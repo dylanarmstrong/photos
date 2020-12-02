@@ -1,0 +1,26 @@
+html
+  head
+    title=album
+    link(rel='stylesheet', type='text/css', href='/photos/css/index.css')
+    link(rel='preload', href='/photos/fonts/mukta-all-400-normal.woff', as='font', type='font/woff', crossorigin='anonymous')
+    link(rel='preload', href='/photos/fonts/mukta-latin-400-normal.woff2', as='font', type='font/woff2', crossorigin='anonymous')
+
+  body
+    header
+      h1=album
+      h4=page + " of " + pages
+
+    div.navigation
+      if page > 1
+        a.prev(href=prevPage)="Previous"
+      if page < pages
+        a.next(href=nextPage)="Next"
+
+    div.container
+      each data in images
+        div.block
+          if data.image.match(/^.*\.mov.*$/)
+            video(src=data.image, controls, preload="none")
+          else
+            a(href=data.image, target="_blank")
+              img(src=data.thumb)

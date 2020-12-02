@@ -1,0 +1,17 @@
+{
+  "name": "@dylanarmstrong/photos",
+  "license": "MIT",
+  "scripts": {
+    "server": ". ./.env && node server.js",
+    "server:dev": "watch \"npm run server\" ."
+  },
+  "devDependencies": {
+    "watch": "^1.0.2"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.801.0",
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "pug": "^3.0.0"
+  }
+}

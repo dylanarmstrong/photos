@@ -1,0 +1,53 @@
+@font-face {
+  font-family: 'Mukta';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/photos/fonts/mukta-latin-400-normal.woff2') format('woff2'), url('/photos/fonts/mukta-all-400-normal.woff') format('woff');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  font-display: swap;
+}
+
+html {
+  box-sizing: border-box;
+  font-family: 'Mukta', sans-serif;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+h1,
+h4 {
+  line-height: 1.2;
+  margin: 0;
+}
+
+.prev,
+.next {
+  font-size: 24px;
+  margin-right: 20px;
+}
+
+.navigation {
+  margin-bottom: 10px;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -5px;
+  margin-right: -5px;
+}
+
+.block {
+  padding: 5px;
+  justify-content: center;
+  align-self: center;
+}
+
+video {
+  height: 250px;
+  width: 250px;
+}
