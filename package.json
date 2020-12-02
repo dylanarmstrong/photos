@@ -1,6 +1,18 @@
 {
   "name": "@dylanarmstrong/photos",
   "license": "MIT",
+  "main": "./lib/index.js",
+  "private": true,
+  "author": "Dylan Armstrong <dylan@dylan.is>",
+  "description": "Just a super, simple, static S3 photo browser",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dylanarmstrong/photos"
+  },
+  "bugs": {
+    "url": "https://github.com/dylanarmstrong/photos/issues"
+  },
+  "homepage": "https://github.com/dylanarmstrong/photos",
   "scripts": {
     "server": ". ./.env && node server.js",
     "server:dev": "watch \"npm run server\" ."
