@@ -101,6 +101,7 @@ app.set('view engine', 'pug')
 
 const imagesPerPage = 20;
 
+// Typically only briefly exists so I can send to a specific person
 app.get('/photos/:album/download', async (req, res) => {
   const { album } = req.params;
   res.redirect(s3.getSignedUrl(
@@ -112,10 +113,15 @@ app.get('/photos/:album/download', async (req, res) => {
   ));
 });
 
+const getIp = (req) => req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
 let albums = {};
 app.get('/photos/:album/:page', async (req, res) => {
   const { album } = req.params;
   const page = Number.parseInt(req.params.page, 10);
+
+  console.log(`[${getIp(req)}] ${album}/${page}`);
+
   let images;
   if (Object.hasOwnProperty.call(albums, album)) {
     images = albums[album];
@@ -126,6 +132,7 @@ app.get('/photos/:album/:page', async (req, res) => {
 
   const signedImages = images.map(
     image => ({
+      // Not used at the moment
       exif: s3.getSignedUrl(
         'getObject',
         {
@@ -161,6 +168,7 @@ app.get('/photos/:album/:page', async (req, res) => {
 });
 
 app.get('/photos', async (req, res) => {
+  console.log(`[${getIp(req)}] index`);
   res.render('index', { albums: await getAlbums() })
 });
 
