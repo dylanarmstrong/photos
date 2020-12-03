@@ -1,7 +1,7 @@
 {
   "name": "@dylanarmstrong/photos",
   "license": "MIT",
-  "main": "./lib/index.js",
+  "main": "./server.js",
   "private": true,
   "author": "Dylan Armstrong <dylan@dylan.is>",
   "description": "Just a super, simple, static S3 photo browser",
@@ -14,10 +14,13 @@
   },
   "homepage": "https://github.com/dylanarmstrong/photos",
   "scripts": {
+    "lint": "eslint server.js",
     "server": ". ./.env && node server.js",
     "server:dev": "watch \"npm run server\" ."
   },
   "devDependencies": {
+    "@dylanarmstrong/eslint-config": "^0.2.7",
+    "eslint": "^7.14.0",
     "watch": "^1.0.2"
   },
   "dependencies": {

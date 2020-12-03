@@ -6,88 +6,83 @@ const express = require('express');
 
 const port = 9005;
 const app = express();
+const imagesPerPage = 20;
+const albumImages = new Map();
+let albums = null;
+
+// Pulled from .env file
+const {
+  Bucket,
+  IdentityPoolId,
+  region,
+} = process.env;
 
 app.use('/photos', express.static('static'));
 app.use(compression());
 
-// Pulled from .env file
-const Bucket = process.env.Bucket;
-const IdentityPoolId = process.env.IdentityPoolId;
-const region = process.env.region;
-
 AWS.config.update({
-  region,
   credentials: new AWS.CognitoIdentityCredentials({
     IdentityPoolId,
-  })
+  }),
+  region,
 });
 
 const s3 = new AWS.S3({
   apiVersion: '2006-03-01',
-  params: { Bucket }
+  params: { Bucket },
 });
 
-const getAlbums = async (req, res) => {
-  const p = new Promise((resolve, reject) => {
-    s3.listObjects({ Delimiter: '/' }, (err, data) => {
+const getAlbums = async () => new Promise(
+  (resolve) => {
+    const commonPrefixMap = ({ Prefix }) => decodeURIComponent(Prefix.replace('/', ''));
+    const listCb = (err, { CommonPrefixes }) => {
       if (err) {
         resolve([]);
       }
+      // Album Names
+      resolve(CommonPrefixes.map(commonPrefixMap));
+    };
 
-      const albumNames = data.CommonPrefixes.map((commonPrefix) => {
-        const prefix = commonPrefix.Prefix;
-        const albumName = decodeURIComponent(prefix.replace('/', ''));
-        return albumName;
-      });
-
-      resolve(albumNames);
-    });
-  });
-
-  const albums = await p;
-  return albums;
-};
+    s3.listObjects({ Delimiter: '/' }, listCb);
+  },
+);
 
 const viewAlbum = async (albumName) => {
-  const albumPhotosKey = encodeURIComponent(albumName) + '/';
-  const getObjects = async (Marker) => {
-    const p = new Promise((resolve, reject) => {
-      s3.listObjects({
-        Delimiter: '/',
-        Marker,
-        Prefix: albumPhotosKey
-      }, function(err, data) {
+  const getObjects = async (Marker) => new Promise(
+    (resolve) => {
+      const listCb = (err, { Contents, IsTruncated, NextMarker }) => {
         if (err) {
-          resolve({ photos: [], IsTruncated: false, NextMarker: null });
+          resolve({ IsTruncated: false, NextMarker: null, photos: [] });
         }
 
-        // 'this' references the AWS.Response instance that represents the response
-        const href = this.request.httpRequest.endpoint.href;
-        const bucketUrl = href + Bucket + '/';
-
-        const photos = data.Contents.map((photo) => {
-          if (photo.Size === 0) {
+        const photoMap = ({ Key, Size }) => {
+          if (Size === 0) {
             return null;
           }
-          const { Key } = photo;
-          if (Key.match(/.*_thumb\..*$/) || Key.endsWith('.zip')) {
+          if (Key.match(/.*_thumb\..*$/) || Key.match(/.*_exif\..*$/) || Key.endsWith('.zip')) {
             return null;
           }
           return Key;
-        }).filter(Boolean);
+        };
+
+        const photos = Contents.map(photoMap).filter(Boolean);
 
         resolve({
+          IsTruncated,
+          NextMarker,
           photos,
-          IsTruncated: data.IsTruncated,
-          NextMarker: data.NextMarker,
         });
-      });
-    });
-    const data = await p;
-    return data;
-  };
+      };
 
-  let photos = [];
+      s3.listObjects({
+        Delimiter: '/',
+        Marker,
+        Prefix: `${encodeURIComponent(albumName)}/`,
+      }, listCb);
+    },
+  );
+
+  const photos = [];
   let data = await getObjects();
   photos.push(data.photos);
   while (data.IsTruncated) {
@@ -97,13 +92,31 @@ const viewAlbum = async (albumName) => {
   return photos.flat();
 };
 
-app.set('view engine', 'pug')
+app.set('view engine', 'pug');
 
-const imagesPerPage = 20;
+const getIp = (req) => req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+app.post('/photos/recache', async (req, res) => {
+  console.log(`[${getIp(req)}] recache albums`);
+  albums = await getAlbums();
+  res.sendStatus(200);
+});
+
+// Check that album exists
+app.get('/photos/:album*', (req, res, next) => {
+  const { album } = req.params;
+  if (!albums || !albums.includes(album)) {
+    console.log(`[${getIp(req)}] invalid album: ${album}`);
+    res.sendStatus(404);
+    return;
+  }
+  next();
+});
 
 // Typically only briefly exists so I can send to a specific person
 app.get('/photos/:album/download', async (req, res) => {
   const { album } = req.params;
+  console.log(`[${getIp(req)}] ${album}/download`);
   res.redirect(s3.getSignedUrl(
     'getObject',
     {
@@ -113,25 +126,20 @@ app.get('/photos/:album/download', async (req, res) => {
   ));
 });
 
-const getIp = (req) => req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-
-let albums = {};
 app.get('/photos/:album/:page', async (req, res) => {
   const { album } = req.params;
   const page = Number.parseInt(req.params.page, 10);
-
   console.log(`[${getIp(req)}] ${album}/${page}`);
-
   let images;
-  if (Object.hasOwnProperty.call(albums, album)) {
-    images = albums[album];
+  if (albumImages.has(album)) {
+    images = albumImages.get(album);
   } else {
     images = await viewAlbum(album);
-    albums[album] = images;
+    albumImages.set(album, images);
   }
 
   const signedImages = images.map(
-    image => ({
+    (image) => ({
       // Not used at the moment
       exif: s3.getSignedUrl(
         'getObject',
@@ -160,16 +168,29 @@ app.get('/photos/:album/:page', async (req, res) => {
   res.render('album', {
     album,
     images: signedImages.slice((page - 1) * imagesPerPage, page * imagesPerPage),
-    page,
-    prevPage: page - 1,
     nextPage: page + 1,
+    page,
     pages: Math.ceil(images.length / imagesPerPage),
+    prevPage: page - 1,
   });
 });
 
-app.get('/photos', async (req, res) => {
-  console.log(`[${getIp(req)}] index`);
-  res.render('index', { albums: await getAlbums() })
+app.get('/photos/:album', (req, res) => {
+  const { album } = req.params;
+  res.redirect(`/photos/${album}/1`);
 });
 
-app.listen(port, () => console.log(`Listening on ${port}`));
+app.get('/photos', (req, res) => {
+  console.log(`[${getIp(req)}] index`);
+  res.render('index', { albums });
+});
+
+// Fetch albums on server startup
+const init = async () => {
+  albums = await getAlbums();
+};
+
+app.listen(port, () => {
+  console.log(`Listening on ${port}`);
+  init();
+});
