@@ -25,3 +25,9 @@ html
           else
             a(href=data.image, target="_blank")
               img(src=data.thumb)
+
+    div.navigation
+      if page > 1
+        a.prev(href=prevPage)="Previous"
+      if page < pages
+        a.next(href=nextPage)="Next"
