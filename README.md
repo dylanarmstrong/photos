@@ -1,4 +1,4 @@
-### Just a super, simple, static S3 photo browser
+### Just a super, simple, spectacular S3 photo browser
 
 1. Update `.env` following `env.example`.
 2. `npm i`
