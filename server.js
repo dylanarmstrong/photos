@@ -140,12 +140,25 @@ app.get('/photos/:album/:page', async (req, res) => {
   const { album } = req.params;
   const page = Number.parseInt(req.params.page, 10);
   console.log(`[${getIp(req)}] ${album}/${page}`);
+
+  if (Number.isNaN(page)) {
+    res.sendStatus(404);
+    return;
+  }
+
   let images;
   if (albumImages.has(album)) {
     images = albumImages.get(album);
   } else {
     images = await viewAlbum(album);
     albumImages.set(album, images);
+  }
+
+  const pages = Math.ceil(images.length / imagesPerPage);
+
+  if (page > pages || page < 1) {
+    res.sendStatus(404);
+    return;
   }
 
   const signedImages = images.map(
@@ -180,7 +193,7 @@ app.get('/photos/:album/:page', async (req, res) => {
     images: signedImages.slice((page - 1) * imagesPerPage, page * imagesPerPage),
     nextPage: page + 1,
     page,
-    pages: Math.ceil(images.length / imagesPerPage),
+    pages,
     prevPage: page - 1,
   });
 });
