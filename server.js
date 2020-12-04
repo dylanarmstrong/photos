@@ -14,8 +14,11 @@ let albums = null;
 const {
   Bucket,
   IdentityPoolId,
+  PUBLIC_IP,
   region,
 } = process.env;
+
+const validIps = ['::1', PUBLIC_IP];
 
 app.use('/photos', express.static('static'));
 app.use(compression());
@@ -94,12 +97,19 @@ const viewAlbum = async (albumName) => {
 
 app.set('view engine', 'pug');
 
-const getIp = (req) => req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+const getIp = (req) => String(req.headers['x-forwarded-for'] || req.connection.remoteAddress);
 
 app.post('/photos/recache', async (req, res) => {
-  console.log(`[${getIp(req)}] recache albums`);
-  albums = await getAlbums();
-  res.sendStatus(200);
+  const ip = getIp(req);
+  if (validIps.includes(ip)) {
+    console.log(`[${ip}] recache`);
+    albums = await getAlbums();
+    albumImages.clear();
+    res.sendStatus(200);
+    return;
+  }
+
+  res.sendStatus(403);
 });
 
 // Check that album exists
