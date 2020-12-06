@@ -15,7 +15,7 @@
   "homepage": "https://github.com/dylanarmstrong/photos",
   "scripts": {
     "lint": "eslint server.js",
-    "server": ". ./.env && node server.js",
+    "server": "node server.js",
     "server:dev": "watch \"npm run server\" ."
   },
   "devDependencies": {

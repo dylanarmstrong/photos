@@ -1,6 +1,6 @@
 html
   head
-    title="photos"
+    title='photos'
     meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
     link(rel='stylesheet', type='text/css', href='/photos/css/index.css')
     link(rel='preload', href='/photos/fonts/mukta-all-400-normal.woff', as='font', type='font/woff', crossorigin='anonymous')
@@ -8,7 +8,9 @@ html
 
   body
     header
-      h1="trips"
+      h1='Photo Albums'
 
     each album in albums
-      a.trip(href=album + "/1")=album
+      if album.visible
+        div.album
+          a(href=album.album + '/1')=album.name

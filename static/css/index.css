@@ -22,11 +22,11 @@ h1,
 h4 {
   line-height: 1.2;
   margin: 0;
+  font-weight: normal;
 }
 
-.trip,
-.prev,
-.next {
+.navigation a,
+.album a {
   font-size: 24px;
   margin-right: 20px;
 }

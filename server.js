@@ -4,19 +4,23 @@ const AWS = require('aws-sdk');
 const compression = require('compression');
 const express = require('express');
 
-const port = 9005;
+const config = require('./config');
+const albums = require('./albums');
+
 const app = express();
-const imagesPerPage = 20;
 const albumImages = new Map();
-let albums = null;
 
 // Pulled from .env file
 const {
   Bucket,
   IdentityPoolId,
   PUBLIC_IP,
+  baseUrl,
+  domain,
+  imagesPerPage,
+  port,
   region,
-} = process.env;
+} = config;
 
 const validIps = ['::1', PUBLIC_IP];
 
@@ -35,19 +39,8 @@ const s3 = new AWS.S3({
   params: { Bucket },
 });
 
-const getAlbums = async () => new Promise(
-  (resolve) => {
-    const commonPrefixMap = ({ Prefix }) => decodeURIComponent(Prefix.replace('/', ''));
-    const listCb = (err, { CommonPrefixes }) => {
-      if (err) {
-        resolve([]);
-      }
-      // Album Names
-      resolve(CommonPrefixes.map(commonPrefixMap));
-    };
-
-    s3.listObjects({ Delimiter: '/' }, listCb);
-  },
+const isValidAlbum = (albumName) => albums.some(
+  ({ album, visible }) => visible && albumName === album,
 );
 
 const viewAlbum = async (albumName) => {
@@ -62,9 +55,11 @@ const viewAlbum = async (albumName) => {
           if (Size === 0) {
             return null;
           }
+
           if (Key.match(/.*_thumb\..*$/) || Key.match(/.*_exif\..*$/) || Key.endsWith('.zip')) {
             return null;
           }
+
           return Key;
         };
 
@@ -95,15 +90,14 @@ const viewAlbum = async (albumName) => {
   return photos.flat();
 };
 
-app.set('view engine', 'pug');
-
 const getIp = (req) => String(req.headers['x-forwarded-for'] || req.connection.remoteAddress);
 
-app.post('/photos/recache', async (req, res) => {
+app.set('view engine', 'pug');
+
+app.post(`${baseUrl}/recache`, (req, res) => {
   const ip = getIp(req);
   if (validIps.includes(ip)) {
     console.log(`[${ip}] recache`);
-    albums = await getAlbums();
     albumImages.clear();
     res.sendStatus(200);
     return;
@@ -113,9 +107,9 @@ app.post('/photos/recache', async (req, res) => {
 });
 
 // Check that album exists
-app.get('/photos/:album*', (req, res, next) => {
+app.get(`${baseUrl}/:album*`, (req, res, next) => {
   const { album } = req.params;
-  if (!albums || !albums.includes(album)) {
+  if (!isValidAlbum(album)) {
     console.log(`[${getIp(req)}] invalid album: ${album}`);
     res.sendStatus(404);
     return;
@@ -124,9 +118,10 @@ app.get('/photos/:album*', (req, res, next) => {
 });
 
 // Typically only briefly exists so I can send to a specific person
-app.get('/photos/:album/download', async (req, res) => {
+app.get(`${baseUrl}/:album/download`, (req, res) => {
   const { album } = req.params;
   console.log(`[${getIp(req)}] ${album}/download`);
+  // Do not use cloudfront cache for this
   res.redirect(s3.getSignedUrl(
     'getObject',
     {
@@ -136,7 +131,7 @@ app.get('/photos/:album/download', async (req, res) => {
   ));
 });
 
-app.get('/photos/:album/:page', async (req, res) => {
+app.get(`${baseUrl}/:album/:page`, async (req, res) => {
   const { album } = req.params;
   const page = Number.parseInt(req.params.page, 10);
   console.log(`[${getIp(req)}] ${album}/${page}`);
@@ -161,36 +156,18 @@ app.get('/photos/:album/:page', async (req, res) => {
     return;
   }
 
-  const signedImages = images.map(
+  const data = images.map(
     (image) => ({
-      // Not used at the moment
-      exif: s3.getSignedUrl(
-        'getObject',
-        {
-          Bucket,
-          Key: image.replace(/\.jpeg/, '_exif.txt'),
-        },
-      ),
-      image: s3.getSignedUrl(
-        'getObject',
-        {
-          Bucket,
-          Key: image,
-        },
-      ),
-      thumb: s3.getSignedUrl(
-        'getObject',
-        {
-          Bucket,
-          Key: image.replace(/\./, '_thumb.'),
-        },
-      ),
+      image: `https://${domain}/${image}`,
+      thumb: `https://${domain}/${image.replace(/\./, '_thumb.')}`,
     }),
   );
 
   res.render('album', {
-    album,
-    images: signedImages.slice((page - 1) * imagesPerPage, page * imagesPerPage),
+    // Display Name
+    album: albums.find(({ album: folderName }) => folderName === album).name,
+    datas: data.slice((page - 1) * imagesPerPage, page * imagesPerPage),
+    home: baseUrl,
     nextPage: page + 1,
     page,
     pages,
@@ -198,22 +175,16 @@ app.get('/photos/:album/:page', async (req, res) => {
   });
 });
 
-app.get('/photos/:album', (req, res) => {
+app.get(`${baseUrl}/:album`, (req, res) => {
   const { album } = req.params;
-  res.redirect(`/photos/${album}/1`);
+  res.redirect(`${baseUrl}/${album}/1`);
 });
 
-app.get('/photos', (req, res) => {
+app.get(baseUrl, (req, res) => {
   console.log(`[${getIp(req)}] index`);
   res.render('index', { albums });
 });
 
-// Fetch albums on server startup
-const init = async () => {
-  albums = await getAlbums();
-};
-
 app.listen(port, () => {
-  console.log(`Listening on ${port}`);
-  init();
+  console.log(`Listening on ${port} at ${baseUrl}.`);
 });

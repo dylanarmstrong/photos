@@ -1,0 +1,10 @@
+{
+  "Bucket": "bucket",
+  "IdentityPoolId": "us-east-1:anonymous-identity",
+  "PUBLIC_IP": "255.255.255.255",
+  "baseUrl": "/",
+  "domain": "www.example.com",
+  "imagesPerPage": 20,
+  "port": 9005,
+  "region": "us-east-1"
+}
