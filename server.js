@@ -3,12 +3,21 @@
 const AWS = require('aws-sdk');
 const compression = require('compression');
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 
 const config = require('./config');
-const albums = require('./albums');
 
 const app = express();
+let albums = [];
 const albumImages = new Map();
+const __DEV__ = process.env.MODE === 'development';
+
+const setAlbums = () => {
+  albums = JSON.parse(fs.readFileSync(path.join(__dirname, 'albums.json')));
+};
+
+setAlbums();
 
 // Pulled from .env file
 const {
@@ -21,8 +30,6 @@ const {
   port,
   region,
 } = config;
-
-const validIps = ['::1', PUBLIC_IP];
 
 app.use('/photos', express.static('static'));
 app.use(compression());
@@ -96,8 +103,9 @@ app.set('view engine', 'pug');
 
 app.post(`${baseUrl}/recache`, (req, res) => {
   const ip = getIp(req);
-  if (validIps.includes(ip)) {
+  if (ip === PUBLIC_IP || __DEV__) {
     console.log(`[${ip}] recache`);
+    setAlbums();
     albumImages.clear();
     res.sendStatus(200);
     return;

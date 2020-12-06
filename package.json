@@ -16,12 +16,11 @@
   "scripts": {
     "lint": "eslint server.js",
     "server": "node server.js",
-    "server:dev": "watch \"npm run server\" ."
+    "server:dev": "MODE=development npm run server"
   },
   "devDependencies": {
     "@dylanarmstrong/eslint-config": "^0.2.7",
-    "eslint": "^7.14.0",
-    "watch": "^1.0.2"
+    "eslint": "^7.14.0"
   },
   "dependencies": {
     "aws-sdk": "^2.801.0",
