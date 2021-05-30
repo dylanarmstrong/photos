@@ -10,7 +10,23 @@ html
     header
       h1='Photo Albums'
 
-    each album in albums
-      if album.visible
-        div.album
-          a(href=album.album + '/1')=album.name
+    table
+      thead
+        th="photos"
+        th="country"
+        th="month"
+        th="year"
+      tbody
+        each album in albums
+          tr
+            if album.disabled
+              td="-"
+            else
+              td
+                a(href=album.album + '/1')="View"
+            td=album.country
+            if album.month
+              td=album.month
+            else
+              td="-"
+            td=album.year

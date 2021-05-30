@@ -25,11 +25,36 @@ h4 {
   font-weight: normal;
 }
 
-.navigation a,
-.album a {
+.album a,
+.album span,
+.navigation a {
   font-size: 24px;
   margin-right: 20px;
 }
+
+table {
+  border-collapse: collapse;
+  font-size: 24px;
+}
+
+td, th {
+  border: 1px solid #1f1f1f;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+tr th:nth-child(3),
+tr td:nth-child(3) {
+  display: none;
+}
+
+@media (min-width: 576px) {
+  tr th:nth-child(3),
+  tr td:nth-child(3) {
+    display: table-cell;
+  }
+}
+
 
 .navigation {
   margin-bottom: 10px;

@@ -1,7 +1,9 @@
 [
   {
     "album": "turkey-2020",
-    "name": "Turkey 2020",
-    "visible": true
+    "country": "Turkey",
+    "disabled": false,
+    "month": "January",
+    "year": 2020
   }
 ]

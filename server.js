@@ -47,7 +47,7 @@ const s3 = new AWS.S3({
 });
 
 const isValidAlbum = (albumName) => albums.some(
-  ({ album, visible }) => visible && albumName === album,
+  ({ album, disabled }) => !disabled && albumName === album,
 );
 
 const viewAlbum = async (albumName) => {
@@ -173,7 +173,7 @@ app.get(`${baseUrl}/:album/:page`, async (req, res) => {
 
   res.render('album', {
     // Display Name
-    album: albums.find(({ album: folderName }) => folderName === album).name,
+    album: albums.find(({ album: folderName }) => folderName === album),
     datas: data.slice((page - 1) * imagesPerPage, page * imagesPerPage),
     home: baseUrl,
     nextPage: page + 1,

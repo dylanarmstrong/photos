@@ -11,3 +11,6 @@ mkdir -pv thumbs
 mogrify -path thumbs -scale 256 -quality 100 *.jpeg
 cd thumbs
 rename 's/\.jpeg/_thumb\.jpeg/' *
+cd ..
+mv thumbs/* .
+rmdir thumbs
