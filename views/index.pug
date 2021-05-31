@@ -3,30 +3,33 @@ html
     title='Photo Albums'
     meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
     link(rel='stylesheet', type='text/css', href='/photos/css/index.css')
-    link(rel='preload', href='/photos/fonts/mukta-all-400-normal.woff', as='font', type='font/woff', crossorigin='anonymous')
-    link(rel='preload', href='/photos/fonts/mukta-latin-400-normal.woff2', as='font', type='font/woff2', crossorigin='anonymous')
+    link(rel='preload', href='/photos/fonts/mukta-latin-400.woff', as='font', type='font/woff', crossorigin='anonymous')
+    link(rel='preload', href='/photos/fonts/mukta-latin-400.woff2', as='font', type='font/woff2', crossorigin='anonymous')
+    link(rel='preload', href='/photos/fonts/mukta-latin-700.woff', as='font', type='font/woff', crossorigin='anonymous')
+    link(rel='preload', href='/photos/fonts/mukta-latin-700.woff2', as='font', type='font/woff2', crossorigin='anonymous')
 
   body
-    header
-      h1='Photo Albums'
+    .container
+      header
+        h1='Photo Albums'
 
-    table
-      thead
-        th="photos"
-        th="country"
-        th="month"
-        th="year"
-      tbody
-        each album in albums
-          tr
-            if album.disabled
-              td="-"
-            else
-              td
-                a(href=album.album + '/1')="View"
-            td=album.country
-            if album.month
-              td=album.month
-            else
-              td="-"
-            td=album.year
+      table
+        thead
+          th="photos"
+          th="country"
+          th="month"
+          th="year"
+        tbody
+          each album in albums
+            tr
+              if album.disabled
+                td="-"
+              else
+                td
+                  a(href=album.album + '/1')="View"
+              td=album.country
+              if album.month
+                td=album.month
+              else
+                td="-"
+              td=album.year

@@ -1,15 +1,32 @@
+:root {
+  --black: #151515;
+  --white: #fafafa;
+}
+
 @font-face {
-  font-family: 'Mukta';
+  font-family: Mukta;
   font-style: normal;
-  font-weight: 400;
-  src: url('/photos/fonts/mukta-latin-400-normal.woff2') format('woff2'), url('/photos/fonts/mukta-all-400-normal.woff') format('woff');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
   font-display: swap;
+  src: local('Mukta Regular'),
+    local('Mukta-Regular'),
+    url(/photos/fonts/mukta-latin-400.woff2) format('woff2'),
+    url(/photos/fonts/mukta-latin-400.woff) format('woff')
+}
+
+@font-face {
+  font-family: Mukta;
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: local('Mukta Bold'),
+    local('Mukta-Bold'),
+    url(/photos/fonts/mukta-latin-700.woff2) format('woff2'),
+    url(/photos/fonts/mukta-latin-700.woff) format('woff')
 }
 
 html {
   box-sizing: border-box;
-  font-family: 'Mukta', sans-serif;
+  line-height: 1.15;
 }
 
 *,
@@ -18,34 +35,77 @@ html {
   box-sizing: inherit;
 }
 
+body {
+  -webkit-font-smoothing: subpixel-antialiased;
+  background: var(--white);
+  color: var(--black);
+  font-family: Mukta, 'Helvetica Neue', sans-serif;
+  font-weight: 400;
+  letter-spacing: -.25px;
+  margin: 0;
+}
+
 h1,
 h4 {
-  line-height: 1.2;
   margin: 0;
   font-weight: normal;
 }
 
-.album a,
-.album span,
-.navigation a {
-  font-size: 24px;
-  margin-right: 20px;
-}
-
 table {
   border-collapse: collapse;
-  font-size: 24px;
+  font-size: 1.2rem;
+  width: 100%;
 }
 
 td, th {
   border: 1px solid #1f1f1f;
-  padding: 0.5rem;
+  padding: 0.45rem;
   text-align: left;
+}
+
+th {
+  font-size: 1.2rem;
 }
 
 tr th:nth-child(3),
 tr td:nth-child(3) {
   display: none;
+}
+
+video {
+  height: 250px;
+  width: 250px;
+}
+
+.album a,
+.album span,
+.navigation a {
+  font-size: 1.3rem;
+  margin-right: 20px;
+}
+
+.navigation {
+  margin-bottom: 10px;
+}
+
+.container {
+  width: 95%;
+  margin: 0 auto;
+  margin-top: 1rem;
+}
+
+.image-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-left: -5px;
+  margin-right: -5px;
+}
+
+.block {
+  align-self: center;
+  justify-content: center;
+  padding: 5px;
 }
 
 @media (min-width: 576px) {
@@ -55,32 +115,12 @@ tr td:nth-child(3) {
   }
 }
 
-
-.navigation {
-  margin-bottom: 10px;
-}
-
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  margin-left: -5px;
-  margin-right: -5px;
-  justify-content: center;
-}
-
 @media (min-width: 768px) {
-  .container {
+  table {
+    width: max-content;
+  }
+
+  .image-container {
     justify-content: flex-start;
   }
-}
-
-.block {
-  padding: 5px;
-  justify-content: center;
-  align-self: center;
-}
-
-video {
-  height: 250px;
-  width: 250px;
 }

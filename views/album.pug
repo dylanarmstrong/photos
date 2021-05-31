@@ -6,38 +6,41 @@ html
       title=album.country + " " + album.year
     meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
     link(rel='stylesheet', type='text/css', href='/photos/css/index.css')
-    link(rel='preload', href='/photos/fonts/mukta-all-400-normal.woff', as='font', type='font/woff', crossorigin='anonymous')
-    link(rel='preload', href='/photos/fonts/mukta-latin-400-normal.woff2', as='font', type='font/woff2', crossorigin='anonymous')
+    link(rel='preload', href='/photos/fonts/mukta-latin-400.woff', as='font', type='font/woff', crossorigin='anonymous')
+    link(rel='preload', href='/photos/fonts/mukta-latin-400.woff2', as='font', type='font/woff2', crossorigin='anonymous')
+    link(rel='preload', href='/photos/fonts/mukta-latin-700.woff', as='font', type='font/woff', crossorigin='anonymous')
+    link(rel='preload', href='/photos/fonts/mukta-latin-700.woff2', as='font', type='font/woff2', crossorigin='anonymous')
     script(defer, src='/photos/js/navigation.js')
 
   body
-    header
-      if album.month
-        h1=album.country + " " + album.year + " - " + album.month
-      else
-        h1=album.country + " " + album.year
-      h4='Page ' + page + ' of ' + pages
+    .container
+      header
+        if album.month
+          h1=album.country + " " + album.year + " - " + album.month
+        else
+          h1=album.country + " " + album.year
+        h4='Page ' + page + ' of ' + pages
 
-    div.navigation
-      div
-        a(title='Home', href=home)='Home'
-      if page > 1
-        a(title='Previous', href=prevPage)='Previous'
-      if page < pages
-        a(title='Next', href=nextPage)='Next'
+      div.navigation
+        div
+          a(title='Home', href=home)='Home'
+        if page > 1
+          a(title='Previous', href=prevPage)='Previous'
+        if page < pages
+          a(title='Next', href=nextPage)='Next'
 
-    div.container
-      each data in datas
-        div.block
-          if data.image.match(/^.*\.mov.*$/)
-            video(src=data.image, controls, preload='none')
-          else
-            a(href=data.image, rel='noopener noreferrer', target='_blank')
-              img(src=data.thumb)
+      div.image-container
+        each data in datas
+          div.block
+            if data.image.match(/^.*\.mov.*$/)
+              video(src=data.image, controls, preload='none')
+            else
+              a(href=data.image, rel='noopener noreferrer', target='_blank')
+                img(src=data.thumb)
 
-    div.navigation
-      if page > 1
-        a#prev(title='Previous', href=prevPage)='Previous'
-      if page < pages
-        a#next(title='Next', href=nextPage)='Next'
+      div.navigation
+        if page > 1
+          a#prev(title='Previous', href=prevPage)='Previous'
+        if page < pages
+          a#next(title='Next', href=nextPage)='Next'
 
