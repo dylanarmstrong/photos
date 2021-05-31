@@ -113,13 +113,13 @@ video {
   tr td:nth-child(3) {
     display: table-cell;
   }
-}
 
-@media (min-width: 768px) {
   table {
     width: max-content;
   }
+}
 
+@media (min-width: 768px) {
   .image-container {
     justify-content: flex-start;
   }
