@@ -35,8 +35,18 @@ html
             if data.image.match(/^.*\.mov.*$/)
               video(src=data.image, controls, preload='none')
             else
-              a(href=data.image, rel='noopener noreferrer', target='_blank')
-                img(src=data.thumb)
+              figure
+                a(href=data.image, rel='noopener noreferrer', target='_blank')
+                  img(src=data.thumb)
+              figcaption
+                p.
+                  1˚ 56' 20" S, 30˚ 2' 38" E
+                p.
+                  2018:11:15 15:09:33
+                p.
+                  Apple iPhone 7
+                p.
+                  4032x3024
 
       div.navigation
         if page > 1

@@ -104,9 +104,26 @@ video {
 }
 
 .block {
-  align-self: center;
-  justify-content: center;
   padding: 5px;
+}
+
+figure {
+  margin: 0;
+  padding: 0;
+  display: table;
+}
+
+figcaption {
+  line-height: 1.15;
+  color: var(--black);
+  background: var(--white);
+  border: 1px solid var(--black);
+  padding: 1rem;
+  caption-side: bottom;
+}
+
+figcaption p {
+  margin: 0;
 }
 
 @media (min-width: 576px) {

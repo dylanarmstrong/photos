@@ -5,6 +5,7 @@ const compression = require('compression');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 const config = require('./config');
 
@@ -70,7 +71,55 @@ const viewAlbum = async (albumName) => {
           return Key;
         };
 
+
         const photos = Contents.map(photoMap).filter(Boolean);
+
+        /*
+        for (let i = 0, len = photos.length; i < len; i++) {
+          const photo = photos[i];
+          s3.getObject({
+            Bucket,
+            Key: photo,
+          }, (_, data) => {
+            const objectData = data.Body;
+            const folder = `/tmp/photos/${albumName}`;
+            fs.mkdir(folder, { recursive: true }, () => undefined);
+            const fileName = `${folder}/${photo.split('/')[1]}`;
+            fs.writeFile(fileName, objectData, (err) => {
+              if (!err) {
+                const output = String(execSync(`exiv2 \
+                  -K Exif.Image.Make \
+                  -K Exif.Image.Model \
+                  -K Exif.Image.DateTime \
+                  -K Exif.Photo.PixelXDimension \
+                  -K Exif.Photo.PixelYDimension \
+                  -K Exif.GPSInfo.GPSLatitudeRef \
+                  -K Exif.GPSInfo.GPSLatitude \
+                  -K Exif.GPSInfo.GPSLongitudeRef \
+                  -K Exif.GPSInfo.GPSLongitude \
+                  -K Exif.GPSInfo.GPSAltitudeRef \
+                  -K Exif.GPSInfo.GPSAltitude \
+                  "${fileName}"`,
+                  {
+                    stdio: ['ignore', 'pipe', 'ignore'],
+                  },
+                ))
+                  .split('\n')
+                  .filter(s => s !== '');
+
+                const exif = {};
+                output.forEach((line) => {
+                  const key = line.match(/([\.a-zA-Z]*)/)[0];
+                  const value = line.replace(/([\.a-zA-Z]* *[a-zA-Z]* *[a-zA-Z0-9]* *)/, '')
+                  exif[key] = value;
+                });
+                console.log(exif);
+                console.log('\n');
+              }
+            });
+          });
+        }
+        */
 
         resolve({
           IsTruncated,
