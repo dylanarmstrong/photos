@@ -39,7 +39,8 @@ Running [here](https://dylan.is/photos/).
 
 ### License
 
-This repository, specifically the source code and documentation is
-provided under the MIT license.
-The photos and videos on my personal site (linked above as demo)
-are not licensed for any use, and all rights are reserved to me.
+The underlying source code for this application is provided under
+the [ISC](LICENSE) license.
+
+All files on my personal site, linked above as demo, are not
+included under this license, and all rights are reserved to me.
