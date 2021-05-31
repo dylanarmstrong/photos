@@ -36,3 +36,9 @@ rmdir thumbs
 ### Demo
 
 Running [here](https://dylan.is/photos/).
+
+### License
+
+This repository is provided under the MIT license.
+However, the photo and videos on my personal site above are not,
+and all rights are reserved to me.

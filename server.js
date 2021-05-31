@@ -180,6 +180,7 @@ app.get(`${baseUrl}/:album/:page`, async (req, res) => {
     page,
     pages,
     prevPage: page - 1,
+    year: (new Date()).getFullYear(),
   });
 });
 
@@ -190,7 +191,10 @@ app.get(`${baseUrl}/:album`, (req, res) => {
 
 app.get(baseUrl, (req, res) => {
   console.log(`[${getIp(req)}] index`);
-  res.render('index', { albums });
+  res.render('index', {
+    albums,
+    year: (new Date()).getFullYear(),
+  });
 });
 
 app.listen(port, () => {
