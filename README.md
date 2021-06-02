@@ -33,6 +33,18 @@ mv thumbs/* .
 rmdir thumbs
 ```
 
+### Exif Data
+
+To load exif data, download all images to an album directory, then run:
+
+```sh
+python3 -m venv venv
+. venv/bin/activate
+python3 -m pip install pyexiv2
+python3 scripts/setup-db.py
+python3 scripts/insert.py /tmp/photos/turkey-2020
+```
+
 ### Demo
 
 Running [here](https://dylan.is/photos/).

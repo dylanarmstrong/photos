@@ -38,15 +38,17 @@ html
               figure
                 a(href=data.image, rel='noopener noreferrer', target='_blank')
                   img(src=data.thumb)
-              figcaption
-                p.
-                  1˚ 56' 20" S, 30˚ 2' 38" E
-                p.
-                  2018:11:15 15:09:33
-                p.
-                  Apple iPhone 7
-                p.
-                  4032x3024
+              if data.hasExif
+                figcaption
+                  p
+                    =data.exif.coord
+                  p
+                    =data.exif.datetime
+                  p
+                    =data.exif.make
+                    =data.exif.model
+                  p
+                    =data.exif.resolution
 
       div.navigation
         if page > 1

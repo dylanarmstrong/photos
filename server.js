@@ -5,12 +5,15 @@ const compression = require('compression');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const sqlite = require('better-sqlite3');
 
 const config = require('./config');
 
+let db = null;
+
 const app = express();
 let albums = [];
+let exifCache = {};
 const albumImages = new Map();
 const __DEV__ = process.env.MODE === 'development';
 
@@ -18,7 +21,111 @@ const setAlbums = () => {
   albums = JSON.parse(fs.readFileSync(path.join(__dirname, 'albums.json')));
 };
 
+const populateExifCache = () => {
+  exifCache = {};
+
+  if (db === null) {
+    if (fs.existsSync('./images.db')) {
+      db = sqlite('./images.db', {});
+    } else {
+      albums.forEach(({ album }) => {
+        exifCache[album] = {};
+      });
+      return;
+    }
+  }
+
+  const exifStmt = db.prepare(`
+    select
+      i.file,
+      ifnull(e.gps_latitude, '') as gps_latitude,
+      ifnull(e.gps_latitude_ref, '') as gps_latitude_ref,
+      ifnull(e.gps_longitude, '') as gps_longitude,
+      ifnull(e.gps_longitude_ref, '') as gps_longitude_ref,
+      ifnull(e.datetime, '') as datetime,
+      ifnull(e.make, '') as make,
+      ifnull(e.model, '') as model,
+      ifnull(e.pixel_x_dimension, '') as pixel_x_dimension,
+      ifnull(e.pixel_y_dimension, '') as pixel_y_dimension
+    from images i
+    join exif e
+    on
+      i.id = e.image
+    where
+      album = ?
+  `);
+
+  albums.forEach(({ album }) => {
+    exifCache[album] = {};
+
+    const rows = exifStmt.all(album);
+    rows.forEach((row) => {
+      let {
+        datetime,
+        make,
+        model,
+      } = row;
+
+      const {
+        file,
+        gps_latitude,
+        gps_latitude_ref,
+        gps_longitude,
+        gps_longitude_ref,
+        pixel_x_dimension,
+        pixel_y_dimension,
+      } = row;
+
+      if (model.startsWith(make)) {
+        make = '';
+      } else {
+        make = `${make} `;
+      }
+
+      if (!make && !model) {
+        make = '-';
+      }
+
+      if (datetime) {
+        datetime = datetime
+          .replace(/:..$/, '')
+          .replace(/-/g, '/')
+          .replace(' ', ' @ ');
+      } else {
+        datetime = '-';
+      }
+
+      let coord = '-';
+      if (gps_latitude && gps_latitude_ref && gps_longitude && gps_longitude_ref) {
+        coord = `${
+          gps_latitude.replace(/([0-9]+)\/1 ([0-9]+)\/1 ([0-9]{2}).*$/, '$1˚$2\'$3"')
+        } ${gps_latitude_ref}, ${
+          gps_longitude.replace(/([0-9]+)\/1 ([0-9]+)\/1 ([0-9]{2}).*$/, '$1˚$2\'$3"')
+        } ${gps_longitude_ref}`;
+      }
+
+      let resolution = '-';
+      if (pixel_x_dimension && pixel_y_dimension) {
+        resolution = `${
+          row.pixel_x_dimension
+        }x${
+          row.pixel_y_dimension
+        }`;
+      }
+
+      exifCache[album][file] = {
+        coord,
+        datetime,
+        make,
+        model,
+        resolution,
+      };
+    });
+  });
+};
+
 setAlbums();
+populateExifCache();
 
 // Pulled from .env file
 const {
@@ -64,7 +171,13 @@ const viewAlbum = async (albumName) => {
             return null;
           }
 
-          if (Key.match(/.*_thumb\..*$/) || Key.match(/.*_exif\..*$/) || Key.endsWith('.zip')) {
+          // Don't show .mov, _thumb, _exif, or downloadable zip files
+          if (
+            Key.endsWith('.mov') ||
+            Key.match(/.*_thumb\..*$/) ||
+            Key.match(/.*_exif\..*$/) ||
+            Key.endsWith('.zip')
+          ) {
             return null;
           }
 
@@ -73,53 +186,6 @@ const viewAlbum = async (albumName) => {
 
 
         const photos = Contents.map(photoMap).filter(Boolean);
-
-        /*
-        for (let i = 0, len = photos.length; i < len; i++) {
-          const photo = photos[i];
-          s3.getObject({
-            Bucket,
-            Key: photo,
-          }, (_, data) => {
-            const objectData = data.Body;
-            const folder = `/tmp/photos/${albumName}`;
-            fs.mkdir(folder, { recursive: true }, () => undefined);
-            const fileName = `${folder}/${photo.split('/')[1]}`;
-            fs.writeFile(fileName, objectData, (err) => {
-              if (!err) {
-                const output = String(execSync(`exiv2 \
-                  -K Exif.Image.Make \
-                  -K Exif.Image.Model \
-                  -K Exif.Image.DateTime \
-                  -K Exif.Photo.PixelXDimension \
-                  -K Exif.Photo.PixelYDimension \
-                  -K Exif.GPSInfo.GPSLatitudeRef \
-                  -K Exif.GPSInfo.GPSLatitude \
-                  -K Exif.GPSInfo.GPSLongitudeRef \
-                  -K Exif.GPSInfo.GPSLongitude \
-                  -K Exif.GPSInfo.GPSAltitudeRef \
-                  -K Exif.GPSInfo.GPSAltitude \
-                  "${fileName}"`,
-                  {
-                    stdio: ['ignore', 'pipe', 'ignore'],
-                  },
-                ))
-                  .split('\n')
-                  .filter(s => s !== '');
-
-                const exif = {};
-                output.forEach((line) => {
-                  const key = line.match(/([\.a-zA-Z]*)/)[0];
-                  const value = line.replace(/([\.a-zA-Z]* *[a-zA-Z]* *[a-zA-Z0-9]* *)/, '')
-                  exif[key] = value;
-                });
-                console.log(exif);
-                console.log('\n');
-              }
-            });
-          });
-        }
-        */
 
         resolve({
           IsTruncated,
@@ -155,6 +221,7 @@ app.post(`${baseUrl}/recache`, (req, res) => {
   if (ip === PUBLIC_IP || __DEV__) {
     console.log(`[${ip}] recache`);
     setAlbums();
+    populateExifCache();
     albumImages.clear();
     res.sendStatus(200);
     return;
@@ -213,17 +280,23 @@ app.get(`${baseUrl}/:album/:page`, async (req, res) => {
     return;
   }
 
-  const data = images.map(
-    (image) => ({
-      image: `https://${domain}/${image}`,
-      thumb: `https://${domain}/${image.replace(/\./, '_thumb.')}`,
-    }),
-  );
+  const data = images
+    .slice((page - 1) * imagesPerPage, page * imagesPerPage)
+    .map((image) => {
+      const file = image.split('/')[1];
+      const exif = exifCache[album][file];
+      return {
+        exif,
+        hasExif: !!exif,
+        image: `https://${domain}/${image}`,
+        thumb: `https://${domain}/${image.replace(/\./, '_thumb.')}`,
+      };
+    });
 
   res.render('album', {
     // Display Name
     album: albums.find(({ album: folderName }) => folderName === album),
-    datas: data.slice((page - 1) * imagesPerPage, page * imagesPerPage),
+    datas: data,
     home: baseUrl,
     nextPage: page + 1,
     page,
