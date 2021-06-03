@@ -48,8 +48,11 @@ def main(argv):
                 date = get(data, 'Exif.Image.DateTime'),
                 if date:
                     try:
+                        # Uganda pictures are coming back as a tuple
+                        if isinstance(date, tuple):
+                            date = date[0]
                         date = datetime.strptime(
-                            data,
+                            str(date),
                             '%Y:%m:%d %H:%M:%S'
                         )
                     except:
