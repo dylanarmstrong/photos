@@ -1,9 +1,10 @@
+doctype html
 html
   head
     if album.month
-      title=album.country + " " + album.year + " - " + album.month
+      title=album.country + ' ' + album.year + ' - ' + album.month
     else
-      title=album.country + " " + album.year
+      title=album.country + ' ' + album.year
     meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
     link(rel='stylesheet', type='text/css', href='/photos/css/index.css')
     link(rel='preload', href='/photos/fonts/mukta-latin-400.woff', as='font', type='font/woff', crossorigin='anonymous')
@@ -32,12 +33,11 @@ html
       div.image-container
         each data in datas
           div.block
-            if data.image.match(/^.*\.mov.*$/)
-              video(src=data.image, controls, preload='none')
-            else
-              figure
-                a(href=data.image, rel='noopener noreferrer', target='_blank')
-                  img(src=data.thumb)
+            figure
+              a(href=data.image, rel='noopener noreferrer', target='_blank')
+                picture
+                  source(srcset=data.webp, type='image/webp')
+                  img(src=data.jpeg, width=data.width)
               if data.hasExif
                 figcaption
                   p

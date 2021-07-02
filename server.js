@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint-disable camelcase */
+
 const AWS = require('aws-sdk');
 const compression = require('compression');
 const express = require('express');
@@ -63,11 +65,11 @@ const populateExifCache = () => {
       let {
         datetime,
         make,
-        model,
       } = row;
 
       const {
         file,
+        model,
         gps_latitude,
         gps_latitude_ref,
         gps_longitude,
@@ -119,6 +121,8 @@ const populateExifCache = () => {
         make,
         model,
         resolution,
+        x: pixel_x_dimension,
+        y: pixel_y_dimension,
       };
     });
   });
@@ -214,12 +218,20 @@ const viewAlbum = async (albumName) => {
 
 const getIp = (req) => String(req.headers['x-forwarded-for'] || req.connection.remoteAddress);
 
+const getDate = () => (new Date())
+  .toLocaleString()
+  .replace(',', '');
+
+const log = (req, msg) => {
+  console.log(`[${getDate()}] [${getIp(req)}] ${msg}`);
+};
+
 app.set('view engine', 'pug');
 
 app.post(`${baseUrl}/recache`, (req, res) => {
   const ip = getIp(req);
   if (ip === PUBLIC_IP || __DEV__) {
-    console.log(`[${ip}] recache`);
+    log(req, 'recache');
     setAlbums();
     populateExifCache();
     albumImages.clear();
@@ -234,7 +246,7 @@ app.post(`${baseUrl}/recache`, (req, res) => {
 app.get(`${baseUrl}/:album*`, (req, res, next) => {
   const { album } = req.params;
   if (!isValidAlbum(album)) {
-    console.log(`[${getIp(req)}] invalid album: ${album}`);
+    log(req, `invalid album: ${album}`);
     res.sendStatus(404);
     return;
   }
@@ -244,7 +256,7 @@ app.get(`${baseUrl}/:album*`, (req, res, next) => {
 // Typically only briefly exists so I can send to a specific person
 app.get(`${baseUrl}/:album/download`, (req, res) => {
   const { album } = req.params;
-  console.log(`[${getIp(req)}] ${album}/download`);
+  log(req, `${album}/download`);
   // Do not use cloudfront cache for this
   res.redirect(s3.getSignedUrl(
     'getObject',
@@ -258,7 +270,7 @@ app.get(`${baseUrl}/:album/download`, (req, res) => {
 app.get(`${baseUrl}/:album/:page`, async (req, res) => {
   const { album } = req.params;
   const page = Number.parseInt(req.params.page, 10);
-  console.log(`[${getIp(req)}] ${album}/${page}`);
+  log(req, `${album}/${page}`);
 
   if (Number.isNaN(page)) {
     res.sendStatus(404);
@@ -283,13 +295,25 @@ app.get(`${baseUrl}/:album/:page`, async (req, res) => {
   const data = images
     .slice((page - 1) * imagesPerPage, page * imagesPerPage)
     .map((image) => {
-      const file = image.split('/')[1];
-      const exif = exifCache[album][file];
+      const [splitAlbum, splitFile] = image.split('/');
+      const baseFile = splitFile.replace(/.jpe?g/, '');
+      const exif = exifCache[splitAlbum][splitFile];
+      const base = `${domain}/${splitAlbum}`;
+      const hasExif = !!exif;
+      let width = 256;
+      if (hasExif) {
+        const { x, y } = exif;
+        const ratio = y / x;
+        width = Math.max(256, Math.floor(192 / ratio));
+      }
+
       return {
         exif,
-        hasExif: !!exif,
-        image: `https://${domain}/${image}`,
-        thumb: `https://${domain}/${image.replace(/\./, '_thumb.')}`,
+        hasExif,
+        image: `${base}/${splitFile}`,
+        jpeg: `${base}/${baseFile}_thumb.jpeg`,
+        webp: `${base}/${baseFile}_thumb.webp`,
+        width,
       };
     });
 
@@ -312,7 +336,7 @@ app.get(`${baseUrl}/:album`, (req, res) => {
 });
 
 app.get(baseUrl, (req, res) => {
-  console.log(`[${getIp(req)}] index`);
+  log(req, 'index');
   res.render('index', {
     albums,
     year: (new Date()).getFullYear(),

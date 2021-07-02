@@ -57,7 +57,8 @@ table {
   width: 100%;
 }
 
-td, th {
+td,
+th {
   border: 1px solid #1f1f1f;
   padding: 0.45rem;
   text-align: left;
@@ -70,11 +71,6 @@ th {
 tr th:nth-child(3),
 tr td:nth-child(3) {
   display: none;
-}
-
-video {
-  height: 250px;
-  width: 250px;
 }
 
 .album a,
@@ -96,31 +92,25 @@ video {
 }
 
 .image-container {
-  display: grid;
-  grid-auto-rows: auto;
-  grid-template-columns: repeat(auto-fill, minmax(256px, 1fr));
-  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .block {
-  padding: 5px;
-  width: 266px;
+  align-self: flex-end;
   margin: 0 auto;
+  padding: 5px;
 }
 
 figure {
-  height: fit-content;
-  display: flex;
   margin: 0;
-  padding: 0;
 }
 
 figcaption {
   background: var(--white);
   border: 1px solid var(--black);
-  caption-side: bottom;
   color: var(--black);
-  line-height: 1.15;
+  margin-top: -5px;
   padding: 1rem;
 }
 
@@ -136,6 +126,12 @@ figcaption p {
 
   table {
     width: max-content;
+  }
+}
+
+@media (max-width: 768px) {
+  figure img {
+    width: 256px;
   }
 }
 
