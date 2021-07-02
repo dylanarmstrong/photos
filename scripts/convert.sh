@@ -22,7 +22,8 @@ else
 fi
 
 cjpeg -optimize -quality 80 -outfile "$jpeg" "$ppm"
-jpeg_size=$(stat -f%z "$jpeg")
+#jpeg_size=$(stat -f%z "$jpeg")
+jpeg_size=$(stat --printf "%s" "$jpeg")
 webp_size=$(echo "$jpeg_size * .7" | bc)
 
 cwebp -q 80 -m 6 -f 25 -hint photo -size "$webp_size" "$ppm" -o "$webp"

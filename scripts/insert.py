@@ -66,7 +66,14 @@ def main(argv):
                         ) values (
                             ?,
                             ?
-                        ) returning id
+                        )
+                    ''', [album, file_name])
+
+                    # For compatibility with older sqlite3, do not use returning
+                    cur.execute('''
+                        select id
+                        from images
+                        where album = ? and file = ?
                     ''', [album, file_name])
                     [id] = cur.fetchone()
 
