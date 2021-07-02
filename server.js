@@ -216,7 +216,14 @@ const viewAlbum = async (albumName) => {
   return photos.flat();
 };
 
-const getIp = (req) => String(req.headers['x-forwarded-for'] || req.connection.remoteAddress);
+const getIp = (req) => {
+  try {
+    return String(req.headers['x-forwarded-for'] || req.connection.remoteAddress)
+      .split(',')[0];
+  } catch (e) {
+    return 'Error';
+  }
+};
 
 const getDate = () => (new Date())
   .toLocaleString()
@@ -230,8 +237,8 @@ app.set('view engine', 'pug');
 
 app.post(`${baseUrl}/recache`, (req, res) => {
   const ip = getIp(req);
+  log(req, 'recache');
   if (ip === PUBLIC_IP || __DEV__) {
-    log(req, 'recache');
     setAlbums();
     populateExifCache();
     albumImages.clear();
