@@ -37,7 +37,7 @@ def main(argv):
     count = 0
     # https://www.media.mit.edu/pia/Research/deepview/exif.html
     for file in glob.iglob(f'{folder}/*'):
-        if re.match('.*.(jpe?g|png)$', file, flags=re.IGNORECASE):
+        if re.match(r"(?!.*_thumb.*)^.*?\.jpeg$", file, flags=re.IGNORECASE):
             with pyexiv2.Image(file) as img:
                 file_split = file.split(sep)
                 len_file_split = len(file_split)
