@@ -7,6 +7,7 @@ import pyexiv2
 import re
 import sqlite3
 import sys
+from PIL import Image
 
 # Usage: python3 scripts/insert.py /path/to/album
 def main(argv):
@@ -39,6 +40,8 @@ def main(argv):
     for file in glob.iglob(f'{folder}/*'):
         if re.match(r"(?!.*_thumb.*)^.*?\.jpeg$", file, flags=re.IGNORECASE):
             with pyexiv2.Image(file) as img:
+                pil_image = Image.open(file)
+
                 file_split = file.split(sep)
                 len_file_split = len(file_split)
                 album = file_split[len_file_split - 2]
@@ -150,6 +153,8 @@ def main(argv):
                         get(data, 'Exif.Photo.LensSpecification'),
                         get(data, 'Exif.Image.Make'),
                         get(data, 'Exif.Image.Model'),
+                        # pil_image.width,
+                        # pil_image.height,
                         get(data, 'Exif.Photo.PixelXDimension'),
                         get(data, 'Exif.Photo.PixelYDimension'),
                         get(data, 'Exif.Image.ResolutionUnit'),
