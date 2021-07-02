@@ -308,15 +308,19 @@ app.get(`${baseUrl}/:album/:page`, async (req, res) => {
       const base = `${domain}/${splitAlbum}`;
       const hasExif = !!exif;
       let width = 256;
+      let height = 341;
       if (hasExif) {
         const { x, y } = exif;
         const ratio = y / x;
         width = Math.max(256, Math.floor(192 / ratio));
+        const heightRatio = width / x;
+        height = Math.floor(y * heightRatio);
       }
 
       return {
         exif,
         hasExif,
+        height,
         image: `${base}/${splitFile}`,
         jpeg: `${base}/${baseFile}_thumb.jpeg`,
         webp: `${base}/${baseFile}_thumb.webp`,
