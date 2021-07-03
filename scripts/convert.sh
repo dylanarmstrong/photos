@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-set -eEu -o pipefail
+#set -eEu -o pipefail
+set -e
 
 file="$1"
 file_name=$(echo "$file" | sed -e 's/\.jpeg//g')
