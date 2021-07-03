@@ -65,12 +65,16 @@ def main(argv):
                     cur.execute('''
                         insert into images (
                             album,
-                            file
+                            file,
+                            height,
+                            width
                         ) values (
+                            ?,
+                            ?,
                             ?,
                             ?
                         )
-                    ''', [album, file_name])
+                    ''', [album, file_name, pil_image.height, pil_image.width])
 
                     # For compatibility with older sqlite3, do not use returning
                     cur.execute('''
@@ -153,8 +157,6 @@ def main(argv):
                         get(data, 'Exif.Photo.LensSpecification'),
                         get(data, 'Exif.Image.Make'),
                         get(data, 'Exif.Image.Model'),
-                        # pil_image.width,
-                        # pil_image.height,
                         get(data, 'Exif.Photo.PixelXDimension'),
                         get(data, 'Exif.Photo.PixelYDimension'),
                         get(data, 'Exif.Image.ResolutionUnit'),

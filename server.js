@@ -38,15 +38,15 @@ const populateExifCache = () => {
   const exifStmt = db.prepare(`
     select
       i.file,
+      i.height as height,
+      i.width as width,
       ifnull(e.gps_latitude, '') as gps_latitude,
       ifnull(e.gps_latitude_ref, '') as gps_latitude_ref,
       ifnull(e.gps_longitude, '') as gps_longitude,
       ifnull(e.gps_longitude_ref, '') as gps_longitude_ref,
       ifnull(e.datetime, '') as datetime,
       ifnull(e.make, '') as make,
-      ifnull(e.model, '') as model,
-      ifnull(e.pixel_x_dimension, '') as pixel_x_dimension,
-      ifnull(e.pixel_y_dimension, '') as pixel_y_dimension
+      ifnull(e.model, '') as model
     from images i
     join exif e
     on
@@ -67,13 +67,13 @@ const populateExifCache = () => {
 
       const {
         file,
-        model,
         gps_latitude,
         gps_latitude_ref,
         gps_longitude,
         gps_longitude_ref,
-        pixel_x_dimension,
-        pixel_y_dimension,
+        height,
+        model,
+        width,
       } = row;
 
       if (model.startsWith(make)) {
@@ -105,11 +105,11 @@ const populateExifCache = () => {
       }
 
       let resolution = '-';
-      if (pixel_x_dimension && pixel_y_dimension) {
+      if (width && height) {
         resolution = `${
-          row.pixel_x_dimension
+          row.width
         }x${
-          row.pixel_y_dimension
+          row.height
         }`;
       }
 
@@ -119,8 +119,8 @@ const populateExifCache = () => {
         make,
         model,
         resolution,
-        x: pixel_x_dimension,
-        y: pixel_y_dimension,
+        x: width,
+        y: height,
       };
     });
   });
@@ -135,11 +135,13 @@ const {
   IdentityPoolId,
   PUBLIC_IP,
   baseUrl,
-  domain,
   imagesPerPage,
   port,
   region,
 } = config;
+
+// Use the devDomain if running server:dev
+const domain = __DEV__ ? config.devDomain : config.domain;
 
 app.use('/photos', express.static('static'));
 app.use(compression());
@@ -160,6 +162,18 @@ const isValidAlbum = (albumName) => albums.some(
   ({ album, disabled }) => !disabled && albumName === album,
 );
 
+const photoMap = ({ Key, Size }) => {
+  if (Size === 0) {
+    return null;
+  }
+
+  // Only list full size images, and not thumbnails
+  if (Key.match(/(?!.*_thumb.*)^.*\.jpeg$/i)) {
+    return Key;
+  }
+  return null;
+};
+
 const viewAlbum = async (albumName) => {
   const getObjects = async (Marker) => new Promise(
     (resolve) => {
@@ -167,25 +181,6 @@ const viewAlbum = async (albumName) => {
         if (err) {
           resolve({ IsTruncated: false, NextMarker: null, photos: [] });
         }
-
-        const photoMap = ({ Key, Size }) => {
-          if (Size === 0) {
-            return null;
-          }
-
-          // Don't show .mov, _thumb, _exif, or downloadable zip files
-          if (
-            Key.endsWith('.mov') ||
-            Key.match(/.*_thumb\..*$/) ||
-            Key.match(/.*_exif\..*$/) ||
-            Key.endsWith('.zip')
-          ) {
-            return null;
-          }
-
-          return Key;
-        };
-
 
         const photos = Contents.map(photoMap).filter(Boolean);
 
@@ -301,10 +296,11 @@ app.get(`${baseUrl}/:album/:page`, async (req, res) => {
     .slice((page - 1) * imagesPerPage, page * imagesPerPage)
     .map((image) => {
       const [splitAlbum, splitFile] = image.split('/');
-      const baseFile = splitFile.replace(/.jpe?g/, '');
+      const baseFile = splitFile.replace(/.jpe?g/i, '');
       const exif = exifCache[splitAlbum][splitFile];
       const base = `${domain}/${splitAlbum}`;
       const hasExif = !!exif;
+      // Sane defaults for width and height
       let width = 256;
       let height = 341;
       if (hasExif) {
@@ -353,5 +349,5 @@ app.get(baseUrl, (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Listening on ${port} at ${baseUrl}.`);
+  console.log(`Listening at http://localhost:${port}${baseUrl}`);
 });

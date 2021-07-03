@@ -14,8 +14,12 @@ def main():
     cur.execute('''
         create table if not exists images (
             id integer primary key,
+
             album text not null,
             file text not null,
+            height integer,
+            width integer,
+
             unique (album, file)
         )'''
     )

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-#set -eEu -o pipefail
 set -e
 
 file="$1"
@@ -22,9 +21,21 @@ else
   convert "$out" "$ppm"
 fi
 
+# Stat command behaves differently
+platform='unknown'
+uname=`uname`
+if [[ "$uname" == 'Linux' ]]; then
+  platform='linux'
+else
+  platform='osx'
+fi
+
 cjpeg -optimize -quality 80 -outfile "$jpeg" "$ppm"
-#jpeg_size=$(stat -f%z "$jpeg")
-jpeg_size=$(stat --printf "%s" "$jpeg")
+if [[ $platform == 'osx' ]]; then
+  jpeg_size=$(stat -f%z "$jpeg")
+else
+  jpeg_size=$(stat --printf "%s" "$jpeg")
+fi
 webp_size=$(echo "$jpeg_size * .7" | bc)
 
 cwebp -q 80 -m 6 -f 25 -hint photo -size "$webp_size" "$ppm" -o "$webp"
