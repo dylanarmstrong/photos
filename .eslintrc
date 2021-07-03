@@ -1,6 +1,7 @@
 {
   "extends": "@dylanarmstrong",
   "rules": {
+    "camelcase": "off",
     "no-console": "off"
   }
 }

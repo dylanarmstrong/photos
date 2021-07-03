@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-/* eslint-disable camelcase */
-
 const AWS = require('aws-sdk');
 const compression = require('compression');
 const express = require('express');
