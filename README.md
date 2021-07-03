@@ -11,6 +11,7 @@
 .
 ├── turkey-2020
 │   ├── IMG_0001.jpeg
+│   └── IMG_0001_thumb.webp
 │   └── IMG_0001_thumb.jpeg
 └── ...
 ```
@@ -21,16 +22,11 @@ This is hardcoded to allow specifying the visibility and the display name.
 
 ### Create Thumbnails
 
-If necessary, install `mogrify` and `rename`.
+Use `thumbs.sh`
 
 ```sh
-mkdir -pv thumbs
-mogrify -path thumbs -scale 256 -quality 100 *.jpeg
-cd thumbs
-rename 's/\.jpeg/_thumb\.jpeg/' *
-cd ..
-mv thumbs/* .
-rmdir thumbs
+cd /tmp/photos
+bash ~/scripts/thumbs.sh turkey-2020
 ```
 
 ### Exif Data
@@ -40,7 +36,7 @@ To load exif data, download all images to an album directory, then run:
 ```sh
 python3 -m venv venv
 . venv/bin/activate
-python3 -m pip install pyexiv2
+python3 -m pip install pyexiv2 pillow
 python3 scripts/setup-db.py
 python3 scripts/insert.py /tmp/photos/turkey-2020
 ```
