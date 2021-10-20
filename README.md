@@ -20,7 +20,7 @@
 
 ```
 docker build -t dylanarms/photos .
-docker run -d -p 9005:80 --name photos dylanarms/photos
+docker run -d -p <host port>:<container port> --name photos dylanarms/photos
 ```
 
 ### List of Albums
