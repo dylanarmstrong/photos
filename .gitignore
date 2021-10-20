@@ -1,4 +1,5 @@
 .env
+albums.json
 config.json
 images.db
 node_modules
