@@ -16,6 +16,13 @@
 └── ...
 ```
 
+### Docker
+
+```
+docker build -t dylanarms/photos .
+docker run -d -p 9005:80 --name photos dylanarms/photos
+```
+
 ### List of Albums
 
 This is hardcoded to allow specifying the visibility and the display name.
