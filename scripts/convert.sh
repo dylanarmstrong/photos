@@ -14,8 +14,8 @@ convert "$file" "$png"
 convert "$file" -depth 16 -gamma 0.454545 -filter lanczos -resize 15% -gamma 2.2 -depth 8 "$out"
 # Come out as odd jpeg files when exporting from Photos
 # So the gamma needs to be adjusted back to normal
-make=$(exiv2 -K Exif.Image.Make "$file" | awk '{print $4}')
-if [ "$make" == "Canon" ]; then
+model=$(exiv2 -K Exif.Image.Model "$file" | awk '{$1=$2=$3=""; print $0}' | sed -e 's/^\ *//g')
+if [ "$model" == "Canon EOS Rebel T6" ]; then
   convert -gamma 2.2 "$out" "$ppm"
 else
   convert "$out" "$ppm"
