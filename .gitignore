@@ -1,6 +1,9 @@
-.env
+.*
 albums.json
 config.json
 images.db
+images.db.bak
 node_modules
+scripts/map.py
+test_images
 venv

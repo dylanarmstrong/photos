@@ -17,8 +17,27 @@ let exifCache = {};
 const albumImages = new Map();
 const __DEV__ = process.env.MODE === 'development';
 
+const defaults = (obj) => {
+  const defaultObj = {
+    album: '-',
+    country: '-',
+    disabled: true,
+    month: '-',
+    year: '-',
+  };
+
+  Object.keys(defaultObj).forEach((key) => {
+    if (!Object.hasOwnProperty.call(obj, key)) {
+      obj[key] = defaultObj[key];
+    }
+  });
+  return obj;
+};
+
 const setAlbums = () => {
-  albums = JSON.parse(fs.readFileSync(path.join(__dirname, 'albums.json')));
+  albums = JSON.parse(
+    fs.readFileSync(path.join(__dirname, 'albums.json'))
+  ).map(defaults);
 };
 
 const populateExifCache = () => {
