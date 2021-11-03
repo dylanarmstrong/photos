@@ -1,16 +1,30 @@
 'use strict';
-(function() {
+(function(d) {
   // Navigate with arrow keys
-  const next = document.getElementById('next');
-  const prev = document.getElementById('prev');
+  const home = d.getElementById('home');
+  const next = d.getElementById('next');
+  const prev = d.getElementById('prev');
 
   const move = ({ keyCode }) => {
-    if (keyCode === 39 && next) {
-      next.click();
-    } else if (keyCode === 37 && prev) {
-      prev.click();
+    switch (true) {
+      // Right Arrow
+      case keyCode === 39 && !!next:
+        next.click();
+        break;
+
+      // Left Arrow
+      case keyCode === 37 && !!prev:
+        prev.click();
+        break;
+
+      // Home
+      case keyCode === 72 && !!home:
+        home.click();
+        break;
+
+      default:
+        break;
     }
   };
-
-  document.addEventListener('keydown', move);
-})();
+  d.addEventListener('keydown', move);
+})(document);
