@@ -25,6 +25,7 @@
 }
 
 html {
+  -webkit-text-size-adjust: 100%;
   box-sizing: border-box;
   line-height: 1.15;
 }
@@ -59,7 +60,7 @@ table {
 
 td,
 th {
-  border: 1px solid #1f1f1f;
+  border: 1px solid var(--black);
   padding: 0.45rem;
   text-align: left;
 }
@@ -94,6 +95,8 @@ tr td:nth-child(3) {
 .image-container {
   display: flex;
   flex-wrap: wrap;
+  margin-left: -5px;
+  margin-right: -5px;
 }
 
 .block {

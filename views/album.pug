@@ -11,7 +11,7 @@ html
     link(rel='preload', href='/photos/fonts/mukta-latin-400.woff2', as='font', type='font/woff2', crossorigin='anonymous')
     link(rel='preload', href='/photos/fonts/mukta-latin-700.woff', as='font', type='font/woff', crossorigin='anonymous')
     link(rel='preload', href='/photos/fonts/mukta-latin-700.woff2', as='font', type='font/woff2', crossorigin='anonymous')
-    script(defer, src='/photos/js/navigation.js')
+    script(defer, nonce=nonce, src='/photos/js/navigation.js')
 
   body
     .container
@@ -38,17 +38,16 @@ html
                 picture
                   source(srcset=data.webp, type='image/webp')
                   img(src=data.jpeg, width=data.width, height=data.height)
-              if data.hasExif
-                figcaption
-                  p
-                    =data.exif.coord
-                  p
-                    =data.exif.datetime
-                  p
-                    =data.exif.make
-                    =data.exif.model
-                  p
-                    =data.exif.resolution
+              figcaption
+                p
+                  =data.exif.coord
+                p
+                  =data.exif.displayDate
+                p
+                  =data.exif.make
+                  =data.exif.model
+                p
+                  =data.exif.resolution
 
       div.navigation
         if page > 1

@@ -1,21 +1,47 @@
 #!/usr/bin/env node
 
 const AWS = require('aws-sdk');
+const crypto = require('crypto');
 const compression = require('compression');
 const express = require('express');
 const fs = require('fs');
+const helmet = require('helmet');
 const path = require('path');
 const sqlite = require('better-sqlite3');
 
 const config = require('./config');
 
+const __DEV__ = process.env.MODE === 'development';
+
 let db = null;
 
 const app = express();
+
+app.use((_, res, next) => {
+  res.locals.nonce = crypto.randomBytes(16).toString('hex');
+  next();
+});
+
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        'img-src': ["'self'", 'photos.dylan.is'],
+        'script-src': ["'self'", (_, res) => `'nonce-${res.locals.nonce}'`],
+        'upgrade-insecure-requests': __DEV__ ? null : [],
+      },
+      useDefaults: true,
+    },
+  }),
+);
+
+app.use('/photos', express.static('static'));
+app.use(compression());
+app.set('view engine', 'pug');
+
 let albums = [];
 let exifCache = {};
 const albumImages = new Map();
-const __DEV__ = process.env.MODE === 'development';
 
 const defaults = (obj) => {
   const defaultObj = {
@@ -36,7 +62,7 @@ const defaults = (obj) => {
 
 const setAlbums = () => {
   albums = JSON.parse(
-    fs.readFileSync(path.join(__dirname, 'albums.json'))
+    fs.readFileSync(path.join(__dirname, 'albums.json')),
   ).map(defaults);
 };
 
@@ -55,7 +81,7 @@ const populateExifCache = () => {
   }
 
   const exifStmt = db.prepare(`
-    select
+    SELECT
       i.file,
       i.height as height,
       i.width as width,
@@ -63,28 +89,26 @@ const populateExifCache = () => {
       ifnull(e.gps_latitude_ref, '') as gps_latitude_ref,
       ifnull(e.gps_longitude, '') as gps_longitude,
       ifnull(e.gps_longitude_ref, '') as gps_longitude_ref,
-      ifnull(e.datetime, '') as datetime,
+      ifnull(e.datetime, '1970-01-01 00:00:01') as datetime,
       ifnull(e.make, '') as make,
       ifnull(e.model, '') as model
-    from images i
-    join exif e
-    on
+    FROM images i
+    JOIN exif e
+    ON
       i.id = e.image
-    where
+    WHERE
       album = ?
   `);
 
   albums.forEach(({ album }) => {
     exifCache[album] = {};
-
-    const rows = exifStmt.all(album);
-    rows.forEach((row) => {
+    const eachRow = (row) => {
       let {
-        datetime,
         make,
       } = row;
 
       const {
+        datetime,
         file,
         gps_latitude,
         gps_latitude_ref,
@@ -105,14 +129,10 @@ const populateExifCache = () => {
         make = '-';
       }
 
-      if (datetime) {
-        datetime = datetime
-          .replace(/:..$/, '')
-          .replace(/-/g, '/')
-          .replace(' ', ' @ ');
-      } else {
-        datetime = '-';
-      }
+      const displayDate = datetime
+        .replace(/:..$/, '')
+        .replace(/-/g, '/')
+        .replace(' ', ' @ ');
 
       let coord = '-';
       if (gps_latitude && gps_latitude_ref && gps_longitude && gps_longitude_ref) {
@@ -135,13 +155,16 @@ const populateExifCache = () => {
       exifCache[album][file] = {
         coord,
         datetime,
+        displayDate,
         make,
         model,
         resolution,
         x: width,
         y: height,
       };
-    });
+    };
+
+    exifStmt.all(album).forEach(eachRow);
   });
 };
 
@@ -161,9 +184,6 @@ const {
 
 // Use the devDomain if running server:dev
 const domain = __DEV__ ? config.devDomain : config.domain;
-
-app.use('/photos', express.static('static'));
-app.use(compression());
 
 AWS.config.update({
   credentials: new AWS.CognitoIdentityCredentials({
@@ -245,8 +265,6 @@ const log = (req, msg) => {
   console.log(`[${getDate()}] [${getIp(req)}] ${msg}`);
 };
 
-app.set('view engine', 'pug');
-
 app.post(`${baseUrl}/recache`, (req, res) => {
   const ip = getIp(req);
   log(req, 'recache');
@@ -272,20 +290,6 @@ app.get(`${baseUrl}/:album*`, (req, res, next) => {
   next();
 });
 
-// Typically only briefly exists so I can send to a specific person
-app.get(`${baseUrl}/:album/download`, (req, res) => {
-  const { album } = req.params;
-  log(req, `${album}/download`);
-  // Do not use cloudfront cache for this
-  res.redirect(s3.getSignedUrl(
-    'getObject',
-    {
-      Bucket,
-      Key: `${album}/all.zip`,
-    },
-  ));
-});
-
 app.get(`${baseUrl}/:album/:page`, async (req, res) => {
   const { album } = req.params;
   const page = Number.parseInt(req.params.page, 10);
@@ -300,7 +304,25 @@ app.get(`${baseUrl}/:album/:page`, async (req, res) => {
   if (albumImages.has(album)) {
     images = albumImages.get(album);
   } else {
-    images = await viewAlbum(album);
+    const cache = exifCache[album];
+    const sortImages = (a, b) => {
+      const [,fileA] = a.split('/');
+      const [,fileB] = b.split('/');
+      const dateA = new Date(cache[fileA].datetime);
+      const dateB = new Date(cache[fileB].datetime);
+      if (dateA > dateB) {
+        return 1;
+      }
+      if (dateA < dateB) {
+        return -1;
+      }
+      return 0;
+    };
+    const hasExif = (album) => {
+      const [,file] = album.split('/');
+      return !!cache[file];
+    };
+    images = (await viewAlbum(album)).filter(hasExif).sort(sortImages);
     albumImages.set(album, images);
   }
 
@@ -318,21 +340,14 @@ app.get(`${baseUrl}/:album/:page`, async (req, res) => {
       const baseFile = splitFile.replace(/.jpe?g/i, '');
       const exif = exifCache[splitAlbum][splitFile];
       const base = `${domain}/${splitAlbum}`;
-      const hasExif = !!exif;
-      // Sane defaults for width and height
-      let width = 256;
-      let height = 341;
-      if (hasExif) {
-        const { x, y } = exif;
-        const ratio = y / x;
-        width = Math.max(256, Math.floor(192 / ratio));
-        const heightRatio = width / x;
-        height = Math.floor(y * heightRatio);
-      }
+      const { x, y } = exif;
+      const ratio = y / x;
+      const width = Math.max(256, Math.floor(192 / ratio));
+      const heightRatio = width / x;
+      const height = Math.floor(y * heightRatio);
 
       return {
         exif,
-        hasExif,
         height,
         image: `${base}/${splitFile}`,
         jpeg: `${base}/${baseFile}_thumb.jpeg`,
@@ -347,6 +362,7 @@ app.get(`${baseUrl}/:album/:page`, async (req, res) => {
     datas: data,
     home: baseUrl,
     nextPage: page + 1,
+    nonce: res.locals.nonce,
     page,
     pages,
     prevPage: page - 1,
