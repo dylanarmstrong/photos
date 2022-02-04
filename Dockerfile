@@ -23,6 +23,8 @@ RUN \
   && \
   npm ci \
   && \
+  npm run build \
+  && \
   apk del \
     .gyp
 
