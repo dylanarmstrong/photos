@@ -1,10 +1,10 @@
 {
   "name": "@dylanarmstrong/photos",
-  "license": "MIT",
-  "main": "./server.js",
+  "license": "ISC",
+  "main": "./lib/server.js",
   "private": true,
   "author": "Dylan Armstrong <dylan@dylan.is>",
-  "description": "Just a super, simple, static S3 photo browser",
+  "description": "Just a super, simple, spectacular S3 photo browser",
   "repository": {
     "type": "git",
     "url": "https://github.com/dylanarmstrong/photos"
@@ -14,18 +14,29 @@
   },
   "homepage": "https://github.com/dylanarmstrong/photos",
   "scripts": {
-    "lint": "eslint server.js",
-    "server": "node server.js",
-    "server:dev": "MODE=development npm run server"
+    "build": "tsc",
+    "lint": "eslint src",
+    "server": "npm run build && node ./lib/server.js",
+    "server:dev": "npm run build && MODE=development node ./lib/server.js"
   },
   "devDependencies": {
-    "@dylanarmstrong/eslint-config": "^0.2.7",
-    "eslint": "^7.14.0"
+    "@dylanarmstrong/eslint-config": "^0.3.0",
+    "@types/better-sqlite3": "^7.4.2",
+    "@types/compression": "^1.7.2",
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.13",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "@typescript-eslint/parser": "^5.10.1",
+    "eslint": "^8.8.0",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-import": "^2.25.4",
+    "typescript": "^4.5.5"
   },
   "dependencies": {
     "aws-sdk": "^2.801.0",
     "better-sqlite3": "^7.4.0",
     "compression": "^1.7.4",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "helmet": "^4.6.0",
     "pug": "^3.0.0"

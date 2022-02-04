@@ -4,14 +4,12 @@ LABEL maintainer="Dylan Armstrong <dylan@dylan.is>"
 
 WORKDIR /app
 
-COPY albums.json ./
-COPY config.json ./
+COPY .env ./
 COPY images.db ./
 COPY package-lock.json ./
 COPY package.json ./
-COPY server.js ./
+COPY src ./src
 COPY static ./static
-COPY views ./views
 
 RUN \
   apk add --no-cache --update --virtual \
@@ -20,9 +18,9 @@ RUN \
     make \
     python3 \
   && \
-  npm i -g npm \
+  npm i -g npm@8.3.0 \
   && \
-  npm install \
+  npm ci \
   && \
   apk del \
     .gyp

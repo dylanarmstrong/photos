@@ -1,0 +1,23 @@
+extends layout
+
+block header
+  h1 Photo Albums
+
+block content
+  table
+    thead
+      th="photos"
+      th="country"
+      th="month"
+      th="year"
+    tbody
+      each album in albums
+        tr
+          if album.disabled
+            td="-"
+          else
+            td
+              a(href=album.album + '/1')="View"
+          td=album.country
+          td=album.month
+          td=album.year

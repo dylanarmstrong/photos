@@ -4,14 +4,12 @@ import sqlite3
 
 # Run this to setup the image database
 def main():
-    path = './images.db'
-    con = sqlite3.connect(
-        path,
-        detect_types=sqlite3.PARSE_DECLTYPES
-    )
+    path = "./images.db"
+    con = sqlite3.connect(path, detect_types=sqlite3.PARSE_DECLTYPES)
     cur = con.cursor()
 
-    cur.execute('''
+    cur.execute(
+        """
         create table if not exists images (
             id integer primary key,
 
@@ -21,10 +19,11 @@ def main():
             width integer,
 
             unique (album, file)
-        )'''
+        )"""
     )
 
-    cur.execute('''
+    cur.execute(
+        """
         create table if not exists exif (
             id integer primary key,
 
@@ -55,11 +54,12 @@ def main():
 
             image integer,
             foreign key (image) references images (id) on delete cascade
-        )'''
+        )"""
     )
 
     con.commit()
     con.close()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

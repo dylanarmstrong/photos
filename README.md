@@ -1,7 +1,7 @@
 ### Just a super, simple, spectacular S3 photo browser
 
-1. Copy `config.example.json` to `config.json`, and update as needed.
-2. Copy `albums.example.json` to `albums.json`, and update as needed.
+1. Copy `env.example` to `.env`, and update as needed.
+2. Update `src/albums.json` as needed.
 3. `npm i`
 4. `npm run server`
 
@@ -25,7 +25,8 @@ docker run -d -p <host port>:<container port> --name photos dylanarms/photos
 
 ### List of Albums
 
-This is hardcoded to allow specifying the visibility and the display name.
+This is hardcoded in `src/albums.json` to allow specifying the visibility
+and the display name.
 
 ### Create Thumbnails
 

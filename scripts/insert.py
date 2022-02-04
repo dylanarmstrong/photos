@@ -12,18 +12,15 @@ from PIL import Image
 # Usage: python3 scripts/insert.py /path/to/album
 def main(argv):
     if len(argv) == 0:
-        print('Usage: python3 scripts/insert.py /path/to/album')
+        print("Usage: python3 scripts/insert.py /path/to/album")
         sys.exit(1)
-        
+
     folder = argv[0]
-    album = 'invalid album'
+    album = "invalid album"
     sep = os.path.sep
 
-    path = './images.db'
-    con = sqlite3.connect(
-        path,
-        detect_types=sqlite3.PARSE_DECLTYPES
-    )
+    path = "./images.db"
+    con = sqlite3.connect(path, detect_types=sqlite3.PARSE_DECLTYPES)
     cur = con.cursor()
 
     def get(data, key):
@@ -37,7 +34,7 @@ def main(argv):
     # For counting how many rows have been inserted in this album
     count = 0
     # https://www.media.mit.edu/pia/Research/deepview/exif.html
-    for file in glob.iglob(f'{folder}/*'):
+    for file in glob.iglob(f"{folder}/*"):
         if re.match(r"(?!.*_thumb.*)^.*?\.jpeg$", file, flags=re.IGNORECASE):
             with pyexiv2.Image(file) as img:
                 pil_image = Image.open(file)
@@ -48,21 +45,19 @@ def main(argv):
                 file_name = file_split[len_file_split - 1]
 
                 data = img.read_exif()
-                date = get(data, 'Exif.Image.DateTime'),
+                date = get(data, "Exif.Image.DateTime")
                 if date:
                     try:
                         # Uganda pictures are coming back as a tuple
                         if isinstance(date, tuple):
                             date = date[0]
-                        date = datetime.strptime(
-                            str(date),
-                            '%Y:%m:%d %H:%M:%S'
-                        )
+                        date = datetime.strptime(str(date), "%Y:%m:%d %H:%M:%S")
                     except:
                         date = None
 
                 try:
-                    cur.execute('''
+                    cur.execute(
+                        """
                         insert into images (
                             album,
                             file,
@@ -74,17 +69,23 @@ def main(argv):
                             ?,
                             ?
                         )
-                    ''', [album, file_name, pil_image.height, pil_image.width])
+                    """,
+                        [album, file_name, pil_image.height, pil_image.width],
+                    )
 
                     # For compatibility with older sqlite3, do not use returning
-                    cur.execute('''
+                    cur.execute(
+                        """
                         select id
                         from images
                         where album = ? and file = ?
-                    ''', [album, file_name])
+                    """,
+                        [album, file_name],
+                    )
                     [id] = cur.fetchone()
 
-                    cur.execute('''
+                    cur.execute(
+                        """
                         insert into exif (
                             brightness_value,
                             datetime,
@@ -138,33 +139,35 @@ def main(argv):
                             ?,
                             ?
                         )
-                    ''', [
-                        get(data, 'Exif.Photo.BrightnessValue'),
-                        date,
-                        get(data, 'Exif.Photo.ExposureTime'),
-                        get(data, 'Exif.Photo.FNumber'),
-                        get(data, 'Exif.Photo.Flash'),
-                        get(data, 'Exif.Photo.FocalLength'),
-                        get(data, 'Exif.GPSInfo.GPSAltitude'),
-                        get(data, 'Exif.GPSInfo.GPSAltitudeRef'),
-                        get(data, 'Exif.GPSInfo.GPSLatitude'),
-                        get(data, 'Exif.GPSInfo.GPSLatitudeRef'),
-                        get(data, 'Exif.GPSInfo.GPSLongitude'),
-                        get(data, 'Exif.GPSInfo.GPSLongitudeRef'),
-                        get(data, 'Exif.Photo.ISOSpeedRatings'),
-                        get(data, 'Exif.Photo.LensMake'),
-                        get(data, 'Exif.Photo.LensModel'),
-                        get(data, 'Exif.Photo.LensSpecification'),
-                        get(data, 'Exif.Image.Make'),
-                        get(data, 'Exif.Image.Model'),
-                        get(data, 'Exif.Photo.PixelXDimension'),
-                        get(data, 'Exif.Photo.PixelYDimension'),
-                        get(data, 'Exif.Image.ResolutionUnit'),
-                        get(data, 'Exif.Photo.ShutterSpeedValue'),
-                        get(data, 'Exif.Image.XResolution'),
-                        get(data, 'Exif.Image.YResolution'),
-                        id
-                    ])
+                    """,
+                        [
+                            get(data, "Exif.Photo.BrightnessValue"),
+                            date,
+                            get(data, "Exif.Photo.ExposureTime"),
+                            get(data, "Exif.Photo.FNumber"),
+                            get(data, "Exif.Photo.Flash"),
+                            get(data, "Exif.Photo.FocalLength"),
+                            get(data, "Exif.GPSInfo.GPSAltitude"),
+                            get(data, "Exif.GPSInfo.GPSAltitudeRef"),
+                            get(data, "Exif.GPSInfo.GPSLatitude"),
+                            get(data, "Exif.GPSInfo.GPSLatitudeRef"),
+                            get(data, "Exif.GPSInfo.GPSLongitude"),
+                            get(data, "Exif.GPSInfo.GPSLongitudeRef"),
+                            get(data, "Exif.Photo.ISOSpeedRatings"),
+                            get(data, "Exif.Photo.LensMake"),
+                            get(data, "Exif.Photo.LensModel"),
+                            get(data, "Exif.Photo.LensSpecification"),
+                            get(data, "Exif.Image.Make"),
+                            get(data, "Exif.Image.Model"),
+                            get(data, "Exif.Photo.PixelXDimension"),
+                            get(data, "Exif.Photo.PixelYDimension"),
+                            get(data, "Exif.Image.ResolutionUnit"),
+                            get(data, "Exif.Photo.ShutterSpeedValue"),
+                            get(data, "Exif.Image.XResolution"),
+                            get(data, "Exif.Image.YResolution"),
+                            id,
+                        ],
+                    )
                     count += 1
                 except:
                     pass
@@ -172,7 +175,8 @@ def main(argv):
     con.commit()
     con.close()
 
-    print(f'{album}: inserted {count} rows')
+    print(f"{album}: inserted {count} rows")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main(sys.argv[1:])

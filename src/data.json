@@ -1,0 +1,343 @@
+[
+  {
+    "album": "qatar-2021",
+    "country": "Qatar",
+    "disabled": false,
+    "month": "December",
+    "year": 2021
+  },
+  {
+    "album": "iraqi-kurdistan-2021",
+    "country": "Iraqi Kurdistan",
+    "disabled": false,
+    "month": "December",
+    "year": 2021
+  },
+  {
+    "album": "iraq-2021",
+    "country": "Iraq",
+    "disabled": false,
+    "month": "November",
+    "year": 2021
+  },
+  {
+    "album": "netherlands-2021",
+    "country": "Netherlands",
+    "disabled": false,
+    "month": "October",
+    "year": 2021
+  },
+  {
+    "album": "luxembourg-2021",
+    "country": "Luxembourg",
+    "disabled": false,
+    "month": "October",
+    "year": 2021
+  },
+  {
+    "album": "belgium-2021",
+    "country": "Belgium",
+    "disabled": false,
+    "month": "October",
+    "year": 2021
+  },
+  {
+    "album": "andorra-2021",
+    "country": "Andorra",
+    "disabled": false,
+    "month": "October",
+    "year": 2021
+  },
+  {
+    "album": "france-2021",
+    "country": "France",
+    "disabled": false,
+    "month": "October",
+    "year": 2021
+  },
+  {
+    "album": "liechtenstein-2021",
+    "country": "Liechtenstein",
+    "disabled": false,
+    "month": "September",
+    "year": 2021
+  },
+  {
+    "album": "switzerland-2021",
+    "country": "Switzerland",
+    "disabled": false,
+    "month": "September",
+    "year": 2021
+  },
+  {
+    "album": "austria-2021",
+    "country": "Austria",
+    "disabled": false,
+    "month": "September",
+    "year": 2021
+  },
+  {
+    "album": "czech-2021",
+    "country": "Czech Republic",
+    "disabled": false,
+    "month": "September",
+    "year": 2021
+  },
+  {
+    "album": "germany-2021",
+    "country": "Germany",
+    "disabled": false,
+    "month": "September",
+    "year": 2021
+  },
+  {
+    "album": "ukraine-2021",
+    "country": "Ukraine",
+    "disabled": false,
+    "month": "July",
+    "year": 2021
+  },
+  {
+    "album": "sudan-2020",
+    "country": "Sudan",
+    "disabled": false,
+    "month": "November",
+    "year": 2020
+  },
+  {
+    "album": "turkey-2020-2",
+    "country": "Turkey",
+    "disabled": false,
+    "month": "November",
+    "year": 2020
+  },
+  {
+    "album": "ghana-2020",
+    "country": "Ghana",
+    "disabled": false,
+    "month": "January",
+    "year": 2020
+  },
+  {
+    "album": "togo-2020",
+    "country": "Togo",
+    "disabled": false,
+    "month": "January",
+    "year": 2020
+  },
+  {
+    "album": "benin-2020",
+    "country": "Benin",
+    "disabled": false,
+    "month": "January",
+    "year": 2020
+  },
+  {
+    "album": "turkey-2020-1",
+    "country": "Turkey",
+    "disabled": false,
+    "month": "January",
+    "year": 2020
+  },
+  {
+    "album": "vietnam-2019",
+    "country": "Vietnam",
+    "disabled": false,
+    "month": "December",
+    "year": 2019
+  },
+  {
+    "album": "cambodia-2019",
+    "country": "Cambodia",
+    "disabled": false,
+    "month": "December",
+    "year": 2019
+  },
+  {
+    "album": "thailand-2019",
+    "country": "Thailand",
+    "disabled": false,
+    "month": "December",
+    "year": 2019
+  },
+  {
+    "album": "japan-2019",
+    "country": "Japan",
+    "disabled": false,
+    "month": "November",
+    "year": 2019
+  },
+  {
+    "album": "madagascar-2019",
+    "country": "Madagascar",
+    "disabled": false,
+    "month": "May",
+    "year": 2019
+  },
+  {
+    "album": "germany-2019",
+    "country": "Germany",
+    "disabled": false,
+    "month": "May",
+    "year": 2019
+  },
+  {
+    "album": "tanzania-2018",
+    "country": "Tanzania",
+    "month": "November",
+    "year": 2018
+  },
+  {
+    "album": "kenya-2018",
+    "country": "Kenya",
+    "month": "November",
+    "year": 2018
+  },
+  {
+    "album": "rwanda-2018",
+    "country": "Rwanda",
+    "disabled": false,
+    "month": "November",
+    "year": 2018
+  },
+  {
+    "album": "uganda-2018",
+    "country": "Uganda",
+    "disabled": false,
+    "month": "November",
+    "year": 2018
+  },
+  {
+    "album": "uae-2018",
+    "country": "United Arab Emirates",
+    "month": "November",
+    "year": 2018
+  },
+  {
+    "album": "namibia-2017",
+    "country": "Namibia",
+    "disabled": false,
+    "month": "November",
+    "year": 2017
+  },
+  {
+    "album": "botswana-2017",
+    "country": "Botswana",
+    "disabled": false,
+    "month": "November",
+    "year": 2017
+  },
+  {
+    "album": "zimbabwe-2017",
+    "country": "Zimbabwe",
+    "disabled": false,
+    "month": "November",
+    "year": 2017
+  },
+  {
+    "album": "germany-2017",
+    "country": "Germany",
+    "disabled": false,
+    "month": "November",
+    "year": 2017
+  },
+  {
+    "album": "morocco-2017",
+    "country": "Morocco",
+    "disabled": false,
+    "month": "June",
+    "year": 2017
+  },
+  {
+    "album": "vatican-2017",
+    "country": "Vatican",
+    "disabled": false,
+    "month": "May",
+    "year": 2017
+  },
+  {
+    "album": "italy-2017",
+    "country": "Italy",
+    "disabled": false,
+    "month": "May",
+    "year": 2017
+  },
+  {
+    "album": "monaco-2017",
+    "country": "Monaco",
+    "disabled": false,
+    "month": "May",
+    "year": 2017
+  },
+  {
+    "album": "france-2017",
+    "country": "France",
+    "disabled": false,
+    "month": "May",
+    "year": 2017
+  },
+  {
+    "album": "spain-2017",
+    "country": "Spain",
+    "disabled": false,
+    "month": "May",
+    "year": 2017
+  },
+  {
+    "album": "france-2016",
+    "country": "France",
+    "disabled": false,
+    "month": "November",
+    "year": 2016
+  },
+  {
+    "album": "england-2016",
+    "country": "England",
+    "disabled": false,
+    "month": "November",
+    "year": 2016
+  },
+  {
+    "album": "new-zealand-2009",
+    "country": "New Zealand",
+    "month": "July",
+    "year": 2009
+  },
+  { "country": "Bahamas" },
+  { "country": "Dominica" },
+  {
+    "country": "Mexico",
+    "month": "March",
+    "year": 2005
+  },
+  {
+    "country": "Jamaica",
+    "month": "March",
+    "year": 2005
+  },
+  {
+    "country": "Haiti",
+    "month": "March",
+    "year": 2005
+  },
+  {
+    "country": "Belize",
+    "month": "April",
+    "year": 2004
+  },
+  {
+    "country": "Mexico",
+    "month": "March",
+    "year": 2004
+  },
+  {
+    "country": "Canada",
+    "month": "July",
+    "year": 1994
+  },
+  {
+    "country": "United States",
+    "month": "November",
+    "year": 1989
+  }
+]

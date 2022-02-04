@@ -1,8 +1,7 @@
 .*
-albums.json
-config.json
 images.db
 images.db.bak
+lib
 node_modules
 scripts/map.py
 test_images
