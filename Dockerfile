@@ -6,6 +6,7 @@ WORKDIR /app
 
 COPY .env ./
 COPY images.db ./
+COPY tsconfig.json ./
 COPY package-lock.json ./
 COPY package.json ./
 COPY src ./src
@@ -18,7 +19,7 @@ RUN \
     make \
     python3 \
   && \
-  npm i -g npm@8.3.0 \
+  npm i -g npm@8.4.0 \
   && \
   npm ci \
   && \
