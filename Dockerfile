@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:16-alpine
 
 LABEL maintainer="Dylan Armstrong <dylan@dylan.is>"
 
@@ -19,7 +19,7 @@ RUN \
     make \
     python3 \
   && \
-  npm i -g npm@8.4.0 \
+  npm i -g npm \
   && \
   npm ci \
   && \
