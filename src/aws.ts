@@ -8,6 +8,7 @@ const { Bucket = '', IdentityPoolId = '', region = '' } = process.env;
 
 const s3 = new S3Client({
   credentials: fromCognitoIdentityPool({
+    clientConfig: { region },
     identityPoolId: IdentityPoolId,
   }),
   region,
