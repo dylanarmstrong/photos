@@ -89,6 +89,7 @@ router.use(
       },
       useDefaults: true,
     },
+    expectCt: false,
   }),
 );
 

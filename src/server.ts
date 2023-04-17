@@ -15,6 +15,7 @@ const { baseUrl } = process.env;
   // Use the devPort if running server:dev
   const port = __DEV__ ? process.env.devPort : process.env.port;
 
+  app.disable('etag');
   app.set('views', path.join(process.cwd(), 'src', 'views'));
   app.set('view engine', 'pug');
   app.use(compression());

@@ -23,13 +23,24 @@ block content
       a#next(title='Next', href=nextPage)='Next'
 
   div.image-container
-    each data in datas
+    each data, index in datas
       div.block
         figure
-          a(href=data.image, rel='noopener noreferrer', target='_blank')
+          a(
+            aria-label='Click to see full sized image #' + (index + 1),
+            href=data.image,
+            rel='noopener noreferrer',
+            target='_blank',
+          )
             picture
               source(srcset=data.webp, type='image/webp')
-              img(src=data.jpeg, width=data.width, height=data.height)
+              img(
+                alt='Image #' + (index + 1),
+                height=data.height,
+                src=data.jpeg,
+                width=data.width,
+              )
+
           figcaption
             p
               =data.exif.coord

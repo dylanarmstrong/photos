@@ -21,7 +21,7 @@ fields.set('width', 'number');
 
 const isSqlRow = (value: unknown): value is SqlRow => {
   let result = true;
-  fields.forEach((key, type) => {
+  fields.forEach((type, key) => {
     if (result) {
       const good =
         Object.hasOwnProperty.call(value, key) &&

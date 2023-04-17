@@ -132,12 +132,6 @@ figcaption p {
   }
 }
 
-@media (max-width: 768px) {
-  figure img {
-    width: 256px;
-  }
-}
-
 @media (min-width: 768px) {
   .block {
     margin: 0;
