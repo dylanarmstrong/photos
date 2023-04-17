@@ -63,10 +63,4 @@ type GetObjects = {
   photos: string[];
 };
 
-export {
-  Album,
-  ExifCache,
-  GetObjects,
-  RenderOptions,
-  SqlRow,
-};
+export { Album, ExifCache, GetObjects, RenderOptions, SqlRow };

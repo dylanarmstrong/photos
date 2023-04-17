@@ -6,19 +6,11 @@ import type { Response } from 'express';
 
 import { defaults, log } from './utils';
 
-import {
-  getAlbums,
-  getExifCache,
-  isValidAlbum,
-} from './albums';
+import { getAlbums, getExifCache, isValidAlbum } from './albums';
 
-import type {
-  RenderOptions,
-} from './@types';
+import type { RenderOptions } from './@types';
 
-import {
-  viewAlbum,
-} from './aws';
+import { viewAlbum } from './aws';
 
 const albums = getAlbums();
 const exifCache = getExifCache();
@@ -36,14 +28,12 @@ const domain = __DEV__ ? process.env.devDomain : process.env.domain;
 const router = express.Router();
 
 const sendStatus = (res: Response, status: number) => {
-  res
-    .status(status)
-    .render('status', {
-      baseUrl,
-      nonce: res.locals.nonce,
-      status,
-      year: (new Date()).getFullYear(),
-    });
+  res.status(status).render('status', {
+    baseUrl,
+    nonce: res.locals.nonce,
+    status,
+    year: new Date().getFullYear(),
+  });
 };
 
 const render = (res: Response, page: string, obj: RenderOptions) => {
@@ -51,12 +41,10 @@ const render = (res: Response, page: string, obj: RenderOptions) => {
     baseUrl,
     nonce: res.locals.nonce,
     status: 200,
-    year: (new Date()).getFullYear(),
+    year: new Date().getFullYear(),
   };
 
-  res
-    .status(200)
-    .render(page, defaults(obj, defaultRender));
+  res.status(200).render(page, defaults(obj, defaultRender));
 };
 
 const mapImage = (image: string) => {

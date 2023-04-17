@@ -15,7 +15,7 @@
   "homepage": "https://github.com/dylanarmstrong/photos",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint src",
+    "lint": "prettier --trailing-comma all --single-quote --write --ignore-unknown src && eslint src",
     "server": "node ./lib/server.js",
     "server:dev": "MODE=development node ./lib/server.js"
   },
@@ -28,12 +28,15 @@
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "eslint": "^8.8.0",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.25.4",
+    "prettier": "^2.8.7",
     "typescript": "^4.9.3"
   },
   "dependencies": {
-    "aws-sdk": "^2.801.0",
+    "@aws-sdk/client-s3": "^3.312.0",
+    "@aws-sdk/credential-providers": "^3.312.0",
     "better-sqlite3": "^7.4.0",
     "compression": "^1.7.4",
     "dotenv": "^10.0.0",

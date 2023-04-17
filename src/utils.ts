@@ -2,16 +2,15 @@ import type { Request } from 'express';
 
 const getIp = (req: Request) => {
   try {
-    return String(req.headers['x-forwarded-for'] || req.socket.remoteAddress)
-      .split(',')[0];
+    return String(
+      req.headers['x-forwarded-for'] || req.socket.remoteAddress,
+    ).split(',')[0];
   } catch (e) {
     return 'Error';
   }
 };
 
-const getDate = () => (new Date())
-  .toLocaleString()
-  .replace(',', '');
+const getDate = () => new Date().toLocaleString().replace(',', '');
 
 const log = (req: Request, msg: string) => {
   console.log(`[${getDate()}] [${getIp(req)}] ${msg}`);
@@ -19,7 +18,10 @@ const log = (req: Request, msg: string) => {
 
 // Having fun with this change
 // https://github.com/microsoft/TypeScript/pull/30769
-const defaults = <T extends Record<string, unknown>, S extends Record<string, unknown>>(
+const defaults = <
+  T extends Record<string, unknown>,
+  S extends Record<string, unknown>,
+>(
   obj: T,
   src: S,
 ): S & T => {
@@ -37,7 +39,4 @@ const defaults = <T extends Record<string, unknown>, S extends Record<string, un
   return obj as S & T;
 };
 
-export {
-  defaults,
-  log,
-};
+export { defaults, log };

@@ -1,26 +1,19 @@
-import AWS from 'aws-sdk';
-import type { AWSError, S3 } from 'aws-sdk';
+import { fromCognitoIdentityPool } from '@aws-sdk/credential-providers';
+import { ListObjectsV2Command, S3Client } from '@aws-sdk/client-s3';
+import type { ListObjectsV2CommandOutput, _Object } from '@aws-sdk/client-s3';
 
 import type { GetObjects } from './@types';
 
-const {
-  Bucket = '',
-  IdentityPoolId = '',
-} = process.env;
+const { Bucket = '', IdentityPoolId = '', region = '' } = process.env;
 
-AWS.config.update({
-  credentials: new AWS.CognitoIdentityCredentials({
-    IdentityPoolId,
+const s3 = new S3Client({
+  credentials: fromCognitoIdentityPool({
+    identityPoolId: IdentityPoolId,
   }),
-  region: process.env.region,
+  region,
 });
 
-const s3 = new AWS.S3({
-  apiVersion: '2006-03-01',
-  params: { Bucket },
-});
-
-const photoMap = (value: S3.Object & Partial<{ Key: string; Size: number }>) => {
+const photoMap = (value: _Object) => {
   const { Key, Size } = value;
   if (Size === 0 || !Key) {
     return null;
@@ -37,11 +30,11 @@ const photoMap = (value: S3.Object & Partial<{ Key: string; Size: number }>) => 
 const filterNullKey = (k: string | null): k is string => typeof k === 'string';
 
 const viewAlbum = async (albumName: string) => {
-  const getObjects = async (ContinuationToken?: string): Promise<GetObjects> => new Promise(
-    (resolve) => {
-      const listCb = (err: AWSError, data: S3.Types.ListObjectsV2Output) => {
+  const getObjects = async (ContinuationToken?: string): Promise<GetObjects> =>
+    new Promise((resolve) => {
+      const listCb = (data: ListObjectsV2CommandOutput) => {
         const { Contents, IsTruncated, NextContinuationToken } = data;
-        if (err || typeof Contents === 'undefined') {
+        if (typeof Contents === 'undefined') {
           resolve({
             IsTruncated: false,
             NextContinuationToken: undefined,
@@ -59,14 +52,14 @@ const viewAlbum = async (albumName: string) => {
         });
       };
 
-      s3.listObjectsV2({
+      const command = new ListObjectsV2Command({
         Bucket,
         ContinuationToken,
         Delimiter: '/',
         Prefix: `${encodeURIComponent(albumName)}/`,
-      }, listCb);
-    },
-  );
+      });
+      s3.send(command).then(listCb);
+    });
 
   const photos = [];
   let data = await getObjects();
@@ -78,6 +71,4 @@ const viewAlbum = async (albumName: string) => {
   return photos.flat();
 };
 
-export {
-  viewAlbum,
-};
+export { viewAlbum };

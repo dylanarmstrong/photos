@@ -1,5 +1,8 @@
 {
-  "extends": "@dylanarmstrong",
+  "extends": [
+    "@dylanarmstrong",
+    "prettier"
+  ],
   "rules": {
     "camelcase": "off",
     "no-console": "off"
