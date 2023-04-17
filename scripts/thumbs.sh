@@ -8,16 +8,16 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 
 folder=$1
 
-cd "$folder"
+cd "$folder" || exit 1
 
-rm *_{163,325,650,768}.{webp,jpeg}
-rm *.ppm
-rm *.{in,out}.png
+rm -- *_{163,325,650,768}.{webp,jpeg}
+rm -- *.ppm
+rm -- *.{in,out}.png
 
-rm *_thumb.jpeg
-rm *_thumb.webp
-rm *-thumb.jpeg
-rm *-thumb.webp
+rm -- *_thumb.jpeg
+rm -- *_thumb.webp
+rm -- *-thumb.jpeg
+rm -- *-thumb.webp
 
-find . -type f -exec $SCRIPT_DIR/convert.sh "{}" \;
+find . -type f -exec "$SCRIPT_DIR/convert.sh" "{}" \;
 cd ..

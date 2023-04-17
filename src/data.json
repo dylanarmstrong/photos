@@ -1,16 +1,20 @@
 [
   {
-    "country": "France",
-    "month": "August",
-    "year": 2022
+    "album": "cape-verde-2023",
+    "country": "Cape Verde",
+    "disabled": false,
+    "month": "April",
+    "year": 2023
+  },
+  {
+    "album": "portugal-2023",
+    "country": "Portugal",
+    "disabled": false,
+    "month": "April",
+    "year": 2023
   },
   {
     "country": "Italy",
-    "month": "August",
-    "year": 2022
-  },
-  {
-    "country": "France",
     "month": "August",
     "year": 2022
   },

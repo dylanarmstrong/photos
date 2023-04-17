@@ -23,7 +23,7 @@ fi
 
 # Stat command behaves differently
 platform='unknown'
-uname=`uname`
+uname=$(uname)
 if [[ "$uname" == 'Linux' ]]; then
   platform='linux'
 else

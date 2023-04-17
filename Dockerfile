@@ -4,13 +4,9 @@ LABEL maintainer="Dylan Armstrong <dylan@dylan.is>"
 
 WORKDIR /app
 
-COPY .env ./
-COPY images.db ./
-COPY tsconfig.json ./
-COPY package-lock.json ./
-COPY package.json ./
-COPY src ./src
+COPY .env images.db tsconfig.json package.json package-lock.json ./
 COPY static ./static
+COPY src ./src
 
 RUN \
   apk add --no-cache --update --virtual \
