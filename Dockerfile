@@ -16,8 +16,6 @@ RUN \
 
 WORKDIR /app
 
-COPY static ./static
-
 COPY package.json package-lock.json ./
 RUN npm ci
 
@@ -25,6 +23,7 @@ COPY .env tsconfig.json ./
 COPY src ./src
 RUN npm run build
 
+COPY static ./static
 COPY images.db ./
 
 EXPOSE 80/tcp
