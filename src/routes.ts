@@ -4,12 +4,9 @@ import helmet from 'helmet';
 import process from 'process';
 import type { Response } from 'express';
 
-import { defaults, log } from './utils';
-
-import { getAlbums, getExifCache, isValidAlbum } from './albums';
-
 import type { RenderOptions } from './@types';
-
+import { defaults, log } from './utils';
+import { getAlbums, getExifCache, isValidAlbum } from './albums';
 import { viewAlbum } from './aws';
 
 const albums = getAlbums();

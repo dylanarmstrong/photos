@@ -1,6 +1,6 @@
-import { fromCognitoIdentityPool } from '@aws-sdk/credential-providers';
-import { ListObjectsV2Command, S3Client } from '@aws-sdk/client-s3';
 import type { ListObjectsV2CommandOutput, _Object } from '@aws-sdk/client-s3';
+import { ListObjectsV2Command, S3Client } from '@aws-sdk/client-s3';
+import { fromCognitoIdentityPool } from '@aws-sdk/credential-providers';
 
 import type { GetObjects } from './@types';
 

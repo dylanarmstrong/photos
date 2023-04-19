@@ -1,3 +1,4 @@
+*.tar
 .*
 images.db
 images.db.bak
