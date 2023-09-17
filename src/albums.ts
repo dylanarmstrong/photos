@@ -57,7 +57,9 @@ const mapAlbum = (album: Album) => defaults(album, defaultAlbum);
 const setAlbums = () => {
   albums = JSON.parse(
     String(fs.readFileSync(path.join(process.cwd(), 'src', 'data.json'))),
-  ).map(mapAlbum);
+  )
+    .map(mapAlbum)
+    .filter((album: Album) => album.album !== '-');
 };
 
 const populateExifCache = () => {
