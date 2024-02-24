@@ -1,13 +1,9 @@
-import defaults from 'defaults';
 import express from 'express';
 
-import type { Response } from 'express';
-
-import { log } from './utils.js';
 import { getAlbums, getExifCache } from './database.js';
+import { imagesPerPage } from './constants.js';
+import { log, render, sendStatus } from './utils.js';
 import { viewAlbum } from './aws.js';
-
-import type { RenderOptions } from './@types/index.js';
 
 const albums = getAlbums();
 const exifCache = getExifCache(albums);
@@ -15,41 +11,17 @@ const exifCache = getExifCache(albums);
 const isValidAlbum = (albumName: string) =>
   albums.some(({ album, disabled }) => !disabled && albumName === album);
 
-const { baseUrl } = process.env;
-
-const imagesPerPage = Number.parseInt(process.env['imagesPerPage'] || '20');
-
 const albumImages = new Map<string, string[]>();
-const { domain } = process.env;
+const { IMAGE_DOMAIN } = process.env;
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
-
-const sendStatus = (response: Response, status: number) => {
-  response.status(status).render('status', {
-    baseUrl,
-    nonce: response.locals['nonce'],
-    status,
-    year: new Date().getFullYear(),
-  });
-};
-
-const render = (response: Response, page: string, object: RenderOptions) => {
-  const defaultRender = {
-    baseUrl,
-    nonce: response.locals['nonce'],
-    status: 200,
-    year: new Date().getFullYear(),
-  };
-
-  response.status(200).render(page, defaults(object, defaultRender));
-};
 
 const mapImage = (image: string) => {
   const [splitAlbum, splitFile] = image.split('/');
   const baseFile = splitFile.replace(/.jpe?g/i, '');
   const exif = exifCache[splitAlbum][splitFile];
-  const base = `${domain}/${splitAlbum}`;
+  const base = `${IMAGE_DOMAIN}/${splitAlbum}`;
   const { x, y } = exif;
   const ratio = y / x;
   const width = Math.max(256, Math.floor(192 / ratio));

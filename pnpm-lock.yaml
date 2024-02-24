@@ -20,9 +20,6 @@ dependencies:
   defaults:
     specifier: ^3.0.0
     version: 3.0.0
-  dotenv:
-    specifier: ^16.4.5
-    version: 16.4.5
   express:
     specifier: ^4.18.2
     version: 4.18.2
@@ -2245,11 +2242,6 @@ packages:
 
   /doctypes@1.1.0:
     resolution: {integrity: sha512-LLBi6pEqS6Do3EKQ3J0NqHWV5hhb78Pi8vvESYwyOy2c31ZEZVdtitdzsQsKb7878PEERhzUk0ftqGhG6Mz+pQ==}
-    dev: false
-
-  /dotenv@16.4.5:
-    resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
-    engines: {node: '>=12'}
     dev: false
 
   /ee-first@1.1.1:

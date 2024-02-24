@@ -1,4 +1,10 @@
-import type { Request } from 'express';
+import defaults from 'defaults';
+
+import type { Request, Response } from 'express';
+
+import { baseUrl } from './constants.js';
+
+import type { RenderOptions } from './@types/index.js';
 
 const getIp = (request: Request) => {
   try {
@@ -17,4 +23,24 @@ const log = (request: Request, message: string) => {
   console.log(`[${getDate()}] [${getIp(request)}] ${message}`);
 };
 
-export { log };
+const sendStatus = (response: Response, status: number) => {
+  response.status(status).render('status', {
+    baseUrl,
+    nonce: response.locals['nonce'],
+    status,
+    year: new Date().getFullYear(),
+  });
+};
+
+const render = (response: Response, page: string, object: RenderOptions) => {
+  const defaultRender = {
+    baseUrl,
+    nonce: response.locals['nonce'],
+    status: 200,
+    year: new Date().getFullYear(),
+  };
+
+  response.status(200).render(page, defaults(object, defaultRender));
+};
+
+export { log, render, sendStatus };

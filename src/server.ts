@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import compression from 'compression';
 import express from 'express';
 import helmet from 'helmet';
@@ -6,10 +5,7 @@ import { join } from 'node:path';
 import { randomBytes } from 'node:crypto';
 
 import routes from './routes.js';
-
-const baseUrl = process.env['baseUrl'] || '/photos';
-const port = Number.parseInt(String(process.env['port'] || '80'));
-const isDevelopment = process.env['NODE_ENV'] === 'development';
+import { baseUrl, isDevelopment, port } from './constants.js';
 
 const app = express();
 

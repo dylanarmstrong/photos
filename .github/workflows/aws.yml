@@ -31,10 +31,21 @@ jobs:
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
       env:
+        AWS_IDENTITY_POOL_ID: ${{ vars.AWS_IDENTITY_POOL_ID }}
+        AWS_REGION: ${{ vars.AWS_REGION }}
+        AWS_S3_BUCKET: ${{ vars.AWS_S3_BUCKET }}
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ vars.AWS_ECR_REPOSITORY }}
+        IMAGE_DOMAIN: ${{ vars.IMAGE_DOMAIN }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        docker build --build-arg="build=true" -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker build \
+          --build-arg="AWS_IDENTITY_POOL_ID=$AWS_IDENTITY_POOL_ID" \
+          --build-arg="AWS_REGION=$AWS_REGION" \
+          --build-arg="AWS_S3_BUCKET=$AWS_S3_BUCKET" \
+          --build-arg="IMAGE_DOMAIN=$IMAGE_DOMAIN" \
+          --build-arg="build=true" \
+          -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+          .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT

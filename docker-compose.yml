@@ -11,3 +11,5 @@ services:
     ports:
       - 80:80/tcp
     restart: unless-stopped
+    volumes:
+      - ./images.db:/app/images.db

@@ -8,14 +8,18 @@ import { fromCognitoIdentityPool } from '@aws-sdk/credential-providers';
 
 import type { GetObjects } from './@types/index.js';
 
-const { Bucket = '', IdentityPoolId = '', region = '' } = process.env;
+const {
+  AWS_IDENTITY_POOL_ID = '',
+  AWS_REGION = '',
+  AWS_S3_BUCKET = '',
+} = process.env;
 
 const s3 = new S3Client({
   credentials: fromCognitoIdentityPool({
-    clientConfig: { region },
-    identityPoolId: IdentityPoolId,
+    clientConfig: { region: AWS_REGION },
+    identityPoolId: AWS_IDENTITY_POOL_ID,
   }),
-  region,
+  region: AWS_REGION,
 });
 
 const photoMap = ({ Key, Size }: _Object): string | undefined => {
@@ -53,7 +57,7 @@ const viewAlbum = async (albumName: string) => {
       };
 
       const command = new ListObjectsV2Command({
-        Bucket,
+        Bucket: AWS_S3_BUCKET,
         ContinuationToken,
         Delimiter: '/',
         Prefix: `${encodeURIComponent(albumName)}/`,
