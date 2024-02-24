@@ -20,9 +20,7 @@ const { baseUrl } = process.env;
 const imagesPerPage = Number.parseInt(process.env['imagesPerPage'] || '20');
 
 const albumImages = new Map<string, string[]>();
-const __DEV__ = process.env['NODE_ENV'] === 'development';
-// Use the devDomain if running server:dev
-const domain = __DEV__ ? process.env['devDomain'] : process.env['domain'];
+const { domain } = process.env;
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
