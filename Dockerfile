@@ -20,8 +20,6 @@ RUN if [[ "$build" == "true" ]]; then \
   pnpm prune --prod; \
 fi
 
-COPY images.db ./
-
 EXPOSE 80/tcp
 
 CMD [ "sh", "./scripts/docker-init.sh" ]
