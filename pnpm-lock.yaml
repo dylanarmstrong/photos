@@ -38,8 +38,8 @@ dependencies:
 
 devDependencies:
   '@dylanarmstrong/eslint-config':
-    specifier: link:/Users/dylan/src/eslint-config
-    version: link:../../../src/eslint-config
+    specifier: ^0.6.0
+    version: 0.6.0(eslint@8.57.0)
   '@dylanarmstrong/tsconfig':
     specifier: ^0.0.2
     version: 0.0.2
@@ -864,6 +864,16 @@ packages:
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
     dev: false
+
+  /@dylanarmstrong/eslint-config@0.6.0(eslint@8.57.0):
+    resolution: {integrity: sha512-K7tTycJv4tOVi5TobE4UCAIKg7pZTGbrhdxYjq4GNERoyGnD6hD2vLJhdjszgAXn0TJF+jhTOFeXQpgaaqomOQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      eslint: ^8.57.0
+    dependencies:
+      chalk: 4.1.2
+      eslint: 8.57.0
+    dev: true
 
   /@dylanarmstrong/tsconfig@0.0.2:
     resolution: {integrity: sha512-nvJfte/n74in70bjGy+/CYU9Mj0RMNkBokQvThC3fqURKmeO2FSQeytVthmr1hnMcQJ7IxseQ1o7CSKb12iesA==}

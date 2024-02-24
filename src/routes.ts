@@ -1,18 +1,19 @@
 import defaults from 'defaults';
 import express from 'express';
-import helmet from 'helmet';
-import { randomBytes } from 'node:crypto';
 
 import type { Response } from 'express';
 
 import { log } from './utils.js';
-import { getAlbums, getExifCache, isValidAlbum } from './albums.js';
+import { getAlbums, getExifCache } from './database.js';
 import { viewAlbum } from './aws.js';
 
 import type { RenderOptions } from './@types/index.js';
 
 const albums = getAlbums();
-const exifCache = getExifCache();
+const exifCache = getExifCache(albums);
+
+const isValidAlbum = (albumName: string) =>
+  albums.some(({ album, disabled }) => !disabled && albumName === album);
 
 const { baseUrl } = process.env;
 
@@ -66,31 +67,6 @@ const mapImage = (image: string) => {
     width,
   };
 };
-
-router.use((_, response, next) => {
-  response.locals['nonce'] = randomBytes(16).toString('hex');
-  next();
-});
-
-// Used for nonce to ensure it doesn't work if undefined
-const rnd = randomBytes(16).toString('hex');
-
-router.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        'img-src': ["'self'", 'photos.dylan.is'],
-        'script-src': [
-          "'self'",
-          (_, response) => `'nonce-${response.locals.nonce || rnd}'`,
-        ],
-        // eslint-disable-next-line unicorn/no-null
-        'upgrade-insecure-requests': __DEV__ ? null : [],
-      },
-      useDefaults: true,
-    },
-  }),
-);
 
 // Check that album exists
 router.get('/:album*', (request, response, next) => {

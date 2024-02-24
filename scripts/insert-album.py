@@ -9,6 +9,7 @@ import sqlite3
 import sys
 from PIL import Image
 
+
 # Usage: python3 scripts/insert.py /path/to/album
 def main(argv):
     if len(argv) == 0:
@@ -42,6 +43,29 @@ def main(argv):
                 file_split = file.split(sep)
                 len_file_split = len(file_split)
                 album = file_split[len_file_split - 2]
+                try:
+                    cur.execute(
+                        """
+                        insert or ignore into albums (
+                            album
+                        ) values (
+                            ?
+                        )
+                        """
+                    )
+                except:
+                    pass
+
+                cursor = cur.execute(
+                    """
+                    select id
+                    from albums
+                    where album = ?
+                    """,
+                    [album],
+                )
+                [album_id] = cursor.fetchone()
+
                 file_name = file_split[len_file_split - 1]
 
                 data = img.read_exif()
@@ -59,10 +83,10 @@ def main(argv):
                     cur.execute(
                         """
                         insert into images (
-                            album,
                             file,
                             height,
-                            width
+                            width,
+                            album_id
                         ) values (
                             ?,
                             ?,
@@ -70,7 +94,7 @@ def main(argv):
                             ?
                         )
                     """,
-                        [album, file_name, pil_image.height, pil_image.width],
+                        [file_name, pil_image.height, pil_image.width, album_id],
                     )
 
                     # For compatibility with older sqlite3, do not use returning
@@ -78,9 +102,9 @@ def main(argv):
                         """
                         select id
                         from images
-                        where album = ? and file = ?
+                        where album_id = ? and file = ?
                     """,
-                        [album, file_name],
+                        [album_id, file_name],
                     )
                     [id] = cur.fetchone()
 
@@ -111,7 +135,7 @@ def main(argv):
                             shutter_speed_value,
                             x_resolution,
                             y_resolution,
-                            image
+                            image_id
                         ) values (
                             ?,
                             ?,
@@ -169,8 +193,8 @@ def main(argv):
                         ],
                     )
                     count += 1
-                except:
-                    pass
+                except Exception as e:
+                    print("exception", e, album_id, file_name)
 
     con.commit()
     con.close()

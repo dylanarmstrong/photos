@@ -3,7 +3,7 @@
 set -eEu -o pipefail
 
 file="$1"
-file_name=$(echo "$file" | sed -e 's/\.jpeg//g')
+file_name=${file//\.jpeg/}
 
 out="$file_name.out.png"
 png="$file_name.in.png"

@@ -17,7 +17,7 @@
   },
   "description": "Just a super, simple, spectacular S3 photo browser",
   "devDependencies": {
-    "@dylanarmstrong/eslint-config": "link:/Users/dylan/src/eslint-config",
+    "@dylanarmstrong/eslint-config": "^0.6.0",
     "@dylanarmstrong/tsconfig": "^0.0.2",
     "@types/better-sqlite3": "^7.6.9",
     "@types/compression": "^1.7.5",

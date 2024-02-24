@@ -1,23 +1,49 @@
 import 'dotenv/config';
 import compression from 'compression';
 import express from 'express';
+import helmet from 'helmet';
 import { join } from 'node:path';
+import { randomBytes } from 'node:crypto';
 
 import routes from './routes.js';
 
-const { baseUrl } = process.env;
-
-const port = Number.parseInt(String(process.env['port'] ?? '80'));
+const baseUrl = process.env['baseUrl'] || '/photos';
+const port = Number.parseInt(String(process.env['port'] || '80'));
+const isDevelopment = process.env['NODE_ENV'] === 'development';
 
 const app = express();
 
-app.disable('etag');
-app.set('views', join(process.cwd(), 'src', 'views'));
+// Used for nonce to ensure it doesn't work if undefined
+const rnd = randomBytes(16).toString('hex');
+
 app.set('view engine', 'pug');
+app.set('views', join(process.cwd(), 'src', 'views'));
 app.use(compression());
 
+app.use((_, response, next) => {
+  response.locals['nonce'] = randomBytes(16).toString('hex');
+  next();
+});
+
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        'img-src': ["'self'", 'photos.dylan.is'],
+        'script-src': [
+          "'self'",
+          (_, response) => `'nonce-${response.locals.nonce || rnd}'`,
+        ],
+        // eslint-disable-next-line unicorn/no-null
+        'upgrade-insecure-requests': isDevelopment ? null : [],
+      },
+      useDefaults: true,
+    },
+  }),
+);
+
 if (baseUrl) {
-  app.use(baseUrl, express.static('static'));
+  app.use(baseUrl, express.static('static', { maxAge: '1d' }));
   app.use(baseUrl, routes);
 
   app.listen(port, () => {
