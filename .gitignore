@@ -1,10 +1,11 @@
 *.tar
 .*
+backup/
 images.db
 images.db-*
 images.db.*
-lib
-node_modules
+lib/
+node_modules/
 scripts/map.py
-test_images
-venv
+test_images/
+venv/

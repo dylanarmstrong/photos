@@ -51,7 +51,8 @@ def main(argv):
                         ) values (
                             ?
                         )
-                        """
+                        """,
+                        [album]
                     )
                 except:
                     pass
@@ -193,8 +194,8 @@ def main(argv):
                         ],
                     )
                     count += 1
-                except Exception as e:
-                    print("exception", e, album_id, file_name)
+                except:
+                    pass
 
     con.commit()
     con.close()

@@ -43,7 +43,7 @@ app.use(
 );
 
 if (baseUrl) {
-  app.use(baseUrl, express.static('static', { maxAge: '1d' }));
+  app.use(baseUrl, express.static('static', { maxAge: '1y' }));
   app.use(baseUrl, routes);
 
   app.listen(port, () => {
