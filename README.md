@@ -1,9 +1,8 @@
 ### Just a super, simple, spectacular S3 photo browser
 
 1. Copy `env.example` to `.env`, and update as needed.
-2. Update `src/albums.json` as needed.
-3. `npm i`
-4. `npm run server`
+2. `pnpm install`
+3. `pnpm run build && pnpm run start`
 
 ### S3 Folder Structure
 
@@ -16,17 +15,11 @@
 └── ...
 ```
 
-### Docker
+### Running
 
 ```
-docker build -t dylanarms/photos .
-docker run -d -p <host port>:<container port> --name photos dylanarms/photos
+docker-compose up --build
 ```
-
-### List of Albums
-
-This is hardcoded in `src/albums.json` to allow specifying the visibility
-and the display name.
 
 ### Create Thumbnails
 
@@ -44,9 +37,22 @@ To load exif data, download all images to an album directory, then run:
 ```sh
 python3 -m venv venv
 . venv/bin/activate
-python3 -m pip install pyexiv2 pillow
+python3 -m pip install -r requirements.txt
 python3 scripts/setup-db.py
-python3 scripts/insert.py /tmp/photos/turkey-2020
+python3 scripts/insert-album.py /tmp/photos/turkey-2020
+```
+
+#### Development (Docker)
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+```
+
+#### Development (Non-Docker)
+
+```bash
+pnpm install
+pnpm run dev
 ```
 
 ### Demo
