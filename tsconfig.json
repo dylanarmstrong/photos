@@ -1,20 +1,9 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "strictNullChecks": true,
-    "outDir": "./lib",
-    "strict": true,
-    "target": "es2020"
+    "outDir": "./lib"
   },
-  "exclude":[
-    "./node_modules"
-  ],
-  "include": ["./src/**/*"]
+  "extends": "@dylanarmstrong/tsconfig",
+  "include": [
+    "./src/**/*"
+  ]
 }

@@ -1,11 +1,9 @@
-import fs from 'fs';
-import path from 'path';
-import sqlite from 'better-sqlite3';
-import type { Database } from 'better-sqlite3';
+import defaults from 'defaults';
+import sqlite, { type Database } from 'better-sqlite3';
+import { join } from 'node:path';
+import { readFileSync, existsSync } from 'node:fs';
 
-import { defaults } from './utils';
-
-import type { Album, ExifCache, SqlRow } from './@types';
+import type { Album, ExifCache, SqlRow } from './@types/index.js';
 
 const fields = new Map<string, string>();
 fields.set('datetime', 'string');
@@ -21,7 +19,7 @@ fields.set('width', 'number');
 
 const isSqlRow = (value: unknown): value is SqlRow => {
   let result = true;
-  fields.forEach((type, key) => {
+  for (const [key, type] of fields.entries()) {
     if (result) {
       const good =
         Object.hasOwnProperty.call(value, key) &&
@@ -30,13 +28,13 @@ const isSqlRow = (value: unknown): value is SqlRow => {
         result = false;
       }
     }
-  });
+  }
   return result;
 };
 
 let albums: Album[] = [];
 let exifCache: ExifCache = {};
-let db: Database;
+let database: Database;
 
 const getAlbums = () => albums;
 const getExifCache = () => exifCache;
@@ -52,31 +50,32 @@ const defaultAlbum = {
   year: '-',
 };
 
-const mapAlbum = (album: Album) => defaults(album, defaultAlbum);
+const mapAlbum = (album: Partial<Album>): Required<Album> =>
+  defaults(album, defaultAlbum);
 
 const setAlbums = () => {
   albums = JSON.parse(
-    String(fs.readFileSync(path.join(process.cwd(), 'src', 'data.json'))),
+    String(readFileSync(join(process.cwd(), 'src', 'data.json'))),
   )
-    .map(mapAlbum)
+    .map((album: Partial<Album>) => mapAlbum(album))
     .filter((album: Album) => album.album !== '-');
 };
 
 const populateExifCache = () => {
   exifCache = {};
 
-  if (!db) {
-    if (fs.existsSync('./images.db')) {
-      db = sqlite('./images.db', {});
+  if (!database) {
+    if (existsSync('./images.db')) {
+      database = sqlite('./images.db', {});
     } else {
-      albums.forEach(({ album }) => {
+      for (const { album } of albums) {
         exifCache[album] = {};
-      });
+      }
       return;
     }
   }
 
-  const exifStmt = db.prepare(`
+  const exifStmt = database.prepare(`
     SELECT
       i.file,
       i.height as height,
@@ -96,7 +95,7 @@ const populateExifCache = () => {
       album = ?
   `);
 
-  albums.forEach(({ album }) => {
+  for (const { album } of albums) {
     exifCache[album] = {};
     const eachRow = (row: unknown) => {
       if (!isSqlRow(row)) {
@@ -116,11 +115,7 @@ const populateExifCache = () => {
         width,
       } = row;
 
-      if (model.startsWith(make)) {
-        make = '';
-      } else {
-        make = `${make} `;
-      }
+      make = model.startsWith(make) ? '' : `${make} `;
 
       if (!make && !model) {
         make = '-';
@@ -128,7 +123,7 @@ const populateExifCache = () => {
 
       const displayDate = datetime
         .replace(/:..$/, '')
-        .replace(/-/g, '/')
+        .replaceAll('-', '/')
         .replace(' ', ' @ ');
 
       let coord = '-';
@@ -139,10 +134,10 @@ const populateExifCache = () => {
         gps_longitude_ref
       ) {
         coord = `${gps_latitude.replace(
-          /([0-9]+)\/1 ([0-9]+)\/1 ([0-9]{2}).*$/,
+          /(\d+)\/1 (\d+)\/1 (\d{2}).*$/,
           '$1˚$2\'$3"',
         )} ${gps_latitude_ref}, ${gps_longitude.replace(
-          /([0-9]+)\/1 ([0-9]+)\/1 ([0-9]{2}).*$/,
+          /(\d+)\/1 (\d+)\/1 (\d{2}).*$/,
           '$1˚$2\'$3"',
         )} ${gps_longitude_ref}`;
       }
@@ -164,8 +159,10 @@ const populateExifCache = () => {
       };
     };
 
-    exifStmt.all(album).forEach(eachRow);
-  });
+    for (const albumExif of exifStmt.all(album)) {
+      eachRow(albumExif);
+    }
+  }
 };
 
 setAlbums();

@@ -1,8 +1,12 @@
-import type { ListObjectsV2CommandOutput, _Object } from '@aws-sdk/client-s3';
-import { ListObjectsV2Command, S3Client } from '@aws-sdk/client-s3';
+import {
+  ListObjectsV2Command,
+  S3Client,
+  type ListObjectsV2CommandOutput,
+  type _Object,
+} from '@aws-sdk/client-s3';
 import { fromCognitoIdentityPool } from '@aws-sdk/credential-providers';
 
-import type { GetObjects } from './@types';
+import type { GetObjects } from './@types/index.js';
 
 const { Bucket = '', IdentityPoolId = '', region = '' } = process.env;
 
@@ -14,28 +18,21 @@ const s3 = new S3Client({
   region,
 });
 
-const photoMap = (value: _Object) => {
-  const { Key, Size } = value;
-  if (Size === 0 || !Key) {
-    return null;
-  }
-
+const photoMap = ({ Key, Size }: _Object): string | undefined => {
   // Only list full size images, and not thumbnails
-  if (Key.match(/(?!.*_thumb.*)^.*\.jpeg$/i)) {
+  if (Size && Size > 0 && Key && /(?!.*_thumb.*)^.*\.jpeg$/i.test(Key)) {
     return Key;
   }
 
-  return null;
+  return undefined;
 };
-
-const filterNullKey = (k: string | null): k is string => typeof k === 'string';
 
 const viewAlbum = async (albumName: string) => {
   const getObjects = async (ContinuationToken?: string): Promise<GetObjects> =>
     new Promise((resolve) => {
-      const listCb = (data: ListObjectsV2CommandOutput) => {
+      const listCallback = (data: ListObjectsV2CommandOutput) => {
         const { Contents, IsTruncated, NextContinuationToken } = data;
-        if (typeof Contents === 'undefined') {
+        if (Contents === undefined) {
           resolve({
             IsTruncated: false,
             NextContinuationToken: undefined,
@@ -44,7 +41,9 @@ const viewAlbum = async (albumName: string) => {
           return;
         }
 
-        const photos: string[] = Contents.map(photoMap).filter(filterNullKey);
+        const photos: string[] = Contents.map((Content) =>
+          photoMap(Content),
+        ).filter((k): k is string => typeof k === 'string');
 
         resolve({
           IsTruncated: IsTruncated || false,
@@ -59,7 +58,7 @@ const viewAlbum = async (albumName: string) => {
         Delimiter: '/',
         Prefix: `${encodeURIComponent(albumName)}/`,
       });
-      s3.send(command).then(listCb);
+      s3.send(command).then(listCallback);
     });
 
   const photos = [];

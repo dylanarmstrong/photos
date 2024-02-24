@@ -1,47 +1,49 @@
-import crypto from 'crypto';
+import defaults from 'defaults';
 import express from 'express';
 import helmet from 'helmet';
-import process from 'process';
+import { randomBytes } from 'node:crypto';
+
 import type { Response } from 'express';
 
-import type { RenderOptions } from './@types';
-import { defaults, log } from './utils';
-import { getAlbums, getExifCache, isValidAlbum } from './albums';
-import { viewAlbum } from './aws';
+import { log } from './utils.js';
+import { getAlbums, getExifCache, isValidAlbum } from './albums.js';
+import { viewAlbum } from './aws.js';
+
+import type { RenderOptions } from './@types/index.js';
 
 const albums = getAlbums();
 const exifCache = getExifCache();
 
 const { baseUrl } = process.env;
 
-const imagesPerPage = Number.parseInt(process.env.imagesPerPage || '20');
+const imagesPerPage = Number.parseInt(process.env['imagesPerPage'] || '20');
 
 const albumImages = new Map<string, string[]>();
-const __DEV__ = process.env.MODE === 'development';
+const __DEV__ = process.env['NODE_ENV'] === 'development';
 // Use the devDomain if running server:dev
-const domain = __DEV__ ? process.env.devDomain : process.env.domain;
+const domain = __DEV__ ? process.env['devDomain'] : process.env['domain'];
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
 
-const sendStatus = (res: Response, status: number) => {
-  res.status(status).render('status', {
+const sendStatus = (response: Response, status: number) => {
+  response.status(status).render('status', {
     baseUrl,
-    nonce: res.locals.nonce,
+    nonce: response.locals['nonce'],
     status,
     year: new Date().getFullYear(),
   });
 };
 
-const render = (res: Response, page: string, obj: RenderOptions) => {
+const render = (response: Response, page: string, object: RenderOptions) => {
   const defaultRender = {
     baseUrl,
-    nonce: res.locals.nonce,
+    nonce: response.locals['nonce'],
     status: 200,
     year: new Date().getFullYear(),
   };
 
-  res.status(200).render(page, defaults(obj, defaultRender));
+  response.status(200).render(page, defaults(object, defaultRender));
 };
 
 const mapImage = (image: string) => {
@@ -65,13 +67,13 @@ const mapImage = (image: string) => {
   };
 };
 
-router.use((_, res, next) => {
-  res.locals.nonce = crypto.randomBytes(16).toString('hex');
+router.use((_, response, next) => {
+  response.locals['nonce'] = randomBytes(16).toString('hex');
   next();
 });
 
 // Used for nonce to ensure it doesn't work if undefined
-const rnd = crypto.randomBytes(16).toString('hex');
+const rnd = randomBytes(16).toString('hex');
 
 router.use(
   helmet({
@@ -80,35 +82,35 @@ router.use(
         'img-src': ["'self'", 'photos.dylan.is'],
         'script-src': [
           "'self'",
-          (_, res) => `'nonce-${res.locals.nonce || rnd}'`,
+          (_, response) => `'nonce-${response.locals.nonce || rnd}'`,
         ],
+        // eslint-disable-next-line unicorn/no-null
         'upgrade-insecure-requests': __DEV__ ? null : [],
       },
       useDefaults: true,
     },
-    expectCt: false,
   }),
 );
 
 // Check that album exists
-router.get('/:album*', (req, res, next) => {
+router.get('/:album*', (request, response, next) => {
   // Asterisk is not in the param name..
-  const { album } = req.params as unknown as { album: string };
+  const { album } = request.params as unknown as { album: string };
   if (!isValidAlbum(album)) {
-    log(req, `invalid album: ${album}`);
-    sendStatus(res, 404);
+    log(request, `invalid album: ${album}`);
+    sendStatus(response, 404);
     return;
   }
   next();
 });
 
-router.get('/:album/:page', async (req, res) => {
-  const { album } = req.params;
-  const page = Number.parseInt(req.params.page, 10);
-  log(req, `${album}/${page}`);
+router.get('/:album/:page', async (request, response) => {
+  const { album } = request.params;
+  const page = Number.parseInt(request.params.page, 10);
+  log(request, `${album}/${page}`);
 
   if (Number.isNaN(page)) {
-    sendStatus(res, 404);
+    sendStatus(response, 404);
     return;
   }
 
@@ -139,22 +141,23 @@ router.get('/:album/:page', async (req, res) => {
       const [, file] = exifAlbum.split('/');
       return !!cache[file];
     };
-    images = (await viewAlbum(album)).filter(hasExif).sort(sortImages);
+    const allImages = await viewAlbum(album);
+    images = allImages.filter((image) => hasExif(image)).sort(sortImages);
     albumImages.set(album, images);
   }
 
   const pages = Math.ceil(images.length / imagesPerPage);
 
   if (page > pages || page < 1) {
-    sendStatus(res, 404);
+    sendStatus(response, 404);
     return;
   }
 
   const data = images
     .slice((page - 1) * imagesPerPage, page * imagesPerPage)
-    .map(mapImage);
+    .map((image) => mapImage(image));
 
-  render(res, 'album', {
+  render(response, 'album', {
     // Display Name
     album: albums.find(({ album: folderName }) => folderName === album),
     datas: data,
@@ -165,14 +168,14 @@ router.get('/:album/:page', async (req, res) => {
   });
 });
 
-router.get('/:album', (req, res) => {
-  const { album } = req.params;
-  res.redirect(`/${album}/1`);
+router.get('/:album', (request, response) => {
+  const { album } = request.params;
+  response.redirect(`/${album}/1`);
 });
 
-router.get('/', (req, res) => {
-  log(req, 'index');
-  render(res, 'index', {
+router.get('/', (request, response) => {
+  log(request, 'index');
+  render(response, 'index', {
     albums,
   });
 });

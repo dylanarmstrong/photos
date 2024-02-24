@@ -1,0 +1,13 @@
+version: '3.9'
+services:
+  photos:
+    build:
+      args:
+        build: true
+    container_name: photos
+    environment:
+      NODE_ENV: production
+    image: dylanarms/photos
+    ports:
+      - 80:80/tcp
+    restart: unless-stopped

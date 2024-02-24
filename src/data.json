@@ -1,5 +1,30 @@
 [
   {
+    "country": "Netherlands",
+    "month": "December",
+    "year": 2023
+  },
+  {
+    "country": "Tunis",
+    "month": "November",
+    "year": 2023
+  },
+  {
+    "country": "Madagascar",
+    "month": "August",
+    "year": 2023
+  },
+  {
+    "country": "Reunion",
+    "month": "August",
+    "year": 2023
+  },
+  {
+    "country": "Iceland",
+    "month": "June",
+    "year": 2023
+  },
+  {
     "album": "cape-verde-2023",
     "country": "Cape Verde",
     "disabled": false,

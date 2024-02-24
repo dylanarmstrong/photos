@@ -1,7 +1,8 @@
 *.tar
 .*
 images.db
-images.db.bak
+images.db-*
+images.db.*
 lib
 node_modules
 scripts/map.py

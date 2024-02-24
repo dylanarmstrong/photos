@@ -1,31 +1,24 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
 LABEL maintainer="Dylan Armstrong <dylan@dylan.is>"
 
-RUN \
-  apk add --no-cache --update --virtual \
-    .gyp \
-    g++ \
-    make \
-    python3 \
-  && \
-  npm i -g npm \
-  && \
-  apk del \
-    .gyp
+RUN npm i -g pnpm
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY package.json pnpm-lock.yaml tsconfig.json .env ./
+RUN pnpm install --frozen-lockfile
 
-COPY .env tsconfig.json ./
 COPY src ./src
-RUN npm run build
-
+COPY scripts ./scripts
 COPY static ./static
 COPY images.db ./
 
+RUN if [[ "$build" == "true" ]]; then \
+  pnpm run build; \
+  pnpm prune --prod; \
+fi
+
 EXPOSE 80/tcp
 
-CMD [ "npm", "run", "server" ]
+CMD [ "sh", "./scripts/docker-init.sh" ]

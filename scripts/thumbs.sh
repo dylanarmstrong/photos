@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+set -eEu -o pipefail
+
 if [ ! $# -eq 1 ]; then
   printf 'Usage: thumbs.sh folder\n'
   exit 1
