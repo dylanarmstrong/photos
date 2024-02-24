@@ -1,5 +1,7 @@
 FROM node:20-alpine
 
+ARG build
+
 LABEL maintainer="Dylan Armstrong <dylan@dylan.is>"
 
 RUN npm i -g pnpm
