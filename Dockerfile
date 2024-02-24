@@ -14,12 +14,13 @@ RUN pnpm install --frozen-lockfile
 COPY src ./src
 COPY scripts ./scripts
 COPY static ./static
-COPY images.db ./
 
 RUN if [[ "$build" == "true" ]]; then \
   pnpm run build; \
   pnpm prune --prod; \
 fi
+
+COPY images.db ./
 
 EXPOSE 80/tcp
 
