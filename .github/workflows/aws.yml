@@ -45,6 +45,7 @@ jobs:
           --build-arg="AWS_S3_BUCKET=$AWS_S3_BUCKET" \
           --build-arg="IMAGE_DOMAIN=$IMAGE_DOMAIN" \
           --build-arg="build=true" \
+          --platform linux/arm64 \
           -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
           -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
           .
