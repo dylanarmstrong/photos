@@ -58,7 +58,7 @@
     "build": "tsc",
     "build:watch": "tsc --watch",
     "dev": "concurrently \"pnpm run build:watch\" \"NODE_ENV=development nodemon\"",
-    "lint": "prettier --write --ignore-unknown src/ && eslint --fix src/",
+    "lint": "prettier --write --ignore-unknown src/ static/css/ static/js/ && eslint --fix src/",
     "start": "node ./lib/server.js"
   },
   "type": "module"

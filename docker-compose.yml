@@ -6,6 +6,10 @@ services:
         build: true
     container_name: photos
     environment:
+      AWS_IDENTITY_POOL_ID: $AWS_IDENTITY_POOL_ID
+      AWS_REGION: $AWS_REGION
+      AWS_S3_BUCKET: $AWS_S3_BUCKET
+      IMAGE_DOMAIN: $IMAGE_DOMAIN
       NODE_ENV: production
     image: dylanarms/photos
     ports:

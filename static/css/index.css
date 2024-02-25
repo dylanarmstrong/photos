@@ -7,10 +7,11 @@
   font-family: Mukta;
   font-style: normal;
   font-display: swap;
-  src: local('Mukta Regular'),
+  src:
+    local('Mukta Regular'),
     local('Mukta-Regular'),
     url(/photos/fonts/mukta-latin-400.woff2) format('woff2'),
-    url(/photos/fonts/mukta-latin-400.woff) format('woff')
+    url(/photos/fonts/mukta-latin-400.woff) format('woff');
 }
 
 @font-face {
@@ -18,10 +19,11 @@
   font-style: normal;
   font-display: swap;
   font-weight: 700;
-  src: local('Mukta Bold'),
+  src:
+    local('Mukta Bold'),
     local('Mukta-Bold'),
     url(/photos/fonts/mukta-latin-700.woff2) format('woff2'),
-    url(/photos/fonts/mukta-latin-700.woff) format('woff')
+    url(/photos/fonts/mukta-latin-700.woff) format('woff');
 }
 
 html {
@@ -42,7 +44,7 @@ body {
   color: var(--black);
   font-family: Mukta, 'Helvetica Neue', sans-serif;
   font-weight: 400;
-  letter-spacing: -.25px;
+  letter-spacing: -0.25px;
   margin: 0;
 }
 

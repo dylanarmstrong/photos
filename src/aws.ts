@@ -6,13 +6,13 @@ import {
 } from '@aws-sdk/client-s3';
 import { fromCognitoIdentityPool } from '@aws-sdk/credential-providers';
 
-import type { GetObjects } from './@types/index.js';
+import {
+  AWS_IDENTITY_POOL_ID,
+  AWS_REGION,
+  AWS_S3_BUCKET,
+} from './constants.js';
 
-const {
-  AWS_IDENTITY_POOL_ID = '',
-  AWS_REGION = '',
-  AWS_S3_BUCKET = '',
-} = process.env;
+import type { GetObjects } from './@types/index.js';
 
 const s3 = new S3Client({
   credentials: fromCognitoIdentityPool({

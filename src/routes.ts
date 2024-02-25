@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { getAlbums, getExifCache } from './database.js';
-import { imagesPerPage } from './constants.js';
+import { IMAGE_DOMAIN, imagesPerPage } from './constants.js';
 import { log, render, sendStatus } from './utils.js';
 import { viewAlbum } from './aws.js';
 
@@ -12,7 +12,6 @@ const isValidAlbum = (albumName: string) =>
   albums.some(({ album, disabled }) => !disabled && albumName === album);
 
 const albumImages = new Map<string, string[]>();
-const { IMAGE_DOMAIN } = process.env;
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
@@ -126,4 +125,4 @@ router.get('/', (request, response) => {
   });
 });
 
-export default router;
+export { router };

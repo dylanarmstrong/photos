@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import { join } from 'node:path';
 import { randomBytes } from 'node:crypto';
 
-import routes from './routes.js';
+import { router } from './routes.js';
 import { baseUrl, isDevelopment, port } from './constants.js';
 
 const app = express();
@@ -13,7 +13,7 @@ const app = express();
 const rnd = randomBytes(16).toString('hex');
 
 app.set('view engine', 'pug');
-app.set('views', join(process.cwd(), 'src', 'views'));
+app.set('views', join(process.cwd(), 'views'));
 app.use(compression());
 
 app.use((_, response, next) => {
@@ -40,7 +40,7 @@ app.use(
 
 if (baseUrl) {
   app.use(baseUrl, express.static('static', { maxAge: '1y' }));
-  app.use(baseUrl, routes);
+  app.use(baseUrl, router);
 
   app.listen(port, () => {
     // eslint-disable-next-line no-console
