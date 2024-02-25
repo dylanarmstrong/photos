@@ -24,6 +24,12 @@ jobs:
         aws-region: ${{ vars.AWS_REGION }}
         role-to-assume: ${{ vars.AWS_ROLE_ARN }}
 
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
@@ -39,7 +45,7 @@ jobs:
         IMAGE_DOMAIN: ${{ vars.IMAGE_DOMAIN }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        docker build \
+        docker buildx build \
           --build-arg="AWS_IDENTITY_POOL_ID=$AWS_IDENTITY_POOL_ID" \
           --build-arg="AWS_REGION=$AWS_REGION" \
           --build-arg="AWS_S3_BUCKET=$AWS_S3_BUCKET" \
