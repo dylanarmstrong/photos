@@ -1,5 +1,7 @@
 :root {
   --black: #151515;
+  --blue: #133dc8;
+  --red: #e21352;
   --white: #fafafa;
 }
 
@@ -27,7 +29,6 @@
 }
 
 html {
-  -webkit-text-size-adjust: 100%;
   box-sizing: border-box;
   line-height: 1.15;
 }
@@ -39,13 +40,16 @@ html {
 }
 
 body {
-  -webkit-font-smoothing: subpixel-antialiased;
-  background: var(--white);
+  background-color: var(--white);
   color: var(--black);
   font-family: Mukta, 'Helvetica Neue', sans-serif;
   font-weight: 400;
   letter-spacing: -0.25px;
   margin: 0;
+}
+
+a {
+  color: var(--blue);
 }
 
 h1,
@@ -60,20 +64,60 @@ table {
   width: 100%;
 }
 
+thead tr th {
+  background-color: var(--white);
+  border-bottom: 0;
+  border-top: 0;
+  position: sticky;
+  top: 0;
+}
+
+thead tr th:before,
+thead tr th:after {
+  content: '';
+  left: 0;
+  position: absolute;
+  width: 100%;
+}
+
+thead tr th:before {
+  border-top: 1px solid var(--black);
+  top: 0;
+}
+
+thead tr th:after {
+  bottom: 0;
+  border-bottom: 1px solid var(--black);
+}
+
 td,
 th {
-  border: 1px solid var(--black);
   padding: 0.45rem;
   text-align: left;
 }
 
-th {
-  font-size: 1.2rem;
+td {
+  border: 1px solid var(--black);
 }
 
-tr th:nth-child(3),
-tr td:nth-child(3) {
+tbody tr:first-child td {
+  border-top: 0;
+}
+
+th {
+  font-size: 1.2rem;
+  border-left: 1px solid var(--black);
+  border-right: 1px solid var(--black);
+}
+
+tr th,
+tr td {
   display: none;
+}
+
+tr td.mobile,
+tr th.mobile {
+  display: table-cell;
 }
 
 .album a,
@@ -124,8 +168,8 @@ figcaption p {
 }
 
 @media (min-width: 576px) {
-  tr th:nth-child(3),
-  tr td:nth-child(3) {
+  tr th,
+  tr td {
     display: table-cell;
   }
 

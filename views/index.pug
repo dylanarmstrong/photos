@@ -6,18 +6,23 @@ block header
 block content
   table
     thead
-      th="photos"
-      th="country"
+      th.mobile="photos"
+      th.mobile="country"
       th="month"
-      th="year"
+      th.mobile="year"
+      th="count"
     tbody
       each album in albums
         tr
           if album.disabled
+            td.mobile="-"
+          else
+            td.mobile
+              a(href=album.album + '/1')="View"
+          td.mobile=album.country
+          td=album.month
+          td.mobile=album.year
+          if album.disabled
             td="-"
           else
-            td
-              a(href=album.album + '/1')="View"
-          td=album.country
-          td=album.month
-          td=album.year
+            td=album.count

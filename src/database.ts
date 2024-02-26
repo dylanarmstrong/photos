@@ -55,7 +55,7 @@ const stmtGetAlbums = database.prepare(`
     ifnull(disabled, 1) as disabled,
     ifnull(month, '-') as month,
     cast(ifnull(year, '-') as text) as year
-  FROM albums
+  FROM albums a
 `);
 
 const stmtGetExif = database.prepare(`

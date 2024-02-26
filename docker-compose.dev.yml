@@ -8,3 +8,5 @@ services:
       NODE_ENV: development
     volumes:
       - ./src:/app/src
+      - ./static:/app/static
+      - ./views:/app/views
