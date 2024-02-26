@@ -52,7 +52,7 @@ def main(argv):
                             ?
                         )
                         """,
-                        [album]
+                        [album],
                     )
                 except:
                     pass

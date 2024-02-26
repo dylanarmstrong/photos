@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3';
 
 import type { Album, ExifCache, SqlRow } from './@types/index.js';
+import { months } from './constants.js';
 
 const exifFields = new Map<string, string>();
 exifFields.set('datetime', 'string');
@@ -34,11 +35,13 @@ const isAlbums = (values: unknown[]): values is Album[] =>
   values.every(
     (value) =>
       Object.hasOwnProperty.call(value, 'album') &&
+      Object.hasOwnProperty.call(value, 'count') &&
       Object.hasOwnProperty.call(value, 'country') &&
       Object.hasOwnProperty.call(value, 'disabled') &&
       Object.hasOwnProperty.call(value, 'month') &&
       Object.hasOwnProperty.call(value, 'year') &&
       typeof (value as Album).album === 'string' &&
+      typeof (value as Album).count === 'number' &&
       typeof (value as Album).country === 'string' &&
       typeof (value as Album).disabled === 'number' &&
       typeof (value as Album).month === 'string' &&
@@ -49,38 +52,63 @@ const database = new Database('./images.db');
 database.pragma('journal_mode = WAL');
 
 const stmtGetAlbums = database.prepare(`
+  WITH grouped AS (
+    SELECT
+      a.id AS id,
+      COUNT(*) AS count
+    FROM exif e
+    JOIN images i ON i.id = e.image_id
+    JOIN albums a ON a.id = i.album_id
+    WHERE i.deleted = 0
+    GROUP BY a.id
+  )
   SELECT
     album,
-    ifnull(country, '-') as country,
-    ifnull(disabled, 1) as disabled,
-    ifnull(month, '-') as month,
-    cast(ifnull(year, '-') as text) as year
+    IFNULL(a.country, '-') AS country,
+    IFNULL(a.disabled, 1) AS disabled,
+    IFNULL(strftime('%m', a.datetime), '-') AS month,
+    CAST(IFNULL(strftime('%Y', a.datetime), '-') AS text) AS year,
+    IIF(a.disabled, 0, IFNULL(g.count, 0)) AS count
   FROM albums a
+  FULL OUTER JOIN grouped g ON g.id = a.id
+  ORDER BY a.datetime DESC
 `);
 
 const stmtGetExif = database.prepare(`
   SELECT
     i.file,
-    i.height as height,
-    i.width as width,
-    ifnull(e.gps_latitude, '') as gps_latitude,
-    ifnull(e.gps_latitude_ref, '') as gps_latitude_ref,
-    ifnull(e.gps_longitude, '') as gps_longitude,
-    ifnull(e.gps_longitude_ref, '') as gps_longitude_ref,
-    ifnull(e.datetime, '1970-01-01 00:00:01') as datetime,
-    ifnull(e.make, '') as make,
-    ifnull(e.model, '') as model
+    i.height AS height,
+    i.width AS width,
+    IFNULL(e.gps_latitude, '') AS gps_latitude,
+    IFNULL(e.gps_latitude_ref, '') AS gps_latitude_ref,
+    IFNULL(e.gps_longitude, '') AS gps_longitude,
+    IFNULL(e.gps_longitude_ref, '') AS gps_longitude_ref,
+    IFNULL(e.datetime, '1970-01-01 00:00:01') AS datetime,
+    IFNULL(e.make, '') AS make,
+    IFNULL(e.model, '') AS model
   FROM exif e
   JOIN images i ON i.id = e.image_id
   JOIN albums a ON a.id = i.album_id
   WHERE
-    a.album = ?
+    a.album = ? AND
+    i.deleted = 0
 `);
 
 const getAlbums = (): Album[] => {
   const rows = stmtGetAlbums.all();
   if (isAlbums(rows)) {
-    return rows;
+    const mapMonth = (row: Album) => {
+      const month = Number.parseInt(row.month);
+      if (Number.isNaN(month)) {
+        // Month is weird
+        return row;
+      }
+      return {
+        ...row,
+        month: months[month - 1],
+      };
+    };
+    return rows.map((row) => mapMonth(row));
   }
   return [];
 };

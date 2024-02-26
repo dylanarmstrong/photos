@@ -4,7 +4,6 @@ import { getAlbums, getExifCache } from './database.js';
 import { IMAGE_DOMAIN, imagesPerPage } from './constants.js';
 import { log, render, sendStatus } from './utils.js';
 import { viewAlbum } from './aws.js';
-import { Album } from './@types/index.js';
 
 const albums = getAlbums();
 const exifCache = getExifCache(albums);
@@ -13,9 +12,6 @@ const isValidAlbum = (albumName: string) =>
   albums.some(({ album, disabled }) => !disabled && albumName === album);
 
 const albumImages = new Map<string, string[]>();
-
-// eslint-disable-next-line new-cap
-const router = express.Router();
 
 const mapImage = (image: string) => {
   const [splitAlbum, splitFile] = image.split('/');
@@ -37,18 +33,6 @@ const mapImage = (image: string) => {
     width,
   };
 };
-
-// Check that album exists
-router.get('/:album*', (request, response, next) => {
-  // Asterisk is not in the param name..
-  const { album } = request.params as unknown as { album: string };
-  if (!isValidAlbum(album)) {
-    log(request, `invalid album: ${album}`);
-    sendStatus(response, 404);
-    return;
-  }
-  next();
-});
 
 const getAlbumImages = async (album: string) => {
   let images: string[] = [];
@@ -84,6 +68,21 @@ const getAlbumImages = async (album: string) => {
   }
   return images;
 };
+
+// eslint-disable-next-line new-cap
+const router = express.Router();
+
+// Check that album exists
+router.get('/:album*', (request, response, next) => {
+  // Asterisk is not in the param name..
+  const { album } = request.params as unknown as { album: string };
+  if (!isValidAlbum(album)) {
+    log(request, `invalid album: ${album}`);
+    sendStatus(response, 404);
+    return;
+  }
+  next();
+});
 
 router.get('/:album/:page', async (request, response) => {
   const { album } = request.params;
@@ -123,25 +122,10 @@ router.get('/:album', (request, response) => {
   response.redirect(`/${album}/1`);
 });
 
-const addCount = (allAlbums: Album[]) => {
-  const updatedAlbums: Album[] = [];
-  for (let index = 0, { length } = allAlbums; index < length; index += 1) {
-    const album = allAlbums[index];
-    updatedAlbums.push({
-      ...album,
-      // This is just a rough count of images,
-      // as it doesn't filter by exif or being actually available on AWS
-      // But that's okay
-      count: Object.keys(exifCache[album.album]).length,
-    });
-  }
-  return updatedAlbums;
-};
-
 router.get('/', async (request, response) => {
   log(request, 'index');
   render(response, 'index', {
-    albums: addCount(albums),
+    albums,
   });
 });
 

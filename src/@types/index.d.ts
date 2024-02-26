@@ -1,6 +1,6 @@
 type Album = {
   album: string;
-  count?: number;
+  count: number;
   country: string;
   disabled: boolean;
   month: string;

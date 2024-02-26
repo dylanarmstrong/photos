@@ -152,12 +152,13 @@ body {
 }
 
 figure {
+  border: 1px solid var(--black);
   margin: 0;
 }
 
 figcaption {
   background: var(--white);
-  border: 1px solid var(--black);
+  border-top: 1px solid var(--black);
   color: var(--black);
   margin-top: -5px;
   padding: 1rem;

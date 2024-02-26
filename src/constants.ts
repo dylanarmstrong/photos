@@ -10,6 +10,21 @@ const {
   IMAGE_DOMAIN,
 } = process.env;
 
+const months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
 export {
   AWS_IDENTITY_POOL_ID,
   AWS_REGION,
@@ -18,5 +33,6 @@ export {
   baseUrl,
   imagesPerPage,
   isDevelopment,
+  months,
   port,
 };

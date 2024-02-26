@@ -7,7 +7,7 @@ import sys
 # Run this to setup the image database
 def main():
     path = "./images.db"
-    version = "2"
+    version = "3"
     con = sqlite3.connect(path, detect_types=sqlite3.PARSE_DECLTYPES)
     cur = con.cursor()
 
@@ -62,9 +62,9 @@ def main():
 
             album text not null,
             country text,
-            disabled integer,
-            month text,
-            year integer,
+            datetime timestamp,
+            disabled integer not null default 1,
+
             unique (album)
         )
         """
@@ -75,6 +75,7 @@ def main():
         create table if not exists images (
             id integer primary key,
 
+            deleted integer not null default 0,
             file text not null,
             height integer,
             width integer,
