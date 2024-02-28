@@ -25,6 +25,7 @@ const mapImage = (image: string) => {
   const height = Math.floor(y * heightRatio);
 
   return {
+    base: splitFile,
     exif,
     height,
     image: `${base}/${splitFile}`,

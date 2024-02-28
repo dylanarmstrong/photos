@@ -6,7 +6,7 @@ services:
         build: false
     environment:
       NODE_ENV: development
+    ports:
+      - 5173:5173/tcp
     volumes:
-      - ./src:/app/src
-      - ./static:/app/static
-      - ./views:/app/views
+      - ./packages:/app/packages

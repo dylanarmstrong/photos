@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "lib": ["es2020", "dom", "dom.iterable"],
+    "outDir": "./lib"
+  },
+  "extends": "../../tsconfig.json",
+  "include": [
+    "./src/**/*"
+  ]
+}

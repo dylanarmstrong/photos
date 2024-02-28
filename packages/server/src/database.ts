@@ -67,7 +67,7 @@ const stmtGetAlbums = database.prepare(`
     IFNULL(a.country, '-') AS country,
     IFNULL(a.disabled, 1) AS disabled,
     IFNULL(strftime('%m', a.datetime), '-') AS month,
-    CAST(IFNULL(strftime('%Y', a.datetime), '-') AS text) AS year,
+    IFNULL(strftime('%Y', a.datetime), '-') AS year,
     IIF(a.disabled, 0, IFNULL(g.count, 0)) AS count
   FROM albums a
   FULL OUTER JOIN grouped g ON g.id = a.id

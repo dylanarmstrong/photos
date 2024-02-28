@@ -25,6 +25,8 @@ app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
+        // eslint-disable-next-line unicorn/no-null
+        'connect-src': isDevelopment ? ['ws://localhost:5173/'] : null,
         'img-src': ["'self'", 'photos.dylan.is'],
         'script-src': [
           "'self'",

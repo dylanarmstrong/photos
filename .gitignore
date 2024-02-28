@@ -9,3 +9,6 @@ node_modules/
 scripts/map.py
 test_images/
 venv/
+
+# Now generated via vite
+static/

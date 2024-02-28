@@ -48,12 +48,6 @@ html(lang='en-us')
     )
 
     link(
-      href=baseUrl + '/css/index.css',
-      rel='stylesheet',
-      type='text/css',
-    )
-
-    link(
       as='font',
       crossorigin='anonymous',
       href=baseUrl + '/fonts/mukta-latin-400.woff',
@@ -85,11 +79,30 @@ html(lang='en-us')
       type='font/woff2',
     )
 
-    script(
-      defer,
-      nonce=nonce,
-      src=baseUrl + '/js/navigation.js',
-    )
+    if isDevelopment
+      script(
+        nonce=nonce,
+        src='http://localhost:5173/@vite/client',
+        type='module',
+      )
+      script(
+        nonce=nonce,
+        src='http://localhost:5173/src/main.ts'
+        type='module',
+      )
+    else
+      link(
+        href=baseUrl + '/main.css',
+        nonce=nonce,
+        rel='stylesheet',
+      )
+      script(
+        src=baseUrl + '/main.js',
+        nonce=nonce,
+        type='module',
+      )
+
+    block head
 
   body
     header

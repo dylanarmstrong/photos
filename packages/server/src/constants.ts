@@ -7,7 +7,7 @@ const {
   AWS_IDENTITY_POOL_ID = '',
   AWS_REGION = '',
   AWS_S3_BUCKET = '',
-  IMAGE_DOMAIN,
+  IMAGE_DOMAIN = '',
 } = process.env;
 
 const months = [

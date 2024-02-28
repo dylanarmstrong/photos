@@ -2,7 +2,7 @@
 
 1. Copy `env.example` to `.env`, and update as needed.
 2. `pnpm install`
-3. `pnpm run build && pnpm run start`
+3. `pnpm run -r build && pnpm run start`
 
 ### S3 Folder Structure
 
@@ -58,6 +58,14 @@ pnpm run dev
 ### Demo
 
 Running [here](https://dylan.is/photos/).
+
+### TODO
+
+* Add detail page:
+    * Have SVG icons for camera and such
+    * Have a map via leaflet show the GPS
+    * Design will be 80/20 with details on right of page
+    * Reprocess all photos for new size I want here
 
 ### License
 

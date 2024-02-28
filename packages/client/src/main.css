@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: Mukta;
+  font-style: normal;
+  font-display: swap;
+  src:
+    local('Mukta Regular'),
+    local('Mukta-Regular'),
+    url(/photos/fonts/mukta-latin-400.woff2) format('woff2'),
+    url(/photos/fonts/mukta-latin-400.woff) format('woff');
+}
+
+@font-face {
+  font-family: Mukta;
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src:
+    local('Mukta Bold'),
+    local('Mukta-Bold'),
+    url(/photos/fonts/mukta-latin-700.woff2) format('woff2'),
+    url(/photos/fonts/mukta-latin-700.woff) format('woff');
+}
+
+@layer base {
+  a {
+    @apply text-blue
+      underline;
+  }
+
+  a:visited {
+    @apply text-purple;
+  }
+
+  body {
+    @apply mx-auto
+      my-4
+      w-[95%]
+      bg-white
+      tracking-tight
+      text-black;
+  }
+
+  figcaption {
+    @apply border-t
+      p-4
+      text-black;
+  }
+
+  figure {
+    @apply m-0
+      w-fit
+      border;
+  }
+
+  h1 {
+    @apply text-4xl;
+  }
+
+  h2 {
+    @apply text-base;
+  }
+
+  p {
+    @apply leading-4;
+  }
+
+  table {
+    @apply border-collapse
+      text-xl;
+  }
+
+  td {
+    @apply border
+      border-black
+      p-1.5
+      text-left;
+  }
+
+  th {
+    @apply sticky
+      top-0
+      border-x
+      border-y-0
+      border-black
+      bg-white
+      p-1.5
+      text-left
+      before:absolute
+      before:left-0
+      before:top-0
+      before:w-full
+      before:border-t
+      before:content-['']
+      after:absolute
+      after:bottom-0
+      after:left-0
+      after:w-full
+      after:border-b
+      after:content-[''];
+  }
+
+  tbody tr:first-child td {
+    @apply border-t-0;
+  }
+}
+
+@layer components {
+  .album a,
+  .album span,
+  .navigation a {
+    @apply mr-5
+      text-xl;
+  }
+
+  .image-block {
+    @apply m-0
+      self-end
+      p-0;
+  }
+
+  .image-container {
+    @apply grid
+      grid-cols-5
+      gap-2;
+  }
+
+  .header.navigation {
+    @apply mb-2.5;
+  }
+
+  .footer.navigation {
+    @apply my-2.5;
+  }
+}

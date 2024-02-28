@@ -20,18 +20,15 @@ WORKDIR /app
 
 RUN npm i -g pnpm
 
-COPY package.json pnpm-lock.yaml tsconfig.json ./
-RUN pnpm install --frozen-lockfile
-
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml tsconfig.json ./
 COPY scripts ./scripts
-COPY src ./src
-COPY static ./static
-COPY views ./views
+COPY packages ./packages
+
+RUN pnpm install --frozen-lockfile --prod=false
 
 RUN if [[ "$build" == "true" ]]; then \
-  pnpm run build; \
+  pnpm run -r build; \
   pnpm prune --prod; \
-  rm -r ./src; \
 fi
 
 EXPOSE 80/tcp

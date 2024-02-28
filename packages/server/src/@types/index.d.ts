@@ -19,6 +19,7 @@ type Exif = {
 };
 
 type AlbumRenderData = {
+  base: string;
   exif: Exif;
   height: number;
   image: string;
@@ -51,6 +52,7 @@ type SqlRow = {
 type RenderOptions = Partial<{
   album: Album;
   albums: Album[];
+  data: AlbumRenderData;
   datas: AlbumRenderData[];
   nextPage: number;
   page: number;

@@ -1,0 +1,25 @@
+extends layout
+
+block header
+  h1 Details
+
+block content
+  picture
+    source(srcset=data.webp, type='image/webp')
+    img(
+      alt='Image #' + (index + 1),
+      height=data.height,
+      src=data.jpeg,
+      width=data.width,
+    )
+  p
+    =data.exif.coord
+  p
+    =data.exif.displayDate
+  p
+    =data.exif.make
+    =data.exif.model
+  p
+    =data.exif.resolution
+
+  div#map

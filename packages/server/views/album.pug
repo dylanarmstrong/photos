@@ -11,10 +11,10 @@ block header
     h1=album.country + " " + album.year + " - " + album.month
   else
     h1=album.country + " " + album.year
-  h4='Page ' + page + ' of ' + pages
+  h2='Page ' + page + ' of ' + pages
 
 block content
-  div.navigation
+  div.header.navigation
     div
       a#home(title='Home', href=baseUrl)='Home'
     if page > 1
@@ -24,7 +24,7 @@ block content
 
   div.image-container
     each data, index in datas
-      div.block
+      div.image-block
         figure
           a(
             aria-label='Click to see full sized image #' + (index + 1),
@@ -52,7 +52,7 @@ block content
             p
               =data.exif.resolution
 
-  div.navigation
+  div.footer.navigation
     if page > 1
       a(title='Previous', href=prevPage)='Previous'
     if page < pages

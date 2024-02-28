@@ -2,7 +2,7 @@ import defaults from 'defaults';
 
 import type { Request, Response } from 'express';
 
-import { baseUrl } from './constants.js';
+import { baseUrl, isDevelopment } from './constants.js';
 
 import type { RenderOptions } from './@types/index.js';
 
@@ -26,6 +26,7 @@ const log = (request: Request, message: string) => {
 const sendStatus = (response: Response, status: number) => {
   response.status(status).render('status', {
     baseUrl,
+    isDevelopment,
     nonce: response.locals['nonce'],
     status,
     year: new Date().getFullYear(),
@@ -35,6 +36,7 @@ const sendStatus = (response: Response, status: number) => {
 const render = (response: Response, page: string, object: RenderOptions) => {
   const defaultRender = {
     baseUrl,
+    isDevelopment,
     nonce: response.locals['nonce'],
     status: 200,
     year: new Date().getFullYear(),
