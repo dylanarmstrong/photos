@@ -61,11 +61,13 @@ Running [here](https://dylan.is/photos/).
 
 ### TODO
 
-* Add detail page:
-    * Have SVG icons for camera and such
-    * Have a map via leaflet show the GPS
-    * Design will be 80/20 with details on right of page
-    * Reprocess all photos for new size I want here
+- Add detail page:
+  - Have SVG icons for camera and such
+  - Have a map via leaflet show the GPS
+  - Design will be 80/20 with details on right of page
+  - Reprocess all photos for new size I want here
+- Fix mobile:
+  - Responsive queries in tailwind
 
 ### License
 

@@ -49,7 +49,7 @@
     "url": "https://github.com/dylanarmstrong/photos"
   },
   "scripts": {
-    "dev": "pnpm run -r build && pnpm run -r dev",
+    "dev": "pnpm run -r build && pnpm --stream=true run -r dev",
     "lint": "prettier --write --ignore-unknown ./packages/*/src/ && eslint --fix ./packages/*/src/",
     "start": "pnpm --filter './packages/server' run start"
   },

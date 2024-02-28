@@ -118,6 +118,29 @@ router.get('/:album/:page', async (request, response) => {
   });
 });
 
+router.get('/:album/details/:page/:index', async (request, response) => {
+  const { album, page, index } = request.params;
+  log(request, `/details/${page}/${index}`);
+  const images = await getAlbumImages(album);
+  const imageIndex =
+    Number.parseInt(page) * imagesPerPage + Number.parseInt(index);
+  if (Number.isNaN(index) || imageIndex > images.length || imageIndex < 0) {
+    sendStatus(response, 404);
+    return;
+  }
+
+  const image = images[imageIndex];
+  if (image) {
+    render(response, 'details', {
+      album: albums.find(({ album: folderName }) => folderName === album),
+      data: mapImage(image),
+    });
+    return;
+  }
+
+  sendStatus(response, 404);
+});
+
 router.get('/:album', (request, response) => {
   const { album } = request.params;
   response.redirect(`/${album}/1`);
