@@ -117,15 +117,21 @@
   }
 
   .image-block {
-    @apply m-0
+    @apply mx-auto
       self-end
-      p-0;
+      p-0
+      md:m-0;
   }
 
   .image-container {
     @apply grid
-      grid-cols-5
-      gap-2;
+      grid-cols-1
+      gap-2
+      sm:grid-cols-2
+      md:grid-cols-3
+      lg:grid-cols-5
+      xl:grid-cols-6
+      2xl:grid-cols-8;
   }
 
   .header.navigation {
