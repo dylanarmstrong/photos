@@ -81,24 +81,20 @@ html(lang='en-us')
 
     if isDevelopment
       script(
-        nonce=nonce,
         src='http://localhost:5173/@vite/client',
         type='module',
       )
       script(
-        nonce=nonce,
         src='http://localhost:5173/src/main.ts'
         type='module',
       )
     else
       link(
         href=baseUrl + '/main.css',
-        nonce=nonce,
         rel='stylesheet',
       )
       script(
         src=baseUrl + '/main.js',
-        nonce=nonce,
         type='module',
       )
 

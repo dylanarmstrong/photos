@@ -84,9 +84,6 @@ importers:
       defaults:
         specifier: ^3.0.0
         version: 3.0.0
-      etag:
-        specifier: ^1.8.1
-        version: 1.8.1
       express:
         specifier: ^4.18.2
         version: 4.18.2
