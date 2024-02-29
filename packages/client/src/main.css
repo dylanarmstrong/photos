@@ -26,6 +26,10 @@
 }
 
 @layer base {
+  * {
+    @apply box-border;
+  }
+
   a {
     @apply text-blue
       underline;
@@ -36,32 +40,50 @@
   }
 
   body {
-    @apply mx-auto
-      my-4
-      w-[95%]
+    @apply grid-rows-layout
+      m-0
+      grid
+      min-h-dvh
+      min-w-full
       bg-white
+      p-0
       tracking-tight
       text-black;
   }
 
   figcaption {
-    @apply border-t
-      p-4
-      text-black;
+    @apply block
+      rounded-b
+      border-b
+      border-l
+      border-r
+      p-2
+      text-black
+      md:hidden;
   }
 
-  figure {
-    @apply m-0
-      w-fit
-      border;
+  footer {
+    @apply my-2.5 ml-4;
   }
 
   h1 {
-    @apply text-4xl;
+    @apply text-3xl md:text-4xl;
   }
 
   h2 {
     @apply text-base;
+  }
+
+  header {
+    @apply ml-4;
+  }
+
+  html {
+    @apply min-h-full min-w-full;
+  }
+
+  main {
+    @apply ml-4;
   }
 
   p {
@@ -106,6 +128,11 @@
   tbody tr:first-child td {
     @apply border-t-0;
   }
+
+  td,
+  th {
+    @apply hidden md:table-cell;
+  }
 }
 
 @layer components {
@@ -117,14 +144,61 @@
   }
 
   .image-block {
-    @apply mx-auto
+    @apply relative
+      flex
+      h-auto
+      flex-col
       self-end
-      p-0
-      md:m-0;
+      overflow-hidden;
+  }
+
+  .image-block img {
+    @apply relative
+      w-full
+      rounded-b-none
+      rounded-t
+      border
+      border-black
+      object-cover
+      md:rounded-b;
+  }
+
+  .image-block .data {
+    @apply absolute
+      bottom-0
+      flex
+      h-auto
+      w-full
+      flex-wrap
+      justify-start
+      overflow-hidden
+      rounded-b
+      border
+      border-black
+      bg-black/60
+      p-3
+      text-white
+      subpixel-antialiased
+      opacity-0
+      backdrop-blur
+      backdrop-saturate-150
+      transition-opacity
+      duration-300
+      ease-out
+      before:rounded-xl;
+
+    /* Fix for Safari */
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+
+  .image-block .data p {
+    @apply w-full;
   }
 
   .image-container {
     @apply grid
+      w-[95%]
       grid-cols-1
       gap-2
       sm:grid-cols-2
@@ -139,5 +213,10 @@
 
   .footer.navigation {
     @apply my-2.5;
+  }
+
+  td.mobile,
+  th.mobile {
+    @apply table-cell;
   }
 }

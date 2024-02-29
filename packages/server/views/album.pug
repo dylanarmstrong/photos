@@ -26,11 +26,9 @@ block content
     each data, index in datas
       div.image-block
         figure
-          a(
-            aria-label='Click to see full sized image #' + (index + 1),
-            href=data.image,
-            rel='noopener noreferrer',
-            target='_blank',
+          a.group(
+            aria-label='Click to see details for image #' + (index + 1),
+            href=baseUrl + '/' + album.album + '/details/' + (page - 1) + '/' + index,
           )
             picture
               source(srcset=data.webp, type='image/webp')
@@ -40,6 +38,18 @@ block content
                 src=data.jpeg,
                 width=data.width,
               )
+            div(
+              class='data md:group-hover:opacity-100'
+            )
+              p
+                =data.exif.coord
+              p
+                =data.exif.displayDate
+              p
+                =data.exif.make
+                =data.exif.model
+              p
+                =data.exif.resolution
 
           figcaption
             p

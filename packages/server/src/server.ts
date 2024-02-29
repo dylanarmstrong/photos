@@ -3,7 +3,7 @@ import express from 'express';
 import helmet from 'helmet';
 import { join } from 'node:path';
 
-import { router } from './routes.js';
+import { router } from './router.js';
 import { baseUrl, isDevelopment, port } from './constants.js';
 
 const app = express();
@@ -19,7 +19,9 @@ app.use(
         // eslint-disable-next-line unicorn/no-null
         'connect-src': isDevelopment ? ['ws://localhost:5173/'] : null,
         'img-src': ["'self'", 'photos.dylan.is'],
-        'script-src': isDevelopment ? ["'self'", 'localhost:5173/'] : ["'self'"],
+        'script-src': isDevelopment
+          ? ["'self'", 'localhost:5173/']
+          : ["'self'"],
         // eslint-disable-next-line unicorn/no-null
         'upgrade-insecure-requests': isDevelopment ? null : [],
       },

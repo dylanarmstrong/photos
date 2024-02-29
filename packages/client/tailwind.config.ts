@@ -19,5 +19,8 @@ export default {
     fontFamily: {
       sans: ['Mukta', 'Helvetica Neue', 'sans-serif'],
     },
+    gridTemplateRows: {
+      layout: 'auto 1fr auto',
+    },
   },
 } satisfies Config;

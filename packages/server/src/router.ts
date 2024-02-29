@@ -107,38 +107,53 @@ router.get('/:album/:page', async (request, response) => {
     .slice((page - 1) * imagesPerPage, page * imagesPerPage)
     .map((image) => mapImage(image));
 
-  render(response, 'album', {
-    // Display Name
-    album: albums.find(({ album: folderName }) => folderName === album),
-    datas: data,
-    nextPage: page + 1,
-    page,
-    pages,
-    prevPage: page - 1,
-  });
+  const selectedAlbum = albums.find(
+    ({ album: folderName }) => folderName === album,
+  );
+  if (album) {
+    render(response, 'album', {
+      // Display Name
+      album: selectedAlbum,
+      datas: data,
+      nextPage: page + 1,
+      page,
+      pages,
+      prevPage: page - 1,
+    });
+  } else {
+    sendStatus(response, 404);
+  }
 });
 
 router.get('/:album/details/:page/:index', async (request, response) => {
   const { album, page, index } = request.params;
-  log(request, `/details/${page}/${index}`);
+  log(request, `/${album}/details/${page}/${index}`);
+
   const images = await getAlbumImages(album);
   const imageIndex =
     Number.parseInt(page) * imagesPerPage + Number.parseInt(index);
-  if (Number.isNaN(index) || imageIndex > images.length || imageIndex < 0) {
+
+  if (
+    Number.isNaN(imageIndex) ||
+    imageIndex > images.length ||
+    imageIndex < 0
+  ) {
     sendStatus(response, 404);
     return;
   }
 
   const image = images[imageIndex];
-  if (image) {
+  const selectedAlbum = albums.find(
+    ({ album: folderName }) => folderName === album,
+  );
+  if (selectedAlbum && image) {
     render(response, 'details', {
-      album: albums.find(({ album: folderName }) => folderName === album),
+      album: selectedAlbum,
       data: mapImage(image),
     });
-    return;
+  } else {
+    sendStatus(response, 404);
   }
-
-  sendStatus(response, 404);
 });
 
 router.get('/:album', (request, response) => {
