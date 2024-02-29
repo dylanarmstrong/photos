@@ -28,7 +28,7 @@ block content
         figure
           a.group(
             aria-label='Click to see details for image #' + (index + 1),
-            href=baseUrl + '/' + album.album + '/details/' + (page - 1) + '/' + index,
+            href=baseUrl + '/' + album.album + '/details/' + ((page - 1) * imagesPerPage + index),
           )
             picture
               source(srcset=data.webp, type='image/webp')

@@ -125,13 +125,12 @@ router.get('/:album/:page', async (request, response) => {
   }
 });
 
-router.get('/:album/details/:page/:index', async (request, response) => {
-  const { album, page, index } = request.params;
-  log(request, `/${album}/details/${page}/${index}`);
+router.get('/:album/details/:index', async (request, response) => {
+  const { album, index } = request.params;
+  log(request, `${album}/details/${index}`);
 
   const images = await getAlbumImages(album);
-  const imageIndex =
-    Number.parseInt(page) * imagesPerPage + Number.parseInt(index);
+  const imageIndex = Number.parseInt(index);
 
   if (
     Number.isNaN(imageIndex) ||
