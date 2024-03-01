@@ -1,6 +1,10 @@
-import './main.css';
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/700.css';
+import 'leaflet/dist/leaflet.css';
 
-// import L from 'leaflet';
+import L from 'leaflet';
+
+import './main.css';
 
 // Navigate with arrow keys
 const home: HTMLLinkElement | null = document.querySelector('#home');
@@ -35,12 +39,45 @@ const move = ({ code }: KeyboardEvent) => {
 
 document.addEventListener('keydown', move);
 
-// var map = L.map('map').setView([51.505, -0.09], 13);
+const mapElement: HTMLDivElement | null = document.querySelector('#map');
+if (mapElement) {
+  const { latitude, longitude } = mapElement.dataset;
+  if (longitude && latitude) {
+    const mapCoord = (coord: string, index: number) => {
+      switch (index) {
+        case 1: {
+          return Number.parseInt(coord) / 60;
+        }
+        case 2: {
+          return Number.parseInt(coord.slice(0, 2)) / 3600;
+        }
+        default: {
+          return Number.parseInt(coord);
+        }
+      }
+    };
 
-// L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-// }).addTo(map);
+    const nLongitude = longitude
+      .split(' ')
+      .map((coord, index) => mapCoord(coord, index))
+      .reduce((accumulator, current) => accumulator + current, 0);
 
-// L.marker([51.5, -0.09]).addTo(map)
-//     .bindPopup('A pretty CSS popup.<br> Easily customizable.')
-//     .openPopup();
+    const nLatitude = latitude
+      .split(' ')
+      .map((coord, index) => mapCoord(coord, index))
+      .reduce((accumulator, current) => accumulator + current, 0);
+
+    // eslint-disable-next-line unicorn/no-array-callback-reference
+    const map = L.map(mapElement).setView([nLatitude, nLongitude], 14);
+    L.tileLayer(
+      'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+      {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        maxZoom: 20,
+        subdomains: 'abcd',
+      },
+    ).addTo(map);
+    L.marker([nLatitude, nLongitude]).addTo(map);
+  }
+}

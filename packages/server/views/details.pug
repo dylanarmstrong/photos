@@ -1,25 +1,54 @@
 extends layout
 
-block header
-  h1 Details
-
 block content
-  picture
-    source(srcset=data.webp, type='image/webp')
-    img(
-      alt='Image #' + (index + 1),
-      height=data.height,
-      src=data.jpeg,
-      width=data.width,
-    )
-  p
-    =data.exif.coord
-  p
-    =data.exif.displayDate
-  p
-    =data.exif.make
-    =data.exif.model
-  p
-    =data.exif.resolution
+  div.header.navigation
+    div
+      a#home(title='Home', href=baseUrl)='Home'
+      a#prev(title='Go Back', href=prevUrl)='Go Back'
+      a(title='Download', href=data.images.lg.jpeg)='Download'
 
-  div#map
+  .details
+    .details-image
+      picture
+        source(srcset=data.images.md.webp, type='image/webp')
+        img#detail-img(
+          alt='Image #1',
+          src=data.images.md.jpeg,
+        )
+
+    aside.details-data
+      table.details-table
+        thead
+          tr
+            th.mobile
+              =""
+            th.text-3xl.mobile
+              ="Info"
+        tbody
+          tr
+            td.mobile
+              include svg/calendar.svg
+            td.mobile
+              =data.exif.displayDate
+
+          tr
+            td.mobile
+              include svg/camera.svg
+            td.mobile
+              =data.exif.make
+              =data.exif.model
+              br
+              =data.exif.resolution
+
+          tr
+            td.mobile
+              include svg/location.svg
+            td.mobile
+              =data.exif.coord
+
+      hr.my-5
+
+      .w-full#map(
+        data-latitude=data.exif.latitude
+        data-longitude=data.exif.longitude
+      )

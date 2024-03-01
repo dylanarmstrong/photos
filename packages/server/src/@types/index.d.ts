@@ -11,6 +11,8 @@ type Exif = {
   coord: string;
   datetime: string;
   displayDate: string;
+  latitude: string;
+  longitude: string;
   make: string;
   model: string;
   resolution: string;
@@ -18,14 +20,22 @@ type Exif = {
   y: number;
 };
 
-type AlbumRenderData = {
-  base: string;
-  exif: Exif;
+type Image = {
   height: number;
-  image: string;
   jpeg: string;
   webp: string;
   width: number;
+};
+
+type AlbumRenderData = {
+  base: string;
+  exif: Exif;
+  image: string;
+  images: {
+    lg: Image;
+    md: Image;
+    sm: Image;
+  };
 };
 
 type File = {
@@ -58,6 +68,7 @@ type RenderOptions = Partial<{
   page: number;
   pages: number;
   prevPage: number;
+  prevUrl: string;
 }>;
 
 type GetObjects = {

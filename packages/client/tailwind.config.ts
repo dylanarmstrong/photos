@@ -1,9 +1,11 @@
 import type { Config } from 'tailwindcss';
 
+
 // eslint-disable-next-line import/no-unused-modules
 export default {
   content: [
     '../server/views/*.pug',
+    '../server/views/svg/*.svg',
     './src/**/*.ts',
   ],
   plugins: [],
@@ -15,12 +17,18 @@ export default {
       red: '#e21352',
       white: '#fafafa',
     },
-    extend: {},
-    fontFamily: {
-      sans: ['Mukta', 'Helvetica Neue', 'sans-serif'],
+    extend: {
+      gridTemplateColumns: {
+        details: '1fr 400px',
+      },
+      gridTemplateRows: {
+        details: '1fr auto',
+        layout: 'auto 1fr auto',
+      },
     },
-    gridTemplateRows: {
-      layout: 'auto 1fr auto',
+    fontFamily: {
+      sans: ['Poppins', 'sans-serif'],
+      serif: ['serif'],
     },
   },
 } satisfies Config;

@@ -17,7 +17,8 @@ folder=$1
 
 cd "$folder" || exit 1
 
-rm -- *_{163,325,650,768}.{webp,jpeg} || true
+rm -- *_{512,1024,2048}.{webp,jpeg} || true
+rm -- *-{512,1024,2048}.{webp,jpeg} || true
 rm -- *.ppm || true
 rm -- *.{in,out}.png || true
 

@@ -31,12 +31,12 @@ block content
             href=baseUrl + '/' + album.album + '/details/' + ((page - 1) * imagesPerPage + index),
           )
             picture
-              source(srcset=data.webp, type='image/webp')
+              source(srcset=data.images.sm.webp, type='image/webp')
               img(
                 alt='Image #' + (index + 1),
-                height=data.height,
-                src=data.jpeg,
-                width=data.width,
+                height=data.images.sm.height,
+                src=data.images.sm.jpeg,
+                width=data.images.sm.width,
               )
             div(
               class='data md:group-hover:opacity-100'

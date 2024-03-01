@@ -18,7 +18,23 @@ app.use(
       directives: {
         // eslint-disable-next-line unicorn/no-null
         'connect-src': isDevelopment ? ['ws://localhost:5173/'] : null,
-        'img-src': ["'self'", 'photos.dylan.is'],
+        'img-src': isDevelopment
+          ? [
+              "'self'",
+              'photos.dylan.is',
+              'a.basemaps.cartocdn.com',
+              'b.basemaps.cartocdn.com',
+              'c.basemaps.cartocdn.com',
+              'd.basemaps.cartocdn.com',
+              'localhost:9006/',
+              'localhost:5173/',
+            ]
+          : ["'self'", 'photos.dylan.is',
+              'a.basemaps.cartocdn.com',
+              'b.basemaps.cartocdn.com',
+              'c.basemaps.cartocdn.com',
+              'd.basemaps.cartocdn.com',
+          ],
         'script-src': isDevelopment
           ? ["'self'", 'localhost:5173/']
           : ["'self'"],
@@ -33,6 +49,13 @@ app.use(
 if (baseUrl) {
   app.use(baseUrl, express.static('static', { maxAge: '1y' }));
   app.use(baseUrl, router);
+
+  if (isDevelopment) {
+    app.get('/@fs/*', (request, response) => {
+      const { path } = request;
+      response.redirect(`http://localhost:5173${path}`);
+    });
+  }
 
   app.listen(port, () => {
     // eslint-disable-next-line no-console

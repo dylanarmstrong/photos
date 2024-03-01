@@ -3,26 +3,24 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: Mukta;
+  font-family: Poppins;
   font-style: normal;
   font-display: swap;
   src:
-    local('Mukta Regular'),
-    local('Mukta-Regular'),
-    url(/photos/fonts/mukta-latin-400.woff2) format('woff2'),
-    url(/photos/fonts/mukta-latin-400.woff) format('woff');
+    local('Poppins'),
+    url(/photos/poppins-latin-400-normal.woff2) format('woff2'),
+    url(/photos/poppins-latin-400-normal.woff) format('woff');
 }
 
 @font-face {
-  font-family: Mukta;
+  font-family: Poppins;
   font-style: normal;
   font-display: swap;
   font-weight: 700;
   src:
     local('Mukta Bold'),
-    local('Mukta-Bold'),
-    url(/photos/fonts/mukta-latin-700.woff2) format('woff2'),
-    url(/photos/fonts/mukta-latin-700.woff) format('woff');
+    url(/photos/poppins-latin-700-normal.woff2) format('woff2'),
+    url(/photos/poppins-latin-700-normal.woff) format('woff');
 }
 
 @layer base {
@@ -32,17 +30,21 @@
 
   a {
     @apply text-blue
-      underline;
+      decoration-blue
+      underline
+      decoration-2
+      underline-offset-1;
   }
 
   a:visited {
-    @apply text-purple;
+    @apply text-purple decoration-purple;
   }
 
   body {
     @apply grid-rows-layout
       m-0
       grid
+      max-h-dvh
       min-h-dvh
       min-w-full
       bg-white
@@ -58,6 +60,8 @@
       border-l
       border-r
       p-2
+      text-base
+      leading-5
       text-black
       md:hidden;
   }
@@ -67,7 +71,7 @@
   }
 
   h1 {
-    @apply text-3xl md:text-4xl;
+    @apply text-3xl;
   }
 
   h2 {
@@ -75,7 +79,7 @@
   }
 
   header {
-    @apply ml-4;
+    @apply ml-4 mt-2;
   }
 
   html {
@@ -91,47 +95,14 @@
   }
 
   table {
-    @apply border-collapse
-      text-xl;
-  }
-
-  td {
-    @apply border
-      border-black
-      p-1.5
-      text-left;
-  }
-
-  th {
-    @apply sticky
-      top-0
-      border-x
-      border-y-0
-      border-black
-      bg-white
-      p-1.5
-      text-left
-      before:absolute
-      before:left-0
-      before:top-0
-      before:w-full
-      before:border-t
-      before:content-['']
-      after:absolute
-      after:bottom-0
-      after:left-0
-      after:w-full
-      after:border-b
-      after:content-[''];
-  }
-
-  tbody tr:first-child td {
-    @apply border-t-0;
+    @apply border-collapse text-base;
   }
 
   td,
   th {
-    @apply hidden md:table-cell;
+    @apply hidden p-1.5
+    text-left
+    md:table-cell;
   }
 }
 
@@ -140,7 +111,31 @@
   .album span,
   .navigation a {
     @apply mr-5
-      text-xl;
+      text-base;
+  }
+
+  .details {
+    @apply grid-rows-details md:grid-cols-details grid grid-flow-col bg-black md:grid-rows-none;
+  }
+
+  .details-image img {
+    @apply h-[85dvh];
+  }
+
+  .details-image {
+    @apply mx-auto self-center p-5;
+  }
+
+  .details-data {
+    @apply h-full w-full self-start bg-white px-5 text-black;
+  }
+
+  .details-data > div {
+    @apply flex;
+  }
+
+  .details-data > div > div {
+    @apply flex self-center;
   }
 
   .image-block {
@@ -193,7 +188,7 @@
   }
 
   .image-block .data p {
-    @apply w-full;
+    @apply w-full text-sm leading-4;
   }
 
   .image-container {
@@ -218,5 +213,38 @@
   td.mobile,
   th.mobile {
     @apply table-cell;
+  }
+
+  .index-table td {
+    @apply border border-black;
+  }
+
+  .index-table th {
+    @apply sticky
+      top-0
+      border-x
+      border-y-0
+      border-black
+      bg-white
+      before:absolute
+      before:left-0
+      before:top-0
+      before:w-full
+      before:border-t
+      before:content-['']
+      after:absolute
+      after:bottom-0
+      after:left-0
+      after:w-full
+      after:border-b
+      after:content-[''];
+  }
+
+  .index-table tbody tr:first-child td {
+    @apply border-t-0;
+  }
+
+  #map {
+    @apply h-64 w-full self-end;
   }
 }

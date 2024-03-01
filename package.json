@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/dylanarmstrong/photos",
   "license": "ISC",
-  "main": "./lib/server.js",
+  "main": "./packages/server/lib/server.js",
   "name": "@dylanarmstrong/photos",
   "prettier": {
     "plugins": [

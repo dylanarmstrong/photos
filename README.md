@@ -67,6 +67,88 @@ Running [here](https://dylan.is/photos/).
   - Design will be 80/20 with details on right of page
   - Reprocess all photos for new size I want here
 
+### Database
+```sql
+table exif (
+    id integer primary key,
+
+    -- Exif.Photo.BrightnessValue,
+    brightness_value text,
+
+    -- Exif.Image.DateTime
+    datetime timestamp,
+
+    -- Exif.Photo.ExposureTime,
+    exposure_time text,
+
+    -- Exif.Photo.FNumber,
+    f_number text,
+
+    -- Exif.Photo.Flash,
+    flash integer,
+
+    -- Exif.Photo.FocalLength,
+    focal_length text,
+
+    -- Exif.GPSInfo.GPSAltitude,
+    gps_altitude text,
+
+    -- Exif.GPSInfo.GPSAltitudeRef,
+    gps_altitude_ref text,
+
+    -- Exif.GPSInfo.GPSLatitude,
+    gps_latitude text,
+
+    -- Exif.GPSInfo.GPSLatitudeRef,
+    gps_latitude_ref text,
+
+    -- Exif.GPSInfo.GPSLongitude,
+    gps_longitude text,
+
+    -- Exif.GPSInfo.GPSLongitudeRef,
+    gps_longitude_ref text,
+
+    -- Exif.Photo.ISOSpeedRatings,
+    iso_speed_ratings text,
+
+    -- Exif.Photo.LensMake,
+    lens_make text,
+
+    -- Exif.Photo.LensModel,
+    lens_model text,
+
+    -- Exif.Photo.LensSpecification,
+    lens_specification text,
+
+    -- Exif.Image.Make,
+    make text,
+
+    -- Exif.Image.Model,
+    model text,
+
+    -- Exif.Photo.PixelXDimension,
+    pixel_x_dimension text,
+
+    -- Exif.Photo.PixelYDimension,
+    pixel_y_dimension text,
+
+    -- Exif.Image.ResolutionUnit,
+    resolution_unit text,
+
+    -- Exif.Photo.ShutterSpeedValue,
+    shutter_speed_value text,
+
+    -- Exif.Image.XResolution,
+    x_resolution text,
+
+    -- Exif.Image.YResolution,
+    y_resolution text,
+
+    image_id integer,
+    foreign key (image_id) references images (id) on delete cascade
+)"""
+```
+
 ### License
 
 The underlying source code for this application is provided under

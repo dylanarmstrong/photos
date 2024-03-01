@@ -172,6 +172,8 @@ const getExifCache = (albums: Album[]): ExifCache => {
         coord,
         datetime,
         displayDate,
+        latitude: gps_latitude,
+        longitude: gps_longitude,
         make,
         model,
         resolution,

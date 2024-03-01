@@ -16,6 +16,7 @@
   "type": "module",
   "version": "0.0.0",
   "dependencies": {
+    "@fontsource/poppins": "^5.0.8",
     "leaflet": "^1.9.4"
   }
 }

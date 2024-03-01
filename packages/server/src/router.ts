@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { getAlbums, getExifCache } from './database.js';
-import { IMAGE_DOMAIN, imagesPerPage } from './constants.js';
+import { IMAGE_DOMAIN, baseUrl, imagesPerPage } from './constants.js';
 import { log, render, sendStatus } from './utils.js';
 import { viewAlbum } from './aws.js';
 
@@ -20,18 +20,43 @@ const mapImage = (image: string) => {
   const base = `${IMAGE_DOMAIN}/${splitAlbum}`;
   const { x, y } = exif;
   const ratio = y / x;
-  const width = Math.max(256, Math.floor(192 / ratio));
-  const heightRatio = width / x;
-  const height = Math.floor(y * heightRatio);
+
+  const smWidth = Math.max(256, Math.floor(192 / ratio));
+  const smHeightRatio = smWidth / x;
+  const smHeight = Math.floor(y * smHeightRatio);
+
+  const mdWidth = Math.max(512, Math.floor(384 / ratio));
+  const mdHeightRatio = mdWidth / x;
+  const mdHeight = Math.floor(y * mdHeightRatio);
+
+  const lgWidth = Math.max(1024, Math.floor(768 / ratio));
+  const lgHeightRatio = lgWidth / x;
+  const lgHeight = Math.floor(y * lgHeightRatio);
 
   return {
     base: splitFile,
     exif,
-    height,
     image: `${base}/${splitFile}`,
-    jpeg: `${base}/${baseFile}_thumb.jpeg`,
-    webp: `${base}/${baseFile}_thumb.webp`,
-    width,
+    images: {
+      lg: {
+        height: lgHeight,
+        jpeg: `${base}/${baseFile}_2048.jpeg`,
+        webp: `${base}/${baseFile}_2048.webp`,
+        width: lgWidth,
+      },
+      md: {
+        height: mdHeight,
+        jpeg: `${base}/${baseFile}_1024.jpeg`,
+        webp: `${base}/${baseFile}_1024.webp`,
+        width: mdWidth,
+      },
+      sm: {
+        height: smHeight,
+        jpeg: `${base}/${baseFile}_512.jpeg`,
+        webp: `${base}/${baseFile}_512.webp`,
+        width: smWidth,
+      },
+    },
   };
 };
 
@@ -149,6 +174,7 @@ router.get('/:album/details/:index', async (request, response) => {
     render(response, 'details', {
       album: selectedAlbum,
       data: mapImage(image),
+      prevUrl: `${baseUrl}/${album}/${Math.floor(imageIndex / imagesPerPage) + 1}`,
     });
   } else {
     sendStatus(response, 404);
