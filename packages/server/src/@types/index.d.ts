@@ -12,7 +12,9 @@ type Exif = {
   datetime: string;
   displayDate: string;
   latitude: string;
+  latitudeRef: string;
   longitude: string;
+  longitudeRef: string;
   make: string;
   model: string;
   resolution: string;

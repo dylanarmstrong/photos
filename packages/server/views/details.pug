@@ -49,6 +49,8 @@ block content
       hr.my-5
 
       .w-full#map(
+        data-latitude-ref=data.exif.latitudeRef
         data-latitude=data.exif.latitude
+        data-longitude-ref=data.exif.longitudeRef
         data-longitude=data.exif.longitude
       )

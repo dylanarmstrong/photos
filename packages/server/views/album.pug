@@ -17,10 +17,10 @@ block content
   div.header.navigation
     div
       a#home(title='Home', href=baseUrl)='Home'
-    if page > 1
-      a#prev(title='Previous', href=prevPage)='Previous'
-    if page < pages
-      a#next(title='Next', href=nextPage)='Next'
+      if page > 1
+        a#prev(title='Previous', href=prevPage)='Previous'
+      if page < pages
+        a#next(title='Next', href=nextPage)='Next'
 
   div.image-container
     each data, index in datas

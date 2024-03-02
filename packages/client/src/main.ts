@@ -41,15 +41,15 @@ document.addEventListener('keydown', move);
 
 const mapElement: HTMLDivElement | null = document.querySelector('#map');
 if (mapElement) {
-  const { latitude, longitude } = mapElement.dataset;
-  if (longitude && latitude) {
+  const { latitude, latitudeRef, longitude, longitudeRef } = mapElement.dataset;
+  if (longitude && latitude && latitudeRef && longitudeRef) {
     const mapCoord = (coord: string, index: number) => {
       switch (index) {
         case 1: {
           return Number.parseInt(coord) / 60;
         }
         case 2: {
-          return Number.parseInt(coord.slice(0, 2)) / 3600;
+          return Number.parseInt(coord) / 360_000;
         }
         default: {
           return Number.parseInt(coord);
@@ -57,18 +57,26 @@ if (mapElement) {
       }
     };
 
-    const nLongitude = longitude
+    let nLongitude = longitude
       .split(' ')
       .map((coord, index) => mapCoord(coord, index))
       .reduce((accumulator, current) => accumulator + current, 0);
 
-    const nLatitude = latitude
+    let nLatitude = latitude
       .split(' ')
       .map((coord, index) => mapCoord(coord, index))
       .reduce((accumulator, current) => accumulator + current, 0);
+
+    if (longitudeRef === 'W') {
+      nLongitude *= -1;
+    }
+
+    if (latitudeRef === 'S') {
+      nLatitude *= -1;
+    }
 
     // eslint-disable-next-line unicorn/no-array-callback-reference
-    const map = L.map(mapElement).setView([nLatitude, nLongitude], 14);
+    const map = L.map(mapElement).setView([nLatitude, nLongitude], 10);
     L.tileLayer(
       'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
       {

@@ -155,11 +155,13 @@ const getExifCache = (albums: Album[]): ExifCache => {
         gps_longitude_ref
       ) {
         coord = `${gps_latitude.replace(
-          /(\d+)\/1 (\d+)\/1 (\d{2}).*$/,
-          '$1˚$2\'$3"',
+          /(\d+)\/1 (\d+)\/1 (\d+)\/10+$/,
+          (_, group1, group2, group3) =>
+            `${group1}˚${group2}'${(Number.parseInt(group3) / 100).toFixed(0)}"`,
         )} ${gps_latitude_ref}, ${gps_longitude.replace(
-          /(\d+)\/1 (\d+)\/1 (\d{2}).*$/,
-          '$1˚$2\'$3"',
+          /(\d+)\/1 (\d+)\/1 (\d+)\/100$/,
+          (_, group1, group2, group3) =>
+            `${group1}˚${group2}'${(Number.parseInt(group3) / 100).toFixed(0)}"`,
         )} ${gps_longitude_ref}`;
       }
 
@@ -173,7 +175,9 @@ const getExifCache = (albums: Album[]): ExifCache => {
         datetime,
         displayDate,
         latitude: gps_latitude,
+        latitudeRef: gps_latitude_ref,
         longitude: gps_longitude,
+        longitudeRef: gps_longitude_ref,
         make,
         model,
         resolution,
