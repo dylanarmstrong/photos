@@ -96,7 +96,7 @@ const getAlbumImages = async (album: string) => {
 };
 
 // eslint-disable-next-line new-cap
-const router = express.Router();
+const router = express.Router({ caseSensitive: true, strict: true });
 
 // Check that album exists
 router.get('/:album*', (request, response, next) => {
@@ -186,11 +186,19 @@ router.get('/:album', (request, response) => {
   response.redirect(`/${album}/1`);
 });
 
-router.get('/', async (request, response) => {
+router.get('/', async (request, response, next) => {
+  if (request.originalUrl.at(-1) !== '/') {
+    next();
+    return;
+  }
   log(request, 'index');
   render(response, 'index', {
     albums,
   });
+});
+
+router.get('/', (_, response) => {
+  response.redirect(`${baseUrl}/`);
 });
 
 export { router };

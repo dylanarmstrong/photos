@@ -31,7 +31,7 @@ COPY packages/client/src ./packages/client/src
 COPY packages/client/tailwind.config.ts packages/client/tsconfig.json packages/client/vite.config.ts ./packages/client/
 
 COPY packages/server/src ./packages/server/src
-COPY packages/server/tsconfig.json ./packages/server/tsconfig.json
+COPY packages/server/tsconfig.json ./packages/server/
 COPY packages/server/views ./packages/server/views
 
 RUN if [[ "$build" == "true" ]]; then \

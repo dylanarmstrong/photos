@@ -8,6 +8,7 @@ import { baseUrl, isDevelopment, port } from './constants.js';
 
 const app = express();
 
+app.set('strict routing', true);
 app.set('view engine', 'pug');
 app.set('views', join(process.cwd(), 'views'));
 app.use(compression());
@@ -51,8 +52,10 @@ app.use(
 
 if (baseUrl) {
   app.use(`${baseUrl}/static`, express.static('static', { maxAge: '1y' }));
-  app.use(baseUrl, router);
+  app.use(`${baseUrl}/`, router);
 
+  // If vite resources try and load something, it may hit this (Leaflet)
+  // So redirect to appropiate place
   if (isDevelopment) {
     app.get('/@fs/*', (request, response) => {
       const { path } = request;
@@ -62,7 +65,7 @@ if (baseUrl) {
 
   app.listen(port, () => {
     // eslint-disable-next-line no-console
-    console.log(`Listening at http://localhost:${port}${baseUrl}`);
+    console.log(`Listening at http://localhost:${port}${baseUrl}/`);
   });
 } else {
   // eslint-disable-next-line no-console
