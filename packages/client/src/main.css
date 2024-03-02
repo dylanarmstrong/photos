@@ -8,8 +8,8 @@
   font-display: swap;
   src:
     local('Poppins'),
-    url(/photos/poppins-latin-400-normal.woff2) format('woff2'),
-    url(/photos/poppins-latin-400-normal.woff) format('woff');
+    url(/photos/static/poppins-latin-400-normal.woff2) format('woff2'),
+    url(/photos/static/poppins-latin-400-normal.woff) format('woff');
 }
 
 @font-face {
@@ -18,9 +18,9 @@
   font-display: swap;
   font-weight: 700;
   src:
-    local('Mukta Bold'),
-    url(/photos/poppins-latin-700-normal.woff2) format('woff2'),
-    url(/photos/poppins-latin-700-normal.woff) format('woff');
+    local('Poppins Bold'),
+    url(/photos/static/poppins-latin-700-normal.woff2) format('woff2'),
+    url(/photos/static/poppins-latin-700-normal.woff) format('woff');
 }
 
 @layer base {

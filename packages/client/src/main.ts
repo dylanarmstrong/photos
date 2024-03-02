@@ -78,6 +78,7 @@ if (mapElement) {
         subdomains: 'abcd',
       },
     ).addTo(map);
+    L.Icon.Default.imagePath = '/photos/static/';
     L.marker([nLatitude, nLongitude]).addTo(map);
   }
 }

@@ -4,6 +4,7 @@ services:
     build:
       args:
         build: false
+      target: stage0
     environment:
       NODE_ENV: development
     ports:

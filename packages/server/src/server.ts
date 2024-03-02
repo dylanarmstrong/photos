@@ -29,12 +29,15 @@ app.use(
               'localhost:9006/',
               'localhost:5173/',
             ]
-          : ["'self'", 'photos.dylan.is',
+          : [
+              "'self'",
+              'photos.dylan.is',
               'a.basemaps.cartocdn.com',
               'b.basemaps.cartocdn.com',
               'c.basemaps.cartocdn.com',
               'd.basemaps.cartocdn.com',
-          ],
+              'localhost:9006/',
+            ],
         'script-src': isDevelopment
           ? ["'self'", 'localhost:5173/']
           : ["'self'"],
@@ -47,7 +50,7 @@ app.use(
 );
 
 if (baseUrl) {
-  app.use(baseUrl, express.static('static', { maxAge: '1y' }));
+  app.use(`${baseUrl}/static`, express.static('static', { maxAge: '1y' }));
   app.use(baseUrl, router);
 
   if (isDevelopment) {
