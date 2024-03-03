@@ -115,11 +115,11 @@
   }
 
   .details {
-    @apply grid-rows-details md:grid-cols-details grid grid-flow-col bg-black md:grid-rows-none md:h-[95%];
+    @apply grid-rows-details md:grid-cols-details grid grid-flow-col bg-black md:h-[95%] md:grid-rows-none;
   }
 
   .details-image img {
-    @apply max-h-[84dvh];
+    @apply max-h-[83dvh];
   }
 
   .details-image {

@@ -10,7 +10,7 @@ const {
   IMAGE_DOMAIN = '',
 } = process.env;
 
-const months = [
+const months = Object.freeze([
   'January',
   'February',
   'March',
@@ -23,7 +23,7 @@ const months = [
   'October',
   'November',
   'December',
-];
+]);
 
 export {
   AWS_IDENTITY_POOL_ID,

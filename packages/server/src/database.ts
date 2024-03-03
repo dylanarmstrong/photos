@@ -1,7 +1,9 @@
 import Database from 'better-sqlite3';
 
-import type { Album, ExifCache, SqlRow } from './@types/index.js';
-import { months } from './constants.js';
+import { Photo } from './photo.js';
+
+import type { ExifCache, SqlRowAlbum, SqlRowExif } from './@types/index.js';
+import { Album } from './album.js';
 
 const exifFields = new Map<string, string>();
 exifFields.set('datetime', 'string');
@@ -19,7 +21,7 @@ exifFields.set('model', 'string');
 exifFields.set('shutter_speed_value', 'string');
 exifFields.set('width', 'number');
 
-const isExifRow = (value: unknown): value is SqlRow => {
+const isExifRow = (value: unknown): value is SqlRowExif => {
   let result = true;
   for (const [key, type] of exifFields.entries()) {
     if (result) {
@@ -34,7 +36,7 @@ const isExifRow = (value: unknown): value is SqlRow => {
   return result;
 };
 
-const isAlbums = (values: unknown[]): values is Album[] =>
+const isAlbums = (values: unknown[]): values is SqlRowAlbum[] =>
   Array.isArray(values) &&
   values.every(
     (value) =>
@@ -44,12 +46,12 @@ const isAlbums = (values: unknown[]): values is Album[] =>
       Object.hasOwnProperty.call(value, 'disabled') &&
       Object.hasOwnProperty.call(value, 'month') &&
       Object.hasOwnProperty.call(value, 'year') &&
-      typeof (value as Album).album === 'string' &&
-      typeof (value as Album).count === 'number' &&
-      typeof (value as Album).country === 'string' &&
-      typeof (value as Album).disabled === 'number' &&
-      typeof (value as Album).month === 'string' &&
-      typeof (value as Album).year === 'string',
+      typeof (value as SqlRowAlbum).album === 'string' &&
+      typeof (value as SqlRowAlbum).count === 'number' &&
+      typeof (value as SqlRowAlbum).country === 'string' &&
+      typeof (value as SqlRowAlbum).disabled === 'number' &&
+      typeof (value as SqlRowAlbum).month === 'string' &&
+      typeof (value as SqlRowAlbum).year === 'string',
   );
 
 const database = new Database('./images.db');
@@ -105,18 +107,7 @@ const stmtGetExif = database.prepare(`
 const getAlbums = (): Album[] => {
   const rows = stmtGetAlbums.all();
   if (isAlbums(rows)) {
-    const mapMonth = (row: Album) => {
-      const month = Number.parseInt(row.month);
-      if (Number.isNaN(month)) {
-        // Month is weird
-        return row;
-      }
-      return {
-        ...row,
-        month: months[month - 1],
-      };
-    };
-    return rows.map((row) => mapMonth(row));
+    return rows.map((row) => new Album(row));
   }
   return [];
 };
@@ -130,95 +121,7 @@ const getExifCache = (albums: Album[]): ExifCache => {
       if (!isExifRow(row)) {
         return;
       }
-      let { f_number, focal_length, make, shutter_speed_value } = row;
-
-      const {
-        datetime,
-        file,
-        gps_latitude,
-        gps_latitude_ref,
-        gps_longitude,
-        gps_longitude_ref,
-        height,
-        model,
-        width,
-        iso_speed_ratings,
-      } = row;
-
-      make = model.startsWith(make) ? '' : `${make} `;
-
-      if (!make && !model) {
-        make = '-';
-      }
-
-      const fNumberSides = f_number
-        .split('/')
-        .map((value) => Number.parseInt(value));
-      if (fNumberSides.length === 2) {
-        f_number = String(fNumberSides[0] / fNumberSides[1]);
-      }
-
-      const shutterSpeedValues = shutter_speed_value
-        .split('/')
-        .map((value) => Number.parseInt(value));
-      if (shutterSpeedValues.length === 2) {
-        shutter_speed_value = `1/${String(Math.pow(2, shutterSpeedValues[0] / shutterSpeedValues[1]).toFixed(0))}s`;
-      }
-
-      const focalLengthSides = focal_length
-        .split('/')
-        .map((value) => Number.parseInt(value));
-      if (focalLengthSides.length === 2) {
-        focal_length = String(focalLengthSides[0] / focalLengthSides[1]);
-      }
-
-      const displayDate = datetime
-        .replace(/:..$/, '')
-        .replaceAll('-', '/')
-        .replace(' ', ' @ ');
-
-      let coord = '-';
-      if (
-        gps_latitude &&
-        gps_latitude_ref &&
-        gps_longitude &&
-        gps_longitude_ref
-      ) {
-        coord = `${gps_latitude.replace(
-          /(\d+)\/1 (\d+)\/1 (\d+)\/10+$/,
-          (_, group1, group2, group3) =>
-            `${group1}˚${group2}'${(Number.parseInt(group3) / 100).toFixed(0)}"`,
-        )} ${gps_latitude_ref}, ${gps_longitude.replace(
-          /(\d+)\/1 (\d+)\/1 (\d+)\/100$/,
-          (_, group1, group2, group3) =>
-            `${group1}˚${group2}'${(Number.parseInt(group3) / 100).toFixed(0)}"`,
-        )} ${gps_longitude_ref}`;
-      }
-
-      let resolution = '-';
-      if (width && height) {
-        resolution = `${row.width}x${row.height}`;
-      }
-
-      exifCache[album][file] = {
-        coord,
-        datetime,
-        displayDate,
-        fNumber: f_number,
-        focalLength: focal_length,
-        isoSpeedRatings: iso_speed_ratings,
-        latitude: gps_latitude,
-        latitudeRef: gps_latitude_ref,
-        longitude: gps_longitude,
-        longitudeRef: gps_longitude_ref,
-        make,
-        megapixels: Number((row.width * row.height) / 1_000_000).toFixed(2),
-        model,
-        resolution,
-        shutterSpeedValue: shutter_speed_value,
-        x: width,
-        y: height,
-      };
+      exifCache[album][row.file] = new Photo(row);
     };
 
     for (const albumExif of stmtGetExif.all(album)) {

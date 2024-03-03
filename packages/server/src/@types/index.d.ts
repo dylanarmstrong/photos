@@ -1,30 +1,43 @@
-type Album = {
+interface IPhoto {
+  coord: string;
+  datetime: string;
+  displayDate: string;
+  fNumber: string;
+  file: string;
+  focalLength: string;
+  gpsLatitude: string;
+  gpsLatitudeRef: string;
+  gpsLongitude: string;
+  gpsLongitudeRef: string;
+  height: number;
+  isoSpeedRatings: string;
+  make: string;
+  megapixels: string;
+  model: string;
+  resolution: string;
+  shutterSpeedValue: string;
+  width: number;
+  x: number;
+  y: number;
+}
+
+interface IAlbum {
+  album: string;
+  count: number;
+  country: string;
+  disabled: boolean;
+  header: string;
+  month: string;
+  year: string;
+}
+
+type SqlRowAlbum = {
   album: string;
   count: number;
   country: string;
   disabled: boolean;
   month: string;
   year: string;
-};
-
-type Exif = {
-  coord: string;
-  datetime: string;
-  displayDate: string;
-  fNumber: string;
-  focalLength: string;
-  isoSpeedRatings: string;
-  latitude: string;
-  latitudeRef: string;
-  longitude: string;
-  longitudeRef: string;
-  make: string;
-  megapixels: string;
-  model: string;
-  resolution: string;
-  shutterSpeedValue: string;
-  x: number;
-  y: number;
 };
 
 type Image = {
@@ -36,7 +49,7 @@ type Image = {
 
 type AlbumRenderData = {
   base: string;
-  exif: Exif;
+  exif: IPhoto;
   image: string;
   images: {
     lg: Image;
@@ -46,14 +59,14 @@ type AlbumRenderData = {
 };
 
 type File = {
-  [key: string]: Exif;
+  [key: string]: IPhoto;
 };
 
 type ExifCache = {
   [key: string]: File;
 };
 
-type SqlRow = {
+type SqlRowExif = {
   datetime: string;
   f_number: string;
   file: string;
@@ -71,8 +84,8 @@ type SqlRow = {
 };
 
 type RenderOptions = Partial<{
-  album: Album;
-  albums: Album[];
+  album: IAlbum;
+  albums: IAlbum[];
   data: AlbumRenderData;
   datas: AlbumRenderData[];
   nextPage: number;
@@ -88,4 +101,13 @@ type GetObjects = {
   photos: string[];
 };
 
-export type { Album, ExifCache, GetObjects, RenderOptions, SqlRow };
+export type {
+  AlbumRenderData,
+  ExifCache,
+  GetObjects,
+  IAlbum,
+  IPhoto,
+  RenderOptions,
+  SqlRowAlbum,
+  SqlRowExif,
+};

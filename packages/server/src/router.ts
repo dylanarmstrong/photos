@@ -137,7 +137,6 @@ router.get('/:album/:page', async (request, response) => {
   );
   if (album) {
     render(response, 'album', {
-      // Display Name
       album: selectedAlbum,
       datas: data,
       nextPage: page + 1,
@@ -171,9 +170,10 @@ router.get('/:album/details/:index', async (request, response) => {
     ({ album: folderName }) => folderName === album,
   );
   if (selectedAlbum && image) {
+    const data = mapImage(image);
     render(response, 'details', {
       album: selectedAlbum,
-      data: mapImage(image),
+      data,
       nextPage: imageIndex < images.length - 1 ? imageIndex + 1 : undefined,
       prevPage: imageIndex > 0 ? imageIndex - 1 : undefined,
       prevUrl: `${baseUrl}/${album}/${Math.floor(imageIndex / imagesPerPage) + 1}`,
@@ -193,8 +193,8 @@ router.get('/', async (request, response, next) => {
     next();
     return;
   }
-  log(request, 'index');
-  render(response, 'index', {
+  log(request, 'home');
+  render(response, 'home', {
     albums,
   });
 });

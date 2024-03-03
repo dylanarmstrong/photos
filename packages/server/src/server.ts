@@ -28,7 +28,6 @@ app.use(
               'b.basemaps.cartocdn.com',
               'c.basemaps.cartocdn.com',
               'd.basemaps.cartocdn.com',
-              'localhost:9006/',
               'localhost:5173/',
             ]
           : [
@@ -40,7 +39,7 @@ app.use(
               'd.basemaps.cartocdn.com',
             ],
         'script-src': isDevelopment
-          ? ["'self'", 'localhost:5173/']
+          ? ["'self'", 'localhost:5173/', 'unsafe-inline']
           : ["'self'"],
         // eslint-disable-next-line unicorn/no-null
         'upgrade-insecure-requests': isDevelopment ? null : [],
