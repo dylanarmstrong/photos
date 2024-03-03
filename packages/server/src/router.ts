@@ -174,7 +174,7 @@ router.get('/:album/details/:index', async (request, response) => {
     render(response, 'details', {
       album: selectedAlbum,
       data: mapImage(image),
-      nextPage: imageIndex < images.length ? imageIndex + 1 : undefined,
+      nextPage: imageIndex < images.length - 1 ? imageIndex + 1 : undefined,
       prevPage: imageIndex > 0 ? imageIndex - 1 : undefined,
       prevUrl: `${baseUrl}/${album}/${Math.floor(imageIndex / imagesPerPage) + 1}`,
     });
