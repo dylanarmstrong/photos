@@ -26,16 +26,16 @@ const Album = ({
     title={album.header}
   >
     <div className="header navigation">
-      <a id="home" href={baseUrl}>
+      <a href={baseUrl} id="home">
         Home
       </a>
       {page > 1 && (
-        <a id="prev" href={prevPage}>
+        <a href={prevPage} id="prev">
           Previous
         </a>
       )}
       {page < pages && (
-        <a id="next" href={nextPage}>
+        <a href={nextPage} id="next">
           Next
         </a>
       )}
@@ -45,8 +45,8 @@ const Album = ({
         <div className="image-block" key={data.base}>
           <figure>
             <a
-              className="group"
               aria-label={`Click to see details for image #${index + 1}`}
+              className="group"
               href={`${baseUrl}/${album.album}/details/${(page - 1) * imagesPerPage + index}`}
             >
               <picture>
@@ -54,8 +54,8 @@ const Album = ({
                 <img
                   alt={`Image ${index + 1}`}
                   height={data.images.sm.height}
-                  width={data.images.sm.width}
                   src={data.images.sm.jpeg}
+                  width={data.images.sm.width}
                 />
               </picture>
               <div className="data md:group-hover:opacity-100">

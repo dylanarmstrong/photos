@@ -1,12 +1,14 @@
 import { Layout } from '../components/layout.js';
 
 type Properties = {
-  status: string;
+  readonly status: string;
 };
+
+const message = `You've reached a page that doesn't exist.`;
 
 const Status = ({ status }: Properties) => (
   <Layout header={status}>
-    <p>You've reached a page that doesn't exist.</p>
+    <p>{message}</p>
   </Layout>
 );
 

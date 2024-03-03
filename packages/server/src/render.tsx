@@ -1,30 +1,13 @@
 import { renderToString } from 'react-dom/server';
 
-import type { Request, Response } from 'express';
+import type { Response } from 'express';
 
 import { Album } from './pages/album.js';
 import { Details } from './pages/details.js';
 import { Home } from './pages/home.js';
 import { Status } from './pages/status.js';
 
-import type { RenderOptions } from './@types/index.js';
-
-const getIp = (request: Request) => {
-  try {
-    return String(
-      request.headers['x-forwarded-for'] || request.socket.remoteAddress,
-    ).split(',')[0];
-  } catch {
-    return 'Error';
-  }
-};
-
-const getDate = () => new Date().toLocaleString().replace(',', '');
-
-const log = (request: Request, message: string) => {
-  // eslint-disable-next-line no-console
-  console.log(`[${getDate()}] [${getIp(request)}] ${message}`);
-};
+import type { IAlbum, AlbumRenderData } from './@types/index.js';
 
 const sendStatus = (response: Response, status: number) => {
   const html = renderToString(<Status status={String(status)} />);
@@ -34,12 +17,37 @@ const sendStatus = (response: Response, status: number) => {
   );
 };
 
-const render = (
-  response: Response,
-  page: 'album' | 'details' | 'home',
-  properties: RenderOptions,
-) => {
+type Options =
+  | {
+      page: 'album';
+      properties: {
+        album: IAlbum;
+        datas: AlbumRenderData[];
+        nextPage: number;
+        page: number;
+        pages: number;
+        prevPage: number;
+      };
+    }
+  | {
+      page: 'details';
+      properties: {
+        data: AlbumRenderData;
+        nextPage: number | undefined;
+        prevPage: number | undefined;
+        prevUrl: string;
+      };
+    }
+  | {
+      page: 'home';
+      properties: {
+        albums: IAlbum[];
+      };
+    };
+
+const render = (response: Response, options: Options) => {
   const html = ['<!DOCTYPE html>'];
+  const { page, properties } = options;
   switch (page) {
     case 'album': {
       html.push(
@@ -47,10 +55,10 @@ const render = (
           <Album
             album={properties.album}
             datas={properties.datas}
-            nextPage={String((properties?.page || 0) + 1)}
+            nextPage={String(properties.page + 1)}
             page={properties.page}
             pages={properties.pages}
-            prevPage={String((properties?.page || 0) - 1)}
+            prevPage={String(properties.page - 1)}
           />,
         ),
       );
@@ -88,4 +96,4 @@ const render = (
   response.send(html.join('\n'));
 };
 
-export { log, render, sendStatus };
+export { render, sendStatus };

@@ -28,6 +28,7 @@ interface IAlbum {
   disabled: boolean;
   header: string;
   month: string;
+  photos: IPhoto[];
   year: string;
 }
 
@@ -83,18 +84,6 @@ type SqlRowExif = {
   width: number;
 };
 
-type RenderOptions = Partial<{
-  album: IAlbum;
-  albums: IAlbum[];
-  data: AlbumRenderData;
-  datas: AlbumRenderData[];
-  nextPage: number;
-  page: number;
-  pages: number;
-  prevPage: number;
-  prevUrl: string;
-}>;
-
 type GetObjects = {
   IsTruncated: boolean;
   NextContinuationToken?: string;
@@ -107,7 +96,6 @@ export type {
   GetObjects,
   IAlbum,
   IPhoto,
-  RenderOptions,
   SqlRowAlbum,
   SqlRowExif,
 };

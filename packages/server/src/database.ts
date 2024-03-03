@@ -2,7 +2,7 @@ import Database from 'better-sqlite3';
 
 import { Photo } from './photo.js';
 
-import type { ExifCache, SqlRowAlbum, SqlRowExif } from './@types/index.js';
+import type { SqlRowAlbum, SqlRowExif } from './@types/index.js';
 import { Album } from './album.js';
 
 const exifFields = new Map<string, string>();
@@ -112,24 +112,20 @@ const getAlbums = (): Album[] => {
   return [];
 };
 
-const getExifCache = (albums: Album[]): ExifCache => {
-  const exifCache: ExifCache = {};
-
-  for (const { album } of albums) {
-    exifCache[album] = {};
-    const eachRow = (row: unknown) => {
-      if (!isExifRow(row)) {
-        return;
-      }
-      exifCache[album][row.file] = new Photo(row);
-    };
-
-    for (const albumExif of stmtGetExif.all(album)) {
+const initCache = (albums: Album[]): void => {
+  for (let index = 0, length_ = albums.length; index < length_; index += 1) {
+    const album = albums[index];
+    const { album: albumName } = album;
+    for (const albumExif of stmtGetExif.all(albumName)) {
+      const eachRow = (row: unknown) => {
+        if (!isExifRow(row)) {
+          return;
+        }
+        album.addPhoto(new Photo(row));
+      };
       eachRow(albumExif);
     }
   }
-
-  return exifCache;
 };
 
-export { getAlbums, getExifCache };
+export { getAlbums, initCache };

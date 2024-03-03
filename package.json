@@ -5,7 +5,7 @@
   },
   "description": "Just a super, simple, spectacular S3 photo browser",
   "devDependencies": {
-    "@dylanarmstrong/eslint-config": "^0.6.0",
+    "@dylanarmstrong/eslint-config": "^0.6.1",
     "@dylanarmstrong/tsconfig": "^0.0.2",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/parser": "^7.0.2",
@@ -13,6 +13,8 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-unicorn": "^51.0.1",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",

@@ -1,12 +1,13 @@
 import express from 'express';
 
-import { getAlbums, getExifCache } from './database.js';
+import { getAlbums, initCache } from './database.js';
 import { IMAGE_DOMAIN, baseUrl, imagesPerPage } from './constants.js';
-import { log, render, sendStatus } from './utils.js';
+import { filterUndefined, log } from './utils.js';
+import { render, sendStatus } from './render.js';
 import { viewAlbum } from './aws.js';
 
 const albums = getAlbums();
-const exifCache = getExifCache(albums);
+initCache(albums);
 
 const isValidAlbum = (albumName: string) =>
   albums.some(({ album, disabled }) => !disabled && albumName === album);
@@ -16,7 +17,11 @@ const albumImages = new Map<string, string[]>();
 const mapImage = (image: string) => {
   const [splitAlbum, splitFile] = image.split('/');
   const baseFile = splitFile.replace(/.jpe?g/i, '');
-  const exif = exifCache[splitAlbum][splitFile];
+  const selectedAlbum = albums.find((album) => album.album === splitAlbum);
+  const exif = selectedAlbum?.getPhoto(splitFile);
+  if (!selectedAlbum || !exif) {
+    return;
+  }
   const base = `${IMAGE_DOMAIN}/${splitAlbum}`;
   const { x, y } = exif;
   const ratio = y / x;
@@ -70,27 +75,34 @@ const getAlbumImages = async (album: string) => {
       images = _images;
     }
   } else {
-    const cache = exifCache[album];
-    const sortImages = (a: string, b: string) => {
-      const [, fileA] = a.split('/');
-      const [, fileB] = b.split('/');
-      const dateA = new Date(cache[fileA].datetime);
-      const dateB = new Date(cache[fileB].datetime);
-      if (dateA > dateB) {
-        return 1;
-      }
-      if (dateA < dateB) {
-        return -1;
-      }
-      return 0;
-    };
-    const hasExif = (exifAlbum: string) => {
-      const [, file] = exifAlbum.split('/');
-      return !!cache[file];
-    };
-    const allImages = await viewAlbum(album);
-    images = allImages.filter((image) => hasExif(image)).sort(sortImages);
-    albumImages.set(album, images);
+    const selectedAlbum = albums.find(({ album: folderName }) => folderName === album);
+    if (selectedAlbum) {
+      const hasExif = (exifAlbum: string) => {
+        const [, file] = exifAlbum.split('/');
+        return !!selectedAlbum.getPhoto(file);
+      };
+      const sortImages = (a: string, b: string) => {
+        const [, fileA] = a.split('/');
+        const [, fileB] = b.split('/');
+        const photoA = selectedAlbum.getPhoto(fileA);
+        const photoB = selectedAlbum.getPhoto(fileB);
+        if (!photoA || !photoB) {
+          return 0;
+        }
+        const dateA = new Date(photoA.datetime);
+        const dateB = new Date(photoB.datetime);
+        if (dateA > dateB) {
+          return 1;
+        }
+        if (dateA < dateB) {
+          return -1;
+        }
+        return 0;
+      };
+      const allImages = await viewAlbum(album);
+      images = allImages.filter((image) => hasExif(image)).sort(sortImages);
+      albumImages.set(album, images);
+    }
   }
   return images;
 };
@@ -130,19 +142,24 @@ router.get('/:album/:page', async (request, response) => {
 
   const data = images
     .slice((page - 1) * imagesPerPage, page * imagesPerPage)
-    .map((image) => mapImage(image));
+    .map((image) => mapImage(image))
+    .filter(filterUndefined)
 
   const selectedAlbum = albums.find(
     ({ album: folderName }) => folderName === album,
   );
-  if (album) {
-    render(response, 'album', {
-      album: selectedAlbum,
-      datas: data,
-      nextPage: page + 1,
-      page,
-      pages,
-      prevPage: page - 1,
+
+  if (selectedAlbum) {
+    render(response, {
+      page: 'album',
+      properties: {
+        album: selectedAlbum,
+        datas: data,
+        nextPage: page + 1,
+        page,
+        pages,
+        prevPage: page - 1,
+      },
     });
   } else {
     sendStatus(response, 404);
@@ -169,14 +186,16 @@ router.get('/:album/details/:index', async (request, response) => {
   const selectedAlbum = albums.find(
     ({ album: folderName }) => folderName === album,
   );
-  if (selectedAlbum && image) {
-    const data = mapImage(image);
-    render(response, 'details', {
-      album: selectedAlbum,
-      data,
-      nextPage: imageIndex < images.length - 1 ? imageIndex + 1 : undefined,
-      prevPage: imageIndex > 0 ? imageIndex - 1 : undefined,
-      prevUrl: `${baseUrl}/${album}/${Math.floor(imageIndex / imagesPerPage) + 1}`,
+  const data = mapImage(image);
+  if (selectedAlbum && data) {
+    render(response, {
+      page: 'details',
+      properties: {
+        data,
+        nextPage: imageIndex < images.length - 1 ? imageIndex + 1 : undefined,
+        prevPage: imageIndex > 0 ? imageIndex - 1 : undefined,
+        prevUrl: `${baseUrl}/${album}/${Math.floor(imageIndex / imagesPerPage) + 1}`,
+      },
     });
   } else {
     sendStatus(response, 404);
@@ -194,8 +213,11 @@ router.get('/', async (request, response, next) => {
     return;
   }
   log(request, 'home');
-  render(response, 'home', {
-    albums,
+  render(response, {
+    page: 'home',
+    properties: {
+      albums,
+    },
   });
 });
 
