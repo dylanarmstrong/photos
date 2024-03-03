@@ -19,6 +19,7 @@ app.use(
       directives: {
         // eslint-disable-next-line unicorn/no-null
         'connect-src': isDevelopment ? ['ws://localhost:5173/'] : null,
+        'font-src': isDevelopment ? ["'self'", 'localhost:5173'] : ["'self'"],
         'img-src': isDevelopment
           ? [
               "'self'",
@@ -37,7 +38,6 @@ app.use(
               'b.basemaps.cartocdn.com',
               'c.basemaps.cartocdn.com',
               'd.basemaps.cartocdn.com',
-              'localhost:9006/',
             ],
         'script-src': isDevelopment
           ? ["'self'", 'localhost:5173/']

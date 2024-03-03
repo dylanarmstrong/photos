@@ -61,6 +61,7 @@ Running [here](https://dylan.is/photos/).
 
 ### TODO
 
+- Clean stuff up
 - Remove AWS permissions on original photos
 - Reprocess all photos for new size I want here
 - Update README with more DB information
@@ -145,7 +146,7 @@ table exif (
 
     image_id integer,
     foreign key (image_id) references images (id) on delete cascade
-)"""
+)
 ```
 
 ### License

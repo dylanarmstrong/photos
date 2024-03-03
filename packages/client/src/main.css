@@ -67,7 +67,7 @@
   }
 
   footer {
-    @apply my-2.5 ml-4;
+    @apply ml-4 mt-2.5 pb-2.5;
   }
 
   h1 {
@@ -119,7 +119,7 @@
   }
 
   .details-image img {
-    @apply h-[85dvh];
+    @apply h-[84dvh];
   }
 
   .details-image {
@@ -136,6 +136,10 @@
 
   .details-data > div > div {
     @apply flex self-center;
+  }
+
+  .details-table tbody tr td:first-child {
+    @apply align-top;
   }
 
   .image-block {
@@ -207,7 +211,7 @@
   }
 
   .footer.navigation {
-    @apply my-2.5;
+    @apply mt-2.5;
   }
 
   td.mobile,

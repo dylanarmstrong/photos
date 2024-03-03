@@ -11,13 +11,18 @@ type Exif = {
   coord: string;
   datetime: string;
   displayDate: string;
+  fNumber: string;
+  focalLength: string;
+  isoSpeedRatings: string;
   latitude: string;
   latitudeRef: string;
   longitude: string;
   longitudeRef: string;
   make: string;
+  megapixels: string;
   model: string;
   resolution: string;
+  shutterSpeedValue: string;
   x: number;
   y: number;
 };
@@ -50,14 +55,18 @@ type ExifCache = {
 
 type SqlRow = {
   datetime: string;
+  f_number: string;
   file: string;
+  focal_length: string;
   gps_latitude: string;
   gps_latitude_ref: string;
   gps_longitude: string;
   gps_longitude_ref: string;
   height: number;
+  iso_speed_ratings: string;
   make: string;
   model: string;
+  shutter_speed_value: string;
   width: number;
 };
 

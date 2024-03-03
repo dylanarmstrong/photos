@@ -5,14 +5,18 @@ import { months } from './constants.js';
 
 const exifFields = new Map<string, string>();
 exifFields.set('datetime', 'string');
+exifFields.set('f_number', 'string');
 exifFields.set('file', 'string');
+exifFields.set('focal_length', 'string');
 exifFields.set('gps_latitude', 'string');
 exifFields.set('gps_latitude_ref', 'string');
 exifFields.set('gps_longitude', 'string');
 exifFields.set('gps_longitude_ref', 'string');
 exifFields.set('height', 'number');
+exifFields.set('iso_speed_ratings', 'string');
 exifFields.set('make', 'string');
 exifFields.set('model', 'string');
+exifFields.set('shutter_speed_value', 'string');
 exifFields.set('width', 'number');
 
 const isExifRow = (value: unknown): value is SqlRow => {
@@ -85,7 +89,11 @@ const stmtGetExif = database.prepare(`
     IFNULL(e.gps_longitude_ref, '') AS gps_longitude_ref,
     IFNULL(e.datetime, '1970-01-01 00:00:01') AS datetime,
     IFNULL(e.make, '') AS make,
-    IFNULL(e.model, '') AS model
+    IFNULL(e.model, '') AS model,
+    IFNULL(e.f_number, '') AS f_number,
+    IFNULL(e.iso_speed_ratings, '') AS iso_speed_ratings,
+    IFNULL(e.focal_length, '') AS focal_length,
+    IFNULL(e.shutter_speed_value, '') as shutter_speed_value
   FROM exif e
   JOIN images i ON i.id = e.image_id
   JOIN albums a ON a.id = i.album_id
@@ -122,7 +130,7 @@ const getExifCache = (albums: Album[]): ExifCache => {
       if (!isExifRow(row)) {
         return;
       }
-      let { make } = row;
+      let { f_number, focal_length, make, shutter_speed_value } = row;
 
       const {
         datetime,
@@ -134,12 +142,34 @@ const getExifCache = (albums: Album[]): ExifCache => {
         height,
         model,
         width,
+        iso_speed_ratings,
       } = row;
 
       make = model.startsWith(make) ? '' : `${make} `;
 
       if (!make && !model) {
         make = '-';
+      }
+
+      const fNumberSides = f_number
+        .split('/')
+        .map((value) => Number.parseInt(value));
+      if (fNumberSides.length === 2) {
+        f_number = String(fNumberSides[0] / fNumberSides[1]);
+      }
+
+      const shutterSpeedValues = shutter_speed_value
+        .split('/')
+        .map((value) => Number.parseInt(value));
+      if (shutterSpeedValues.length === 2) {
+        shutter_speed_value = `1/${String(Math.pow(2, shutterSpeedValues[0] / shutterSpeedValues[1]).toFixed(0))}s`;
+      }
+
+      const focalLengthSides = focal_length
+        .split('/')
+        .map((value) => Number.parseInt(value));
+      if (focalLengthSides.length === 2) {
+        focal_length = String(focalLengthSides[0] / focalLengthSides[1]);
       }
 
       const displayDate = datetime
@@ -174,13 +204,18 @@ const getExifCache = (albums: Album[]): ExifCache => {
         coord,
         datetime,
         displayDate,
+        fNumber: f_number,
+        focalLength: focal_length,
+        isoSpeedRatings: iso_speed_ratings,
         latitude: gps_latitude,
         latitudeRef: gps_latitude_ref,
         longitude: gps_longitude,
         longitudeRef: gps_longitude_ref,
         make,
+        megapixels: Number((row.width * row.height) / 1_000_000).toFixed(2),
         model,
         resolution,
+        shutterSpeedValue: shutter_speed_value,
         x: width,
         y: height,
       };

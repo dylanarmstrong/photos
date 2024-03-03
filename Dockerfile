@@ -26,7 +26,6 @@ COPY packages/server/package.json ./packages/server/package.json
 
 RUN pnpm install --frozen-lockfile --prod=false
 
-COPY packages/client/public ./packages/client/public
 COPY packages/client/src ./packages/client/src
 COPY packages/client/tailwind.config.ts packages/client/tsconfig.json packages/client/vite.config.ts ./packages/client/
 
