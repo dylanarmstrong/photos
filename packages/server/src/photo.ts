@@ -1,3 +1,5 @@
+import { IMAGE_DOMAIN } from './constants.js';
+
 import type { IPhoto, SqlRowExif } from './@types/index.js';
 
 const divide = (string_: string) => {
@@ -12,6 +14,7 @@ const divide = (string_: string) => {
 };
 
 class Photo implements IPhoto {
+  album: string;
   datetime: string;
   file: string;
   gpsLatitude: string;
@@ -27,7 +30,8 @@ class Photo implements IPhoto {
   private _shutterSpeedValue: string;
   width: number;
 
-  constructor(row: SqlRowExif) {
+  constructor(album: string, row: SqlRowExif) {
+    this.album = album;
     this._make = row.make;
     this.datetime = row.datetime;
     this.file = row.file;
@@ -72,11 +76,6 @@ class Photo implements IPhoto {
     return `ƒ${divide(_fNumber)}`;
   }
 
-  getIsoSpeedRatings() {
-    const { _isoSpeedRatings } = this;
-    return `ISO${_isoSpeedRatings}`;
-  }
-
   get isoSpeedRatings() {
     const { _isoSpeedRatings } = this;
     return `ISO${_isoSpeedRatings}`;
@@ -94,6 +93,52 @@ class Photo implements IPhoto {
   get focalLength() {
     const { _focalLength } = this;
     return `${divide(_focalLength)}mm`;
+  }
+
+  get images() {
+    const baseFile = this.file.replace(/\.[^./]+$/, '');
+    const base = `${IMAGE_DOMAIN}/${this.album}`;
+    const { x, y } = this;
+    const ratio = y / x;
+
+    const smWidth = Math.max(256, Math.floor(192 / ratio));
+    const smHeightRatio = smWidth / x;
+    const smHeight = Math.floor(y * smHeightRatio);
+
+    const mdWidth = Math.max(512, Math.floor(384 / ratio));
+    const mdHeightRatio = mdWidth / x;
+    const mdHeight = Math.floor(y * mdHeightRatio);
+
+    const lgWidth = Math.max(1024, Math.floor(768 / ratio));
+    const lgHeightRatio = lgWidth / x;
+    const lgHeight = Math.floor(y * lgHeightRatio);
+
+    return {
+      base: {
+        height: lgHeight,
+        jpeg: `${base}/${baseFile}_2048.jpeg`,
+        webp: `${base}/${baseFile}_2048.webp`,
+        width: lgWidth,
+      },
+      lg: {
+        height: lgHeight,
+        jpeg: `${base}/${baseFile}_2048.jpeg`,
+        webp: `${base}/${baseFile}_2048.webp`,
+        width: lgWidth,
+      },
+      md: {
+        height: mdHeight,
+        jpeg: `${base}/${baseFile}_1024.jpeg`,
+        webp: `${base}/${baseFile}_1024.webp`,
+        width: mdWidth,
+      },
+      sm: {
+        height: smHeight,
+        jpeg: `${base}/${baseFile}_512.jpeg`,
+        webp: `${base}/${baseFile}_512.webp`,
+        width: smWidth,
+      },
+    };
   }
 
   get make() {

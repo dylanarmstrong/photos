@@ -1,10 +1,9 @@
 import express from 'express';
 
+import { baseUrl, imagesPerPage } from './constants.js';
 import { getAlbums, initCache } from './database.js';
-import { IMAGE_DOMAIN, baseUrl, imagesPerPage } from './constants.js';
-import { filterUndefined, log } from './utils.js';
+import { log } from './utils.js';
 import { render, sendStatus } from './render.js';
-import { viewAlbum } from './aws.js';
 
 const albums = getAlbums();
 initCache(albums);
@@ -12,99 +11,16 @@ initCache(albums);
 const isValidAlbum = (albumName: string) =>
   albums.some(({ album, disabled }) => !disabled && albumName === album);
 
-const albumImages = new Map<string, string[]>();
-
-const mapImage = (image: string) => {
-  const [splitAlbum, splitFile] = image.split('/');
-  const baseFile = splitFile.replace(/.jpe?g/i, '');
-  const selectedAlbum = albums.find((album) => album.album === splitAlbum);
-  const exif = selectedAlbum?.getPhoto(splitFile);
-  if (!selectedAlbum || !exif) {
-    return;
-  }
-  const base = `${IMAGE_DOMAIN}/${splitAlbum}`;
-  const { x, y } = exif;
-  const ratio = y / x;
-
-  const smWidth = Math.max(256, Math.floor(192 / ratio));
-  const smHeightRatio = smWidth / x;
-  const smHeight = Math.floor(y * smHeightRatio);
-
-  const mdWidth = Math.max(512, Math.floor(384 / ratio));
-  const mdHeightRatio = mdWidth / x;
-  const mdHeight = Math.floor(y * mdHeightRatio);
-
-  const lgWidth = Math.max(1024, Math.floor(768 / ratio));
-  const lgHeightRatio = lgWidth / x;
-  const lgHeight = Math.floor(y * lgHeightRatio);
-
-  return {
-    base: splitFile,
-    exif,
-    image: `${base}/${splitFile}`,
-    images: {
-      lg: {
-        height: lgHeight,
-        jpeg: `${base}/${baseFile}_2048.jpeg`,
-        webp: `${base}/${baseFile}_2048.webp`,
-        width: lgWidth,
-      },
-      md: {
-        height: mdHeight,
-        jpeg: `${base}/${baseFile}_1024.jpeg`,
-        webp: `${base}/${baseFile}_1024.webp`,
-        width: mdWidth,
-      },
-      sm: {
-        height: smHeight,
-        jpeg: `${base}/${baseFile}_512.jpeg`,
-        webp: `${base}/${baseFile}_512.webp`,
-        width: smWidth,
-      },
-    },
-  };
-};
+const getAlbum = (albumName: string) =>
+  albums.find(({ album }) => album === albumName);
 
 const getAlbumImages = async (album: string) => {
-  let images: string[] = [];
-  if (albumImages.has(album)) {
-    // Oh typescript and your silly missing map .has assertions
-    // https://github.com/microsoft/TypeScript/issues/9619
-    const _images = albumImages.get(album);
-    if (_images) {
-      images = _images;
-    }
-  } else {
-    const selectedAlbum = albums.find(({ album: folderName }) => folderName === album);
-    if (selectedAlbum) {
-      const hasExif = (exifAlbum: string) => {
-        const [, file] = exifAlbum.split('/');
-        return !!selectedAlbum.getPhoto(file);
-      };
-      const sortImages = (a: string, b: string) => {
-        const [, fileA] = a.split('/');
-        const [, fileB] = b.split('/');
-        const photoA = selectedAlbum.getPhoto(fileA);
-        const photoB = selectedAlbum.getPhoto(fileB);
-        if (!photoA || !photoB) {
-          return 0;
-        }
-        const dateA = new Date(photoA.datetime);
-        const dateB = new Date(photoB.datetime);
-        if (dateA > dateB) {
-          return 1;
-        }
-        if (dateA < dateB) {
-          return -1;
-        }
-        return 0;
-      };
-      const allImages = await viewAlbum(album);
-      images = allImages.filter((image) => hasExif(image)).sort(sortImages);
-      albumImages.set(album, images);
-    }
+  const selectedAlbum = getAlbum(album);
+  if (selectedAlbum) {
+    await selectedAlbum.refreshExternalPhotos();
+    return selectedAlbum.photos;
   }
-  return images;
+  return [];
 };
 
 // eslint-disable-next-line new-cap
@@ -132,18 +48,13 @@ router.get('/:album/:page', async (request, response) => {
     return;
   }
 
-  const images = await getAlbumImages(album);
-  const pages = Math.ceil(images.length / imagesPerPage);
+  const photos = await getAlbumImages(album);
+  const pages = Math.ceil(photos.length / imagesPerPage);
 
   if (page > pages || page < 1) {
     sendStatus(response, 404);
     return;
   }
-
-  const data = images
-    .slice((page - 1) * imagesPerPage, page * imagesPerPage)
-    .map((image) => mapImage(image))
-    .filter(filterUndefined)
 
   const selectedAlbum = albums.find(
     ({ album: folderName }) => folderName === album,
@@ -154,7 +65,6 @@ router.get('/:album/:page', async (request, response) => {
       page: 'album',
       properties: {
         album: selectedAlbum,
-        datas: data,
         nextPage: page + 1,
         page,
         pages,
@@ -170,29 +80,25 @@ router.get('/:album/details/:index', async (request, response) => {
   const { album, index } = request.params;
   log(request, `${album}/details/${index}`);
 
-  const images = await getAlbumImages(album);
+  const photos = await getAlbumImages(album);
   const imageIndex = Number.parseInt(index);
 
   if (
     Number.isNaN(imageIndex) ||
-    imageIndex > images.length ||
+    imageIndex > photos.length ||
     imageIndex < 0
   ) {
     sendStatus(response, 404);
     return;
   }
 
-  const image = images[imageIndex];
-  const selectedAlbum = albums.find(
-    ({ album: folderName }) => folderName === album,
-  );
-  const data = mapImage(image);
-  if (selectedAlbum && data) {
+  const photo = photos[imageIndex];
+  if (photo) {
     render(response, {
       page: 'details',
       properties: {
-        data,
-        nextPage: imageIndex < images.length - 1 ? imageIndex + 1 : undefined,
+        nextPage: imageIndex < photos.length - 1 ? imageIndex + 1 : undefined,
+        photo,
         prevPage: imageIndex > 0 ? imageIndex - 1 : undefined,
         prevUrl: `${baseUrl}/${album}/${Math.floor(imageIndex / imagesPerPage) + 1}`,
       },

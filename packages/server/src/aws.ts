@@ -11,6 +11,7 @@ import {
   AWS_REGION,
   AWS_S3_BUCKET,
 } from './constants.js';
+import { filterUndefined } from './utils.js';
 
 import type { GetObjects } from './@types/index.js';
 
@@ -45,9 +46,10 @@ const viewAlbum = async (albumName: string) => {
           return;
         }
 
-        const photos: string[] = Contents.map((Content) =>
-          photoMap(Content),
-        ).filter((k): k is string => typeof k === 'string');
+        const photos: string[] = Contents.map(
+          (Content) => photoMap(Content),
+          // eslint-disable-next-line unicorn/no-array-callback-reference
+        ).filter(filterUndefined);
 
         resolve({
           IsTruncated: IsTruncated || false,

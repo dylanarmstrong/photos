@@ -121,7 +121,7 @@ const initCache = (albums: Album[]): void => {
         if (!isExifRow(row)) {
           return;
         }
-        album.addPhoto(new Photo(row));
+        album.addPhoto(new Photo(albumName, row));
       };
       eachRow(albumExif);
     }

@@ -1,4 +1,19 @@
+type Image = {
+  height: number;
+  jpeg: string;
+  webp: string;
+  width: number;
+};
+
+type Images = {
+  base: Image;
+  lg: Image;
+  md: Image;
+  sm: Image;
+};
+
 interface IPhoto {
+  album: string;
   coord: string;
   datetime: string;
   displayDate: string;
@@ -10,6 +25,7 @@ interface IPhoto {
   gpsLongitude: string;
   gpsLongitudeRef: string;
   height: number;
+  images: Images;
   isoSpeedRatings: string;
   make: string;
   megapixels: string;
@@ -41,32 +57,6 @@ type SqlRowAlbum = {
   year: string;
 };
 
-type Image = {
-  height: number;
-  jpeg: string;
-  webp: string;
-  width: number;
-};
-
-type AlbumRenderData = {
-  base: string;
-  exif: IPhoto;
-  image: string;
-  images: {
-    lg: Image;
-    md: Image;
-    sm: Image;
-  };
-};
-
-type File = {
-  [key: string]: IPhoto;
-};
-
-type ExifCache = {
-  [key: string]: File;
-};
-
 type SqlRowExif = {
   datetime: string;
   f_number: string;
@@ -90,12 +80,4 @@ type GetObjects = {
   photos: string[];
 };
 
-export type {
-  AlbumRenderData,
-  ExifCache,
-  GetObjects,
-  IAlbum,
-  IPhoto,
-  SqlRowAlbum,
-  SqlRowExif,
-};
+export type { GetObjects, IAlbum, IPhoto, SqlRowAlbum, SqlRowExif };

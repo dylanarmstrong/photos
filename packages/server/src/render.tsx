@@ -7,7 +7,7 @@ import { Details } from './pages/details.js';
 import { Home } from './pages/home.js';
 import { Status } from './pages/status.js';
 
-import type { IAlbum, AlbumRenderData } from './@types/index.js';
+import type { IAlbum, IPhoto } from './@types/index.js';
 
 const sendStatus = (response: Response, status: number) => {
   const html = renderToString(<Status status={String(status)} />);
@@ -22,7 +22,6 @@ type Options =
       page: 'album';
       properties: {
         album: IAlbum;
-        datas: AlbumRenderData[];
         nextPage: number;
         page: number;
         pages: number;
@@ -32,7 +31,7 @@ type Options =
   | {
       page: 'details';
       properties: {
-        data: AlbumRenderData;
+        photo: IPhoto;
         nextPage: number | undefined;
         prevPage: number | undefined;
         prevUrl: string;
@@ -54,7 +53,6 @@ const render = (response: Response, options: Options) => {
         renderToString(
           <Album
             album={properties.album}
-            datas={properties.datas}
             nextPage={String(properties.page + 1)}
             page={properties.page}
             pages={properties.pages}
@@ -69,12 +67,12 @@ const render = (response: Response, options: Options) => {
       html.push(
         renderToString(
           <Details
-            data={properties.data}
             nextPage={
               properties.nextPage === undefined
                 ? undefined
                 : String(properties.nextPage)
             }
+            photo={properties.photo}
             prevPage={
               properties.prevPage === undefined
                 ? undefined
@@ -87,7 +85,7 @@ const render = (response: Response, options: Options) => {
       break;
     }
 
-    case 'home': {
+    default: {
       html.push(renderToString(<Home albums={properties.albums} />));
       break;
     }
