@@ -27,6 +27,7 @@ interface IPhoto {
   height: number;
   images: Images;
   isoSpeedRatings: string;
+  latLng: [number, number] | undefined;
   make: string;
   megapixels: string;
   model: string;
@@ -38,12 +39,12 @@ interface IPhoto {
 }
 
 interface IAlbum {
-  album: string;
   count: number;
   country: string;
   disabled: boolean;
   header: string;
   month: string;
+  name: string;
   photos: IPhoto[];
   year: string;
 }

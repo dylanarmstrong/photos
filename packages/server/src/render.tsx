@@ -2,9 +2,9 @@ import { renderToString } from 'react-dom/server';
 
 import type { Response } from 'express';
 
-import { Album } from './pages/album.js';
+import { Album } from './pages/album/index.js';
 import { Details } from './pages/details.js';
-import { Home } from './pages/home.js';
+import { Home } from './pages/home/index.js';
 import { Status } from './pages/status.js';
 
 import type { RenderOptions } from './@types/index.js';

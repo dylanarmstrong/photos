@@ -18,7 +18,7 @@ type Properties = {
 };
 
 const Details = ({ photo, prevPage, nextPage, prevUrl }: Properties) => {
-  const { images } = photo;
+  const { images, latLng } = photo;
   return (
     <Layout>
       <div className="header navigation">
@@ -109,14 +109,14 @@ const Details = ({ photo, prevPage, nextPage, prevUrl }: Properties) => {
 
           <hr className="my-5" />
 
-          <div
-            className="w-full"
-            data-latitude={photo.gpsLatitude}
-            data-latitude-ref={photo.gpsLatitudeRef}
-            data-longitude={photo.gpsLongitude}
-            data-longitude-ref={photo.gpsLongitudeRef}
-            id="map"
-          />
+          {latLng !== undefined && (
+            <div
+              className="w-full"
+              data-latitude={latLng[0]}
+              data-longitude={latLng[1]}
+              id="map"
+            />
+          )}
         </aside>
       </div>
     </Layout>

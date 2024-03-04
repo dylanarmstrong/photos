@@ -111,13 +111,12 @@ const getAlbums = (): Album[] => {
   const rows = stmtGetAlbums.all();
   if (isAlbums(rows)) {
     return rows.map((row) => {
-      const album = new Album(row)
-      for (const albumExif of stmtGetExif.all(album.album)) {
-        const eachRow = (row: unknown) => {
-          if (!isExifRow(row)) {
-            return;
+      const album = new Album(row);
+      for (const albumExif of stmtGetExif.all(album.name)) {
+        const eachRow = (exifRow: unknown) => {
+          if (isExifRow(exifRow)) {
+            album.addPhoto(new Photo(exifRow));
           }
-          album.addPhoto(new Photo(row));
         };
         eachRow(albumExif);
       }

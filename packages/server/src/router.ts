@@ -8,13 +8,13 @@ import { render, sendStatus } from './render.js';
 const albums = getAlbums();
 
 const isValidAlbum = (albumName: string) =>
-  albums.some(({ album, disabled }) => !disabled && albumName === album);
+  albums.some(({ disabled, name }) => !disabled && name === albumName);
 
 const getAlbum = (albumName: string) =>
-  albums.find(({ album }) => album === albumName);
+  albums.find(({ name }) => name === albumName);
 
-const getAlbumImages = async (album: string) => {
-  const selectedAlbum = getAlbum(album);
+const getAlbumImages = async (albumName: string) => {
+  const selectedAlbum = getAlbum(albumName);
   if (selectedAlbum) {
     await selectedAlbum.refreshExternalPhotos();
     return selectedAlbum.photos;
@@ -26,28 +26,28 @@ const getAlbumImages = async (album: string) => {
 const router = express.Router({ caseSensitive: true, strict: true });
 
 // Check that album exists
-router.get('/:album*', (request, response, next) => {
+router.get('/:albumName*', (request, response, next) => {
   // Asterisk is not in the param name..
-  const { album } = request.params as unknown as { album: string };
-  if (!isValidAlbum(album)) {
-    log(request, `invalid album: ${album}`);
+  const { albumName } = request.params as unknown as { albumName: string };
+  if (!isValidAlbum(albumName)) {
+    log(request, `invalid album: ${albumName}`);
     sendStatus(response, 404);
     return;
   }
   next();
 });
 
-router.get('/:album/:page', async (request, response) => {
-  const { album } = request.params;
+router.get('/:albumName/:page', async (request, response) => {
+  const { albumName } = request.params;
   const page = Number.parseInt(request.params.page, 10);
-  log(request, `${album}/${page}`);
+  log(request, `${albumName}/${page}`);
 
   if (Number.isNaN(page)) {
     sendStatus(response, 404);
     return;
   }
 
-  const photos = await getAlbumImages(album);
+  const photos = await getAlbumImages(albumName);
   const pages = Math.ceil(photos.length / imagesPerPage);
 
   if (page > pages || page < 1) {
@@ -55,10 +55,7 @@ router.get('/:album/:page', async (request, response) => {
     return;
   }
 
-  const selectedAlbum = albums.find(
-    ({ album: folderName }) => folderName === album,
-  );
-
+  const selectedAlbum = getAlbum(albumName);
   if (selectedAlbum) {
     render(response, {
       page: 'album',
@@ -75,11 +72,11 @@ router.get('/:album/:page', async (request, response) => {
   }
 });
 
-router.get('/:album/details/:index', async (request, response) => {
-  const { album, index } = request.params;
-  log(request, `${album}/details/${index}`);
+router.get('/:albumName/details/:index', async (request, response) => {
+  const { albumName, index } = request.params;
+  log(request, `${albumName}/details/${index}`);
 
-  const photos = await getAlbumImages(album);
+  const photos = await getAlbumImages(albumName);
   const imageIndex = Number.parseInt(index);
 
   if (
@@ -99,7 +96,7 @@ router.get('/:album/details/:index', async (request, response) => {
         nextPage: imageIndex < photos.length - 1 ? imageIndex + 1 : undefined,
         photo,
         prevPage: imageIndex > 0 ? imageIndex - 1 : undefined,
-        prevUrl: `${baseUrl}/${album}/${Math.floor(imageIndex / imagesPerPage) + 1}`,
+        prevUrl: `${baseUrl}/${albumName}/${Math.floor(imageIndex / imagesPerPage) + 1}`,
       },
     });
   } else {
@@ -107,9 +104,9 @@ router.get('/:album/details/:index', async (request, response) => {
   }
 });
 
-router.get('/:album', (request, response) => {
-  const { album } = request.params;
-  response.redirect(`/${album}/1`);
+router.get('/:albumName', (request, response) => {
+  const { albumName } = request.params;
+  response.redirect(`/${albumName}/1`);
 });
 
 router.get('/', async (request, response, next) => {

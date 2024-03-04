@@ -64,6 +64,47 @@ class Photo implements IPhoto {
     return '-';
   }
 
+  get latLng(): [number, number] | undefined {
+    const { gpsLatitude, gpsLatitudeRef, gpsLongitude, gpsLongitudeRef } = this;
+    if (gpsLongitude && gpsLatitude && gpsLatitudeRef && gpsLongitudeRef) {
+      const mapCoord = (coord: string, index: number) => {
+        switch (index) {
+          case 1: {
+            return Number.parseInt(coord) / 60;
+          }
+          case 2: {
+            return Number.parseInt(coord) / 360_000;
+          }
+          default: {
+            return Number.parseInt(coord);
+          }
+        }
+      };
+
+      let nLongitude = gpsLongitude
+        .split(' ')
+        .map((coord, index) => mapCoord(coord, index))
+        .reduce((accumulator, current) => accumulator + current, 0);
+
+      let nLatitude = gpsLatitude
+        .split(' ')
+        .map((coord, index) => mapCoord(coord, index))
+        .reduce((accumulator, current) => accumulator + current, 0);
+
+      if (gpsLongitudeRef === 'W') {
+        nLongitude *= -1;
+      }
+
+      if (gpsLatitudeRef === 'S') {
+        nLatitude *= -1;
+      }
+
+      return [nLatitude, nLongitude];
+    }
+
+    return undefined;
+  }
+
   get displayDate() {
     return this.datetime
       .replace(/:..$/, '')
@@ -96,7 +137,7 @@ class Photo implements IPhoto {
   }
 
   get images() {
-    const baseFile = this.file.replace(/\.[^./]+$/, '');
+    const baseFile = encodeURI(this.file.replace(/\.[^./]+$/, ''));
     const base = `${IMAGE_DOMAIN}/${this.album}`;
     const { x, y } = this;
     const ratio = y / x;

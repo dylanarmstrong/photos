@@ -18,20 +18,20 @@ const sortImages = (photoA: IPhoto, photoB: IPhoto) => {
 class Album implements IAlbum {
   private _photos: IPhoto[] = [];
   private hasRefreshedPhotos: boolean = false;
-  private sorted: boolean = false;
   private readonly _month: string;
-  readonly album: string;
+  private sorted: boolean = false;
   readonly count: number;
   readonly country: string;
   readonly disabled: boolean;
+  readonly name: string;
   readonly year: string;
 
   constructor(row: SqlRowAlbum) {
-    this.album = row.album;
+    this._month = row.month;
     this.count = row.count;
     this.country = row.country;
     this.disabled = row.disabled;
-    this._month = row.month;
+    this.name = row.album;
     this.year = row.year;
   }
 
@@ -45,7 +45,7 @@ class Album implements IAlbum {
 
   async refreshExternalPhotos() {
     if (!this.hasRefreshedPhotos) {
-      const externalPhotos = await viewAlbum(this.album);
+      const externalPhotos = await viewAlbum(this.name);
       const photos = [];
       for (
         let index = 0, { length } = externalPhotos;

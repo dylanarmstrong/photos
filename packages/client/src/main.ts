@@ -48,40 +48,9 @@ document.addEventListener('keydown', move);
 
 const mapElement: HTMLDivElement | null = document.querySelector('#map');
 if (mapElement) {
-  const { latitude, latitudeRef, longitude, longitudeRef } = mapElement.dataset;
-  if (longitude && latitude && latitudeRef && longitudeRef) {
-    const mapCoord = (coord: string, index: number) => {
-      switch (index) {
-        case 1: {
-          return Number.parseInt(coord) / 60;
-        }
-        case 2: {
-          return Number.parseInt(coord) / 360_000;
-        }
-        default: {
-          return Number.parseInt(coord);
-        }
-      }
-    };
-
-    let nLongitude = longitude
-      .split(' ')
-      .map((coord, index) => mapCoord(coord, index))
-      .reduce((accumulator, current) => accumulator + current, 0);
-
-    let nLatitude = latitude
-      .split(' ')
-      .map((coord, index) => mapCoord(coord, index))
-      .reduce((accumulator, current) => accumulator + current, 0);
-
-    if (longitudeRef === 'W') {
-      nLongitude *= -1;
-    }
-
-    if (latitudeRef === 'S') {
-      nLatitude *= -1;
-    }
-
+  const nLatitude = Number.parseInt(mapElement.dataset['latitude'] || 'NaN');
+  const nLongitude = Number.parseInt(mapElement.dataset['longitude'] || 'NaN');
+  if (!Number.isNaN(nLatitude) && !Number.isNaN(nLongitude)) {
     // eslint-disable-next-line unicorn/no-array-callback-reference
     const map = L.map(mapElement).setView([nLatitude, nLongitude], 10);
     L.tileLayer(
