@@ -36,7 +36,7 @@ class Album implements IAlbum {
   }
 
   addPhoto(photo: IPhoto) {
-    this.photos.push(photo);
+    this._photos.push(photo);
   }
 
   getPhoto(file: string) {

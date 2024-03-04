@@ -1,12 +1,11 @@
 import express from 'express';
 
 import { baseUrl, imagesPerPage } from './constants.js';
-import { getAlbums, initCache } from './database.js';
+import { getAlbums } from './database.js';
 import { log } from './utils.js';
 import { render, sendStatus } from './render.js';
 
 const albums = getAlbums();
-initCache(albums);
 
 const isValidAlbum = (albumName: string) =>
   albums.some(({ album, disabled }) => !disabled && albumName === album);

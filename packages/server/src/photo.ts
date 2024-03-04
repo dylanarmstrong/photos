@@ -30,9 +30,13 @@ class Photo implements IPhoto {
   private _shutterSpeedValue: string;
   width: number;
 
-  constructor(album: string, row: SqlRowExif) {
-    this.album = album;
+  constructor(row: SqlRowExif) {
+    this._fNumber = row.f_number;
+    this._focalLength = row.focal_length;
+    this._isoSpeedRatings = row.iso_speed_ratings;
     this._make = row.make;
+    this._shutterSpeedValue = row.shutter_speed_value;
+    this.album = row.album;
     this.datetime = row.datetime;
     this.file = row.file;
     this.gpsLatitude = row.gps_latitude;
@@ -40,12 +44,8 @@ class Photo implements IPhoto {
     this.gpsLongitude = row.gps_longitude;
     this.gpsLongitudeRef = row.gps_longitude_ref;
     this.height = row.height;
-    this._isoSpeedRatings = row.iso_speed_ratings;
     this.model = row.model;
     this.width = row.width;
-    this._fNumber = row.f_number;
-    this._shutterSpeedValue = row.shutter_speed_value;
-    this._focalLength = row.focal_length;
   }
 
   get coord() {
@@ -73,7 +73,7 @@ class Photo implements IPhoto {
 
   get fNumber() {
     const { _fNumber } = this;
-    return `ƒ${divide(_fNumber)}`;
+    return `ƒ${divide(_fNumber).toFixed(1)}`;
   }
 
   get isoSpeedRatings() {

@@ -1,11 +1,12 @@
 import Database from 'better-sqlite3';
 
+import { Album } from './album.js';
 import { Photo } from './photo.js';
 
 import type { SqlRowAlbum, SqlRowExif } from './@types/index.js';
-import { Album } from './album.js';
 
 const exifFields = new Map<string, string>();
+exifFields.set('album', 'string');
 exifFields.set('datetime', 'string');
 exifFields.set('f_number', 'string');
 exifFields.set('file', 'string');
@@ -82,7 +83,8 @@ const stmtGetAlbums = database.prepare(`
 
 const stmtGetExif = database.prepare(`
   SELECT
-    i.file,
+    a.album AS album,
+    i.file AS file,
     i.height AS height,
     i.width AS width,
     IFNULL(e.gps_latitude, '') AS gps_latitude,
@@ -101,31 +103,28 @@ const stmtGetExif = database.prepare(`
   JOIN albums a ON a.id = i.album_id
   WHERE
     a.album = ? AND
+    a.disabled = 0 AND
     i.deleted = 0
 `);
 
 const getAlbums = (): Album[] => {
   const rows = stmtGetAlbums.all();
   if (isAlbums(rows)) {
-    return rows.map((row) => new Album(row));
+    return rows.map((row) => {
+      const album = new Album(row)
+      for (const albumExif of stmtGetExif.all(album.album)) {
+        const eachRow = (row: unknown) => {
+          if (!isExifRow(row)) {
+            return;
+          }
+          album.addPhoto(new Photo(row));
+        };
+        eachRow(albumExif);
+      }
+      return album;
+    });
   }
   return [];
 };
 
-const initCache = (albums: Album[]): void => {
-  for (let index = 0, length_ = albums.length; index < length_; index += 1) {
-    const album = albums[index];
-    const { album: albumName } = album;
-    for (const albumExif of stmtGetExif.all(albumName)) {
-      const eachRow = (row: unknown) => {
-        if (!isExifRow(row)) {
-          return;
-        }
-        album.addPhoto(new Photo(albumName, row));
-      };
-      eachRow(albumExif);
-    }
-  }
-};
-
-export { getAlbums, initCache };
+export { getAlbums };

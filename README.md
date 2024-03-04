@@ -65,6 +65,8 @@ Running [here](https://dylan.is/photos/).
 - Remove AWS permissions on original photos
 - Reprocess all photos for new size I want here
 - Update README with more DB information
+- Get list of deleted files by comparing what's available and what's in EXIF
+    - Update this to correct counts
 
 ### Database
 

@@ -48,6 +48,33 @@ interface IAlbum {
   year: string;
 }
 
+type RenderOptions =
+  | {
+      page: 'album';
+      properties: {
+        album: IAlbum;
+        nextPage: number;
+        page: number;
+        pages: number;
+        prevPage: number;
+      };
+    }
+  | {
+      page: 'details';
+      properties: {
+        photo: IPhoto;
+        nextPage: number | undefined;
+        prevPage: number | undefined;
+        prevUrl: string;
+      };
+    }
+  | {
+      page: 'home';
+      properties: {
+        albums: IAlbum[];
+      };
+    };
+
 type SqlRowAlbum = {
   album: string;
   count: number;
@@ -58,6 +85,7 @@ type SqlRowAlbum = {
 };
 
 type SqlRowExif = {
+  album: string;
   datetime: string;
   f_number: string;
   file: string;
@@ -80,4 +108,11 @@ type GetObjects = {
   photos: string[];
 };
 
-export type { GetObjects, IAlbum, IPhoto, SqlRowAlbum, SqlRowExif };
+export type {
+  GetObjects,
+  IAlbum,
+  IPhoto,
+  RenderOptions,
+  SqlRowAlbum,
+  SqlRowExif,
+};

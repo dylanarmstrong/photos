@@ -7,7 +7,7 @@ import { Details } from './pages/details.js';
 import { Home } from './pages/home.js';
 import { Status } from './pages/status.js';
 
-import type { IAlbum, IPhoto } from './@types/index.js';
+import type { RenderOptions } from './@types/index.js';
 
 const sendStatus = (response: Response, status: number) => {
   const html = renderToString(<Status status={String(status)} />);
@@ -17,34 +17,7 @@ const sendStatus = (response: Response, status: number) => {
   );
 };
 
-type Options =
-  | {
-      page: 'album';
-      properties: {
-        album: IAlbum;
-        nextPage: number;
-        page: number;
-        pages: number;
-        prevPage: number;
-      };
-    }
-  | {
-      page: 'details';
-      properties: {
-        photo: IPhoto;
-        nextPage: number | undefined;
-        prevPage: number | undefined;
-        prevUrl: string;
-      };
-    }
-  | {
-      page: 'home';
-      properties: {
-        albums: IAlbum[];
-      };
-    };
-
-const render = (response: Response, options: Options) => {
+const render = (response: Response, options: RenderOptions) => {
   const html = ['<!DOCTYPE html>'];
   const { page, properties } = options;
   switch (page) {
