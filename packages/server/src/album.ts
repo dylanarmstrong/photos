@@ -1,7 +1,7 @@
 import { months } from './constants.js';
+import { viewAlbum } from './aws.js';
 
 import type { IAlbum, IPhoto, SqlRowAlbum } from './@types/index.js';
-import { viewAlbum } from './aws.js';
 
 const sortImages = (photoA: IPhoto, photoB: IPhoto) => {
   const dateA = new Date(photoA.datetime);
@@ -18,9 +18,9 @@ const sortImages = (photoA: IPhoto, photoB: IPhoto) => {
 class Album implements IAlbum {
   private _photos: IPhoto[] = [];
   private hasRefreshedPhotos: boolean = false;
+  private readonly _count: number;
   private readonly _month: string;
   private sorted: boolean = false;
-  readonly count: number;
   readonly country: string;
   readonly disabled: boolean;
   readonly name: string;
@@ -28,7 +28,7 @@ class Album implements IAlbum {
 
   constructor(row: SqlRowAlbum) {
     this._month = row.month;
-    this.count = row.count;
+    this._count = row.count;
     this.country = row.country;
     this.disabled = row.disabled;
     this.name = row.album;
@@ -66,6 +66,14 @@ class Album implements IAlbum {
       this.sorted = false;
       this._photos = photos;
     }
+  }
+
+  get count() {
+    const { length } = this.photos;
+    if (length === 0) {
+      return this._count;
+    }
+    return length;
   }
 
   get header() {

@@ -31,7 +31,6 @@ COPY packages/client/tailwind.config.ts packages/client/tsconfig.json packages/c
 
 COPY packages/server/src ./packages/server/src
 COPY packages/server/tsconfig.json ./packages/server/
-COPY packages/server/views ./packages/server/views
 
 RUN if [[ "$build" == "true" ]]; then \
   pnpm run -r build; \
@@ -50,7 +49,6 @@ RUN pnpm install --frozen-lockfile --prod=true
 
 COPY --from=stage0 /app/packages/server/lib ./packages/server/lib
 COPY --from=stage0 /app/packages/server/static ./packages/server/static
-COPY --from=stage0 /app/packages/server/views ./packages/server/views
 
 EXPOSE 80/tcp
 

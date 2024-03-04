@@ -1,4 +1,4 @@
-import { baseUrl, isDevelopment } from '../constants.js';
+import { baseUrl, developmentPort, isDevelopment } from '../constants.js';
 
 type Properties = {
   readonly title?: string;
@@ -48,8 +48,14 @@ const Head = ({ title }: Properties) => (
     />
     {isDevelopment ? (
       <>
-        <script src="http://localhost:5173/@vite/client" type="module" />
-        <script src="http://localhost:5173/src/main.ts" type="module" />
+        <script
+          src={`http://localhost:${developmentPort}/@vite/client`}
+          type="module"
+        />
+        <script
+          src={`http://localhost:${developmentPort}/src/main.ts`}
+          type="module"
+        />
       </>
     ) : (
       <>

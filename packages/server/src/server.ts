@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import { join } from 'node:path';
 
 import { router } from './router.js';
-import { baseUrl, isDevelopment, port } from './constants.js';
+import { baseUrl, developmentPort, isDevelopment, port } from './constants.js';
 
 const app = express();
 
@@ -17,9 +17,13 @@ app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        // eslint-disable-next-line unicorn/no-null
-        'connect-src': isDevelopment ? ['ws://localhost:5173/'] : null,
-        'font-src': isDevelopment ? ["'self'", 'localhost:5173'] : ["'self'"],
+        'connect-src': isDevelopment
+          ? [`ws://localhost:${developmentPort}/`]
+          : // eslint-disable-next-line unicorn/no-null
+            null,
+        'font-src': isDevelopment
+          ? ["'self'", `localhost:${developmentPort}`]
+          : ["'self'"],
         'img-src': isDevelopment
           ? [
               "'self'",
@@ -28,7 +32,7 @@ app.use(
               'b.basemaps.cartocdn.com',
               'c.basemaps.cartocdn.com',
               'd.basemaps.cartocdn.com',
-              'localhost:5173/',
+              `localhost:${developmentPort}/`,
             ]
           : [
               "'self'",
@@ -39,7 +43,7 @@ app.use(
               'd.basemaps.cartocdn.com',
             ],
         'script-src': isDevelopment
-          ? ["'self'", 'localhost:5173/', 'unsafe-inline']
+          ? ["'self'", `localhost:${developmentPort}/`]
           : ["'self'"],
         // eslint-disable-next-line unicorn/no-null
         'upgrade-insecure-requests': isDevelopment ? null : [],
@@ -58,7 +62,7 @@ if (baseUrl) {
   if (isDevelopment) {
     app.get('/@fs/*', (request, response) => {
       const { path } = request;
-      response.redirect(`http://localhost:5173${path}`);
+      response.redirect(`http://localhost:${developmentPort}${path}`);
     });
   }
 

@@ -1,5 +1,6 @@
 // Single place for getting constants and accessing process.env variables
 const baseUrl = '/photos';
+const developmentPort = 5173;
 const imagesPerPage = 20;
 const isDevelopment = process.env['NODE_ENV'] === 'development';
 const port = 80;
@@ -31,6 +32,7 @@ export {
   AWS_S3_BUCKET,
   IMAGE_DOMAIN,
   baseUrl,
+  developmentPort,
   imagesPerPage,
   isDevelopment,
   months,

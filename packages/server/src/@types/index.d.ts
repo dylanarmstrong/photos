@@ -6,7 +6,6 @@ type Image = {
 };
 
 type Images = {
-  base: Image;
   lg: Image;
   md: Image;
   sm: Image;

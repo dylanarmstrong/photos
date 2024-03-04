@@ -25,7 +25,15 @@ const s3 = new S3Client({
 
 const photoMap = ({ Key, Size }: _Object): string | undefined => {
   // Only list full size images, and not thumbnails
-  if (Size && Size > 0 && Key && /(?!.*_thumb.*)^.*\.jpeg$/i.test(Key)) {
+  if (
+    Size &&
+    Size > 0 &&
+    Key &&
+    /(?!.*_thumb.*)^.*\.jpeg$/i.test(Key) &&
+    /(?!.*_2048.*)^.*\.jpeg$/i.test(Key) &&
+    /(?!.*_1024.*)^.*\.jpeg$/i.test(Key) &&
+    /(?!.*_512.*)^.*\.jpeg$/i.test(Key)
+  ) {
     return Key;
   }
 

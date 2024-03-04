@@ -1,5 +1,3 @@
-import '@fontsource/poppins/400.css';
-import '@fontsource/poppins/700.css';
 import 'leaflet/dist/leaflet.css';
 
 import L from 'leaflet';
@@ -48,8 +46,10 @@ document.addEventListener('keydown', move);
 
 const mapElement: HTMLDivElement | null = document.querySelector('#map');
 if (mapElement) {
-  const nLatitude = Number.parseInt(mapElement.dataset['latitude'] || 'NaN');
-  const nLongitude = Number.parseInt(mapElement.dataset['longitude'] || 'NaN');
+  const nLatitude = Number.parseFloat(mapElement.dataset['latitude'] || 'NaN');
+  const nLongitude = Number.parseFloat(
+    mapElement.dataset['longitude'] || 'NaN',
+  );
   if (!Number.isNaN(nLatitude) && !Number.isNaN(nLongitude)) {
     // eslint-disable-next-line unicorn/no-array-callback-reference
     const map = L.map(mapElement).setView([nLatitude, nLongitude], 10);

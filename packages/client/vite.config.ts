@@ -24,16 +24,32 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: 'node_modules/leaflet/dist/images/marker-icon-2x.png',
           dest: './',
+          src: 'node_modules/@fontsource/poppins/files/poppins-latin-700-normal.woff',
+        },
+        {
+          dest: './',
+          src: 'node_modules/@fontsource/poppins/files/poppins-latin-700-normal.woff2',
+        },
+        {
+          dest: './',
+          src: 'node_modules/@fontsource/poppins/files/poppins-latin-400-normal.woff',
+        },
+        {
+          dest: './',
+          src: 'node_modules/@fontsource/poppins/files/poppins-latin-400-normal.woff2',
+        },
+        {
+          dest: './',
+          src: 'node_modules/leaflet/dist/images/marker-icon-2x.png',
         },
         {
           src: 'node_modules/leaflet/dist/images/marker-icon.png',
           dest: './',
         },
         {
-          src: 'node_modules/leaflet/dist/images/marker-shadow.png',
           dest: './',
+          src: 'node_modules/leaflet/dist/images/marker-shadow.png',
         },
       ],
     }),

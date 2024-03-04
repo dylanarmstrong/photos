@@ -155,12 +155,6 @@ class Photo implements IPhoto {
     const lgHeight = Math.floor(y * lgHeightRatio);
 
     return {
-      base: {
-        height: lgHeight,
-        jpeg: `${base}/${baseFile}_2048.jpeg`,
-        webp: `${base}/${baseFile}_2048.webp`,
-        width: lgWidth,
-      },
       lg: {
         height: lgHeight,
         jpeg: `${base}/${baseFile}_2048.jpeg`,
