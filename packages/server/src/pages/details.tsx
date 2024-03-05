@@ -47,28 +47,30 @@ const Details = ({ photo, prevPage, nextPage, prevUrl }: Properties) => {
         </div>
       </div>
       <div className="details">
-        {prevPage === undefined ? (
-          <span />
-        ) : (
-          <a className="chevron" href={prevPage}>
-            <ChevronLeftIcon className="h-6 w-6 text-white" />
-          </a>
-        )}
+        <div className="details-container">
+          {prevPage === undefined ? (
+            <span />
+          ) : (
+            <a className="chevron" href={prevPage}>
+              <ChevronLeftIcon className="h-6 w-6 text-white" />
+            </a>
+          )}
 
-        <div className="details-image">
-          <picture>
-            <source srcSet={images.md.webp} type="image/webp" />
-            <img alt={`Taken at ${photo.coord}`} src={images.md.jpeg} />
-          </picture>
+          <div className="details-image">
+            <picture>
+              <source srcSet={images.md.webp} type="image/webp" />
+              <img alt={`Taken at ${photo.coord}`} src={images.md.jpeg} />
+            </picture>
+          </div>
+
+          {nextPage === undefined ? (
+            <span />
+          ) : (
+            <a className="chevron" href={nextPage}>
+              <ChevronRightIcon className="h-6 w-6 text-white" />
+            </a>
+          )}
         </div>
-
-        {nextPage === undefined ? (
-          <span />
-        ) : (
-          <a className="chevron" href={nextPage}>
-            <ChevronRightIcon className="h-6 w-6 text-white" />
-          </a>
-        )}
         <aside className="details-data">
           <table className="details-table">
             <thead>

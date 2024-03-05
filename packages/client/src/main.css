@@ -115,15 +115,19 @@
   }
 
   .details {
-    @apply grid-rows-details md:grid-cols-details grid grid-flow-col bg-black md:h-[95%] md:grid-rows-none;
+    @apply grid-rows-details md:grid-cols-details grid grid-flow-col md:h-[95%] md:grid-rows-none;
+  }
+
+  .details-container {
+    @apply grid-cols-detailContainer grid bg-black;
   }
 
   .details-image img {
     @apply max-h-[83dvh];
   }
 
-  .details a.chevron {
-    @apply m-auto hidden md:block;
+  .details-container a.chevron {
+    @apply m-auto flex h-full w-full items-center justify-center;
   }
 
   .details-image {
