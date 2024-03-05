@@ -8,7 +8,8 @@ if [ ! $# -eq 1 ]; then
 fi
 
 command -v convert >/dev/null || (echo 'convert missing, install imagemagick' && exit 1)
-command -v exiv2 >/dev/null || (echo 'exiv2 missing, install exiv2' && exit 1)
+command -v exiftool >/dev/null || (echo 'exiftool missing, install exiftool' && exit 1)
+command -v fd >/dev/null || (echo 'fd missing, install fd' && exit 1)
 command -v rename >/dev/null || (echo 'rename missing, install rename' && exit 1)
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
@@ -27,5 +28,6 @@ rm -- *_thumb.webp || true
 rm -- *-thumb.jpeg || true
 rm -- *-thumb.webp || true
 
-find . -type f -exec "$SCRIPT_DIR/convert.sh" "{}" \;
+fd -t f --threads=1 -x "$SCRIPT_DIR/convert.sh" "{}" \;
+
 cd ..

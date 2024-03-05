@@ -9,6 +9,10 @@ out="$file_name.out.png"
 png="$file_name.in.png"
 ppm="$file_name.ppm"
 
+rm -- "$out" || true
+rm -- "$png" || true
+rm -- "$ppm" || true
+
 sm=512
 md=1024
 lg=2048
@@ -29,10 +33,13 @@ function convertToSize {
   file_name_jpeg="$file_name-$size.jpeg"
   file_name_webp="$file_name-$size.webp"
 
+  rm -- "$file_name_jpeg" || true
+  rm -- "$file_name_webp" || true
+
   convert "$file" -depth 16 -gamma 0.454545 -filter lanczos -resize x"$size" -gamma 2.2 -depth 8 "$out"
   # Come out as odd jpeg files when exporting from Photos
   # So the gamma needs to be adjusted back to normal
-  model=$(exiv2 -K Exif.Image.Model "$file" | awk '{$1=$2=$3=""; print $0}' | sed -e 's/^\ *//g')
+  model=$(exiftool -Model "$file" | sed -e 's/: //g' | awk '{$1=$2=$3=""; print $0}' | sed -e 's/^\ *//g')
   if [ "$model" == "Canon EOS Rebel T6" ]; then
     convert -gamma 2.2 "$out" "$ppm"
   else
@@ -58,4 +65,4 @@ convertToSize $lg
 
 rm "$png"
 
-rename 's/-/_/' -- *
+rename -f 's/-/_/' -- *

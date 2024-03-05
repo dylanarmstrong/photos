@@ -122,6 +122,10 @@
     @apply max-h-[83dvh];
   }
 
+  .details a.chevron {
+    @apply m-auto hidden md:block;
+  }
+
   .details-image {
     @apply mx-auto self-center p-5;
   }

@@ -55,7 +55,7 @@ const isAlbums = (values: unknown[]): values is SqlRowAlbum[] =>
       typeof (value as SqlRowAlbum).year === 'string',
   );
 
-const database = new Database('./images.db');
+const database = new Database('../../images.db');
 database.pragma('journal_mode = WAL');
 
 const stmtGetAlbums = database.prepare(`

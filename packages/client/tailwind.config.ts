@@ -17,7 +17,7 @@ export default {
     },
     extend: {
       gridTemplateColumns: {
-        details: '1fr 400px',
+        details: '24px 1fr 24px 400px',
       },
       gridTemplateRows: {
         details: '1fr auto',
