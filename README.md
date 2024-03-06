@@ -2,7 +2,7 @@
 
 1. Copy `env.example` to `.env`, and update as needed.
 2. `pnpm install`
-3. `pnpm run build && pnpm run start`
+3. `pnpm run -r build && pnpm run start`
 
 ### S3 Folder Structure
 
@@ -58,6 +58,98 @@ pnpm run dev
 ### Demo
 
 Running [here](https://dylan.is/photos/).
+
+### TODO
+
+- Clean stuff up
+- Remove AWS permissions on original photos
+- Reprocess all photos for new size I want here
+- Update README with more DB information
+- Get list of deleted files by comparing what's available and what's in EXIF
+    - Update this to correct counts
+
+### Database
+
+```sql
+table exif (
+    id integer primary key,
+
+    -- Exif.Photo.BrightnessValue,
+    brightness_value text,
+
+    -- Exif.Image.DateTime
+    datetime timestamp,
+
+    -- Exif.Photo.ExposureTime,
+    exposure_time text,
+
+    -- Exif.Photo.FNumber,
+    f_number text,
+
+    -- Exif.Photo.Flash,
+    flash integer,
+
+    -- Exif.Photo.FocalLength,
+    focal_length text,
+
+    -- Exif.GPSInfo.GPSAltitude,
+    gps_altitude text,
+
+    -- Exif.GPSInfo.GPSAltitudeRef,
+    gps_altitude_ref text,
+
+    -- Exif.GPSInfo.GPSLatitude,
+    gps_latitude text,
+
+    -- Exif.GPSInfo.GPSLatitudeRef,
+    gps_latitude_ref text,
+
+    -- Exif.GPSInfo.GPSLongitude,
+    gps_longitude text,
+
+    -- Exif.GPSInfo.GPSLongitudeRef,
+    gps_longitude_ref text,
+
+    -- Exif.Photo.ISOSpeedRatings,
+    iso_speed_ratings text,
+
+    -- Exif.Photo.LensMake,
+    lens_make text,
+
+    -- Exif.Photo.LensModel,
+    lens_model text,
+
+    -- Exif.Photo.LensSpecification,
+    lens_specification text,
+
+    -- Exif.Image.Make,
+    make text,
+
+    -- Exif.Image.Model,
+    model text,
+
+    -- Exif.Photo.PixelXDimension,
+    pixel_x_dimension text,
+
+    -- Exif.Photo.PixelYDimension,
+    pixel_y_dimension text,
+
+    -- Exif.Image.ResolutionUnit,
+    resolution_unit text,
+
+    -- Exif.Photo.ShutterSpeedValue,
+    shutter_speed_value text,
+
+    -- Exif.Image.XResolution,
+    x_resolution text,
+
+    -- Exif.Image.YResolution,
+    y_resolution text,
+
+    image_id integer,
+    foreign key (image_id) references images (id) on delete cascade
+)
+```
 
 ### License
 

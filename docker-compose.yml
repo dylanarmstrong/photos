@@ -4,6 +4,7 @@ services:
     build:
       args:
         build: true
+      target: stage1
     container_name: photos
     environment:
       AWS_IDENTITY_POOL_ID: $AWS_IDENTITY_POOL_ID
