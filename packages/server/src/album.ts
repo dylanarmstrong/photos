@@ -40,13 +40,15 @@ class Album implements IAlbum {
   }
 
   getPhoto(file: string) {
+    // TODO: Move _512, _1024, _2048 logic here
+    // const fixedName = '';
     return this.photos.find((photo) => photo.file === file);
   }
 
   async refreshExternalPhotos() {
     if (!this.hasRefreshedPhotos) {
       const externalPhotos = await viewAlbum(this.name);
-      const photos = [];
+      const photos: IPhoto[] = [];
       for (
         let index = 0, { length } = externalPhotos;
         index < length;
@@ -55,7 +57,7 @@ class Album implements IAlbum {
         const externalPhoto = externalPhotos[index];
         const split = externalPhoto.split('/');
         if (split.length === 2) {
-          const file = split[1];
+          const file = split[1].replace('_512.jpeg', '.jpeg');
           const photo = this.getPhoto(file);
           if (photo) {
             photos.push(photo);

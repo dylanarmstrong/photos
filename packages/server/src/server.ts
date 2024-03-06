@@ -19,8 +19,7 @@ app.use(
       directives: {
         'connect-src': isDevelopment
           ? [`ws://localhost:${developmentPort}/`]
-          : // eslint-disable-next-line unicorn/no-null
-            null,
+          : [],
         'font-src': isDevelopment
           ? ["'self'", `localhost:${developmentPort}`]
           : ["'self'"],
