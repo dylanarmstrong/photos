@@ -25,12 +25,7 @@ const s3 = new S3Client({
 
 const photoMap = ({ Key, Size }: _Object): string | undefined => {
   // Gather all valid images, they will have a 512 sized thumbnail
-  if (
-    Size &&
-    Size > 0 &&
-    Key &&
-    /^.*_512.jpeg$/.test(Key)
-  ) {
+  if (Size && Size > 0 && Key && /^.*_512.jpeg$/.test(Key)) {
     return Key;
   }
 

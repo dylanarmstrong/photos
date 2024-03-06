@@ -87,7 +87,7 @@
   }
 
   main {
-    @apply ml-4;
+    @apply mx-4;
   }
 
   p {
@@ -205,7 +205,6 @@
 
   .image-container {
     @apply grid
-      w-[95%]
       grid-cols-1
       gap-2
       sm:grid-cols-2
@@ -215,7 +214,7 @@
   }
 
   .header.navigation {
-    @apply mb-2.5;
+    @apply mb-2.5 flex flex-wrap;
   }
 
   .footer.navigation {

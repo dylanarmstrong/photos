@@ -24,27 +24,25 @@ const Details = ({ photo, prevPage, nextPage, prevUrl }: Properties) => {
   return (
     <Layout>
       <div className="header navigation">
-        <div>
-          <a href={baseUrl} id="home">
-            Home
+        <a href={baseUrl} id="home">
+          Home
+        </a>
+        <a href={prevUrl} id="back">
+          Go Back
+        </a>
+        {prevPage !== undefined && (
+          <a href={prevPage} id="prev">
+            Previous
           </a>
-          <a href={prevUrl} id="back">
-            Go Back
+        )}
+        {nextPage !== undefined && (
+          <a href={nextPage} id="next">
+            Next
           </a>
-          {prevPage !== undefined && (
-            <a href={prevPage} id="prev">
-              Previous
-            </a>
-          )}
-          {nextPage !== undefined && (
-            <a href={nextPage} id="next">
-              Next
-            </a>
-          )}
-          <a href={images.lg.jpeg} title="Download">
-            Download
-          </a>
-        </div>
+        )}
+        <a href={images.lg.jpeg} title="Download">
+          Download
+        </a>
       </div>
       <div className="details">
         <div className="details-container">
