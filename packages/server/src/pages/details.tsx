@@ -57,7 +57,12 @@ const Details = ({ photo, prevPage, nextPage, prevUrl }: Properties) => {
           <div className="details-image">
             <picture>
               <source srcSet={images.md.webp} type="image/webp" />
-              <img alt={`Taken at ${photo.coord}`} src={images.md.jpeg} />
+              <img
+                alt={`Taken at ${photo.coord}`}
+                height={images.md.height}
+                src={images.md.jpeg}
+                width={images.md.width}
+              />
             </picture>
           </div>
 

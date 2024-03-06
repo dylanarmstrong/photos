@@ -22,7 +22,7 @@ class Album implements IAlbum {
   private readonly _month: string;
   private sorted: boolean = false;
   readonly country: string;
-  readonly disabled: boolean;
+  readonly _disabled: boolean;
   readonly name: string;
   readonly year: string;
 
@@ -30,7 +30,7 @@ class Album implements IAlbum {
     this._month = row.month;
     this._count = row.count;
     this.country = row.country;
-    this.disabled = row.disabled;
+    this._disabled = row.disabled;
     this.name = row.album;
     this.year = row.year;
   }
@@ -40,8 +40,6 @@ class Album implements IAlbum {
   }
 
   getPhoto(file: string) {
-    // TODO: Move _512, _1024, _2048 logic here
-    // const fixedName = '';
     return this.photos.find((photo) => photo.file === file);
   }
 
@@ -57,7 +55,7 @@ class Album implements IAlbum {
         const externalPhoto = externalPhotos[index];
         const split = externalPhoto.split('/');
         if (split.length === 2) {
-          const file = split[1].replace('_512.jpeg', '.jpeg');
+          const file = split[1];
           const photo = this.getPhoto(file);
           if (photo) {
             photos.push(photo);
@@ -76,6 +74,10 @@ class Album implements IAlbum {
       return this._count;
     }
     return length;
+  }
+
+  get disabled() {
+    return this._disabled === false || this.count === 0;
   }
 
   get header() {

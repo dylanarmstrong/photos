@@ -114,12 +114,19 @@ class Photo implements IPhoto {
 
   get fNumber() {
     const { _fNumber } = this;
-    return `ƒ${divide(_fNumber).toFixed(1)}`;
+    const div = divide(_fNumber);
+    if (Number.isNaN(div)) {
+      return ' ';
+    }
+    return `ƒ${div.toFixed(1)}`;
   }
 
   get isoSpeedRatings() {
     const { _isoSpeedRatings } = this;
-    return `ISO${_isoSpeedRatings}`;
+    if (_isoSpeedRatings) {
+      return `ISO${_isoSpeedRatings}`;
+    }
+    return ' ';
   }
 
   get resolution() {
@@ -128,30 +135,37 @@ class Photo implements IPhoto {
 
   get shutterSpeedValue() {
     const { _shutterSpeedValue } = this;
-    return `1/${Math.pow(2, divide(_shutterSpeedValue)).toFixed(0)}s`;
+    const div = divide(_shutterSpeedValue);
+    if (Number.isNaN(div)) {
+      return ' ';
+    }
+    return `1/${Math.pow(2, div).toFixed(0)}s`;
   }
 
   get focalLength() {
     const { _focalLength } = this;
-    return `${divide(_focalLength)}mm`;
+    const div = divide(_focalLength);
+    if (Number.isNaN(div)) {
+      return ' ';
+    }
+    return `${div}mm`;
   }
 
   get images() {
-    const baseFile = encodeURI(this.file.replace(/\.[^./]+$/, ''));
+    const baseFile = encodeURIComponent(this.file.replace(/\.[^./]+$/, ''));
     const base = `${IMAGE_DOMAIN}/${this.album}`;
     const { x, y } = this;
-    const ratio = y / x;
 
-    const smWidth = Math.max(256, Math.floor(192 / ratio));
-    const smHeightRatio = smWidth / x;
+    const smHeightRatio = 512 / y;
+    const smWidth = Math.floor(x * smHeightRatio);
     const smHeight = Math.floor(y * smHeightRatio);
 
-    const mdWidth = Math.max(512, Math.floor(384 / ratio));
-    const mdHeightRatio = mdWidth / x;
+    const mdHeightRatio = 1024 / y;
+    const mdWidth = Math.floor(x * mdHeightRatio);
     const mdHeight = Math.floor(y * mdHeightRatio);
 
-    const lgWidth = Math.max(1024, Math.floor(768 / ratio));
-    const lgHeightRatio = lgWidth / x;
+    const lgHeightRatio = 2048 / y;
+    const lgWidth = Math.floor(x * lgHeightRatio);
     const lgHeight = Math.floor(y * lgHeightRatio);
 
     return {
@@ -178,7 +192,7 @@ class Photo implements IPhoto {
 
   get make() {
     const { _make, model } = this;
-    if (model.startsWith(_make)) {
+    if (model && model.startsWith(_make)) {
       return '';
     }
 

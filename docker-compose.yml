@@ -17,4 +17,6 @@ services:
       - 80:80/tcp
     restart: unless-stopped
     volumes:
+      - ./images.db-shm:/app/images.db-shm
+      - ./images.db-wal:/app/images.db-wal
       - ./images.db:/app/images.db

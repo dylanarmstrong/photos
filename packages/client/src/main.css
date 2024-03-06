@@ -110,8 +110,8 @@
   .album a,
   .album span,
   .navigation a {
-    @apply mr-5
-      text-base;
+    @apply mr-3 text-base
+      md:mr-5;
   }
 
   .details {
@@ -123,7 +123,7 @@
   }
 
   .details-image img {
-    @apply max-h-[83dvh];
+    @apply max-h-[83dvh] object-contain;
   }
 
   .details-container a.chevron {
