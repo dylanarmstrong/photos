@@ -49,7 +49,7 @@ const Details = ({ photo, prevPage, nextPage, prevUrl }: Properties) => {
           {prevPage === undefined ? (
             <span />
           ) : (
-            <a className="chevron" href={prevPage}>
+            <a className="chevron" href={prevPage} title="Previous Image">
               <ChevronLeftIcon className="h-6 w-6 text-white" />
             </a>
           )}
@@ -69,7 +69,7 @@ const Details = ({ photo, prevPage, nextPage, prevUrl }: Properties) => {
           {nextPage === undefined ? (
             <span />
           ) : (
-            <a className="chevron" href={nextPage}>
+            <a className="chevron" href={nextPage} title="Next Image">
               <ChevronRightIcon className="h-6 w-6 text-white" />
             </a>
           )}

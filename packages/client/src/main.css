@@ -161,12 +161,14 @@
 
   .image-block img {
     @apply relative
+      max-h-[512px]
       w-full
       rounded-b-none
       rounded-t
       border
       border-black
-      object-cover
+      object-contain
+      md:max-h-[362.25px]
       md:rounded-b;
   }
 
