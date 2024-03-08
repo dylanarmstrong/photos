@@ -1,3 +1,4 @@
+import { Data } from './data.js';
 import { baseUrl, imagesPerPage } from '../../constants.js';
 
 import type { IPhoto } from '../../@types/index.js';
@@ -13,7 +14,10 @@ type Properties = {
 const Photo = ({ albumName, country, index, page, photo }: Properties) => {
   const { images } = photo;
   return (
-    <div className="image-block" key={photo.file}>
+    <div
+      className="relative flex h-auto flex-col self-end overflow-hidden"
+      key={photo.file}
+    >
       <figure>
         <a
           aria-label={`Click to see details for image #${index + 1}`}
@@ -24,30 +28,15 @@ const Photo = ({ albumName, country, index, page, photo }: Properties) => {
             <source srcSet={images.sm.webp} type="image/webp" />
             <img
               alt={`${country} - ${photo.coord}`}
+              className="relative max-h-[512px] w-full rounded-b-none rounded-t border border-black object-contain md:max-h-[362.25px] md:rounded-b"
               height={images.sm.height}
               src={images.sm.jpeg}
               width={images.sm.width}
             />
           </picture>
-          <div className="data md:group-hover:opacity-100">
-            <p>{photo.coord}</p>
-            <p>{photo.displayDate}</p>
-            <p>
-              {photo.make}
-              {photo.model}
-            </p>
-            <p>{photo.resolution}</p>
-          </div>
+          <Data component="div" photo={photo} />
         </a>
-        <figcaption>
-          <p>{photo.coord}</p>
-          <p>{photo.displayDate}</p>
-          <p>
-            {photo.make}
-            {photo.model}
-          </p>
-          <p>{photo.resolution}</p>
-        </figcaption>
+        <Data component="figcaption" photo={photo} />
       </figure>
     </div>
   );

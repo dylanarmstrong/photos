@@ -1,4 +1,5 @@
 import { Layout } from '../../components/layout.js';
+import { Link } from '../../components/link.js';
 import { Photo } from './photo.js';
 import { baseUrl, imagesPerPage } from '../../constants.js';
 
@@ -32,25 +33,27 @@ const Album = ({ album, nextPage, page, pages, prevPage }: Properties) => {
       subheader={`Page ${page} of ${pages}`}
       title={album.header}
     >
-      <div className="header navigation">
-        <a href={baseUrl} id="home">
+      <div className="mb-2.5 flex flex-wrap">
+        <Link href={baseUrl} id="home">
           Home
-        </a>
+        </Link>
         {page > 1 && (
-          <a href={prevPage} id="prev">
+          <Link href={prevPage} id="prev">
             Previous
-          </a>
+          </Link>
         )}
         {page < pages && (
-          <a href={nextPage} id="next">
+          <Link href={nextPage} id="next">
             Next
-          </a>
+          </Link>
         )}
       </div>
-      <div className="image-container">{photos}</div>
-      <div className="footer navigation">
-        {page > 1 && <a href={prevPage}>Previous</a>}
-        {page < pages && <a href={nextPage}>Next</a>}
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-8">
+        {photos}
+      </div>
+      <div className="mt-2.5">
+        {page > 1 && <Link href={prevPage}>Previous</Link>}
+        {page < pages && <Link href={nextPage}>Next</Link>}
       </div>
     </Layout>
   );

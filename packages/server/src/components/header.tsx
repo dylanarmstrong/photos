@@ -4,9 +4,9 @@ type Properties = {
 };
 
 const Header = ({ header, subheader }: Properties) => (
-  <header>
-    {header && <h1>{header}</h1>}
-    {subheader && <h2>{subheader}</h2>}
+  <header className="ml-4 mt-2">
+    {header && <h1 className="text-3xl">{header}</h1>}
+    {subheader && <h2 className="text-base">{subheader}</h2>}
   </header>
 );
 

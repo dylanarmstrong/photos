@@ -16,11 +16,11 @@ const Layout: FC<PropsWithChildren<Properties>> = ({
   subheader,
   title,
 }) => (
-  <html lang="en-us">
+  <html className="min-h-full min-w-full" lang="en-us">
     <Head title={title} />
-    <body>
+    <body className="grid-rows-layout m-0 grid max-h-dvh min-h-dvh min-w-full bg-white p-0 tracking-tight text-black">
       <Header header={header} subheader={subheader} />
-      <main>{children}</main>
+      <main className="mx-4">{children}</main>
       <Footer />
     </body>
   </html>

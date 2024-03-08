@@ -1,5 +1,6 @@
 import { Layout } from '../../components/layout.js';
 import { Row } from './row.js';
+import { Th } from '../../components/th.js';
 
 import type { IAlbum } from '../../@types/index.js';
 
@@ -14,17 +15,27 @@ const Home = ({ albums }: Properties) => {
 
   return (
     <Layout header="Photo Albums">
-      <table className="index-table">
+      <table className="border-collapse text-base">
         <thead>
           <tr>
-            <th className="mobile">photos</th>
-            <th className="mobile">country</th>
-            <th>month</th>
-            <th className="mobile">year</th>
-            <th>count</th>
+            <Th border mobile sticky>
+              photos
+            </Th>
+            <Th border mobile sticky>
+              country
+            </Th>
+            <Th border sticky>
+              month
+            </Th>
+            <Th border mobile sticky>
+              year
+            </Th>
+            <Th border sticky>
+              count
+            </Th>
           </tr>
         </thead>
-        <tbody>{albumRows}</tbody>
+        <tbody className="[&_td]:first:[&>tr]:border-t-0">{albumRows}</tbody>
       </table>
     </Layout>
   );

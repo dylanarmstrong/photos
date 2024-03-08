@@ -3,7 +3,7 @@ import { renderToString } from 'react-dom/server';
 import type { Response } from 'express';
 
 import { Album } from './pages/album/index.js';
-import { Details } from './pages/details.js';
+import { Details } from './pages/details/index.js';
 import { Home } from './pages/home/index.js';
 import { Status } from './pages/status.js';
 

@@ -1,3 +1,5 @@
+import { Link } from '../../components/link.js';
+import { Td } from '../../components/td.js';
 import { baseUrl } from '../../constants.js';
 
 import type { IAlbum } from '../../@types/index.js';
@@ -8,13 +10,21 @@ type Properties = {
 
 const Row = ({ album }: Properties) => (
   <tr>
-    <td className="mobile">
-      {album.disabled ? '-' : <a href={`${baseUrl}/${album.name}/1`}>View</a>}
-    </td>
-    <td className="mobile">{album.country}</td>
-    <td>{album.month}</td>
-    <td className="mobile">{album.year}</td>
-    <td>{album.disabled ? '-' : album.count}</td>
+    <Td border mobile>
+      {album.disabled ? (
+        '-'
+      ) : (
+        <Link href={`${baseUrl}/${album.name}/1`}>View</Link>
+      )}
+    </Td>
+    <Td border mobile>
+      {album.country}
+    </Td>
+    <Td border>{album.month}</Td>
+    <Td border mobile>
+      {album.year}
+    </Td>
+    <Td border>{album.disabled ? '-' : album.count}</Td>
   </tr>
 );
 

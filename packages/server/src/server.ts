@@ -1,7 +1,6 @@
 import compression from 'compression';
 import express from 'express';
 import helmet from 'helmet';
-import { join } from 'node:path';
 
 import { router } from './router.js';
 import { baseUrl, developmentPort, isDevelopment, port } from './constants.js';
@@ -9,8 +8,6 @@ import { baseUrl, developmentPort, isDevelopment, port } from './constants.js';
 const app = express();
 
 app.set('strict routing', true);
-app.set('view engine', 'pug');
-app.set('views', join(process.cwd(), 'views'));
 app.use(compression());
 
 app.use(
@@ -26,6 +23,7 @@ app.use(
         'img-src': isDevelopment
           ? [
               "'self'",
+              "data:",
               'photos.dylan.is',
               'a.basemaps.cartocdn.com',
               'b.basemaps.cartocdn.com',
@@ -35,6 +33,7 @@ app.use(
             ]
           : [
               "'self'",
+              "data:",
               'photos.dylan.is',
               'a.basemaps.cartocdn.com',
               'b.basemaps.cartocdn.com',
