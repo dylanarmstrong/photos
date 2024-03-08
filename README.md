@@ -9,9 +9,12 @@
 ```
 .
 ├── turkey-2020
-│   ├── IMG_0001.jpeg
-│   └── IMG_0001_thumb.webp
-│   └── IMG_0001_thumb.jpeg
+│   └── IMG_0001_512.jpeg
+│   └── IMG_0001_512.webp
+│   └── IMG_0001_1024.jpeg
+│   └── IMG_0001_1024.webp
+│   └── IMG_0001_2048.jpeg
+│   └── IMG_0001_2048.webp
 └── ...
 ```
 
@@ -61,12 +64,7 @@ Running [here](https://dylan.is/photos/).
 
 ### TODO
 
-- Clean stuff up
-- Remove AWS permissions on original photos
-- Reprocess all photos for new size I want here
 - Update README with more DB information
-- Get list of deleted files by comparing what's available and what's in EXIF
-    - Update this to correct counts
 
 ### Database
 
