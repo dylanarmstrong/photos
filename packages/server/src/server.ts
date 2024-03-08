@@ -23,7 +23,7 @@ app.use(
         'img-src': isDevelopment
           ? [
               "'self'",
-              "data:",
+              'data:',
               'photos.dylan.is',
               'a.basemaps.cartocdn.com',
               'b.basemaps.cartocdn.com',
@@ -33,7 +33,7 @@ app.use(
             ]
           : [
               "'self'",
-              "data:",
+              'data:',
               'photos.dylan.is',
               'a.basemaps.cartocdn.com',
               'b.basemaps.cartocdn.com',
