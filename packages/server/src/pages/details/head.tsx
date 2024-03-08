@@ -8,7 +8,7 @@ const Head = () =>
     />
   ) : (
     <>
-      <link href={`${baseUrl}/static/leaflet.css`} rel="stylesheet" />
+      <link as="style" href={`${baseUrl}/static/leaflet.css`} rel="preload" />
       <script src={`${baseUrl}/static/leaflet.js`} type="module" />
     </>
   );

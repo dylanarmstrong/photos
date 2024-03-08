@@ -2,6 +2,21 @@ import 'leaflet/dist/leaflet.css';
 
 import L from 'leaflet';
 
+// Convert preloaded leaflet styles
+const load = () => {
+  const elements: NodeListOf<HTMLLinkElement> = document.querySelectorAll(
+    'link[rel="preload"][as="style"]',
+  );
+  if (elements && elements.length > 0) {
+    for (const element of elements) {
+      element.rel = 'stylesheet';
+    }
+  }
+  window.removeEventListener('load', load);
+};
+
+window.addEventListener('load', load);
+
 const mapElement: HTMLDivElement | null = document.querySelector('#map');
 if (mapElement) {
   const nLatitude = Number.parseFloat(mapElement.dataset['latitude'] || 'NaN');
