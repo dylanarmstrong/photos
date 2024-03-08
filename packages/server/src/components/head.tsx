@@ -1,10 +1,13 @@
+import type { ReactNode } from 'react';
+
 import { baseUrl, developmentPort, isDevelopment } from '../constants.js';
 
 type Properties = {
+  readonly children?: ReactNode | undefined;
   readonly title?: string;
 };
 
-const Head = ({ title }: Properties) => (
+const Head = ({ children, title }: Properties) => (
   <head>
     <title>{title}</title>
     <meta
@@ -63,10 +66,12 @@ const Head = ({ title }: Properties) => (
         <script src={`${baseUrl}/static/main.js`} type="module" />
       </>
     )}
+    {children}
   </head>
 );
 
 Head.defaultProps = {
+  children: undefined,
   title: 'Photo Albums',
 };
 

@@ -2,6 +2,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 
 import { Aside } from './aside.js';
 import { Chevron } from './chevron.js';
+import { Head } from './head.js';
 import { Layout } from '../../components/layout.js';
 import { Link } from '../../components/link.js';
 import { baseUrl } from '../../constants.js';
@@ -18,7 +19,7 @@ type Properties = {
 const Details = ({ photo, prevPage, nextPage, prevUrl }: Properties) => {
   const { images } = photo;
   return (
-    <Layout>
+    <Layout head={<Head />}>
       <div className="mb-2.5 flex flex-wrap">
         <Link href={baseUrl} id="home">
           Home

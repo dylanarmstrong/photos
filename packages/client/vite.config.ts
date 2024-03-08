@@ -8,7 +8,10 @@ export default defineConfig({
     emptyOutDir: true,
     outDir: '../server/static/',
     rollupOptions: {
-      input: './src/main.ts',
+      input: [
+        './src/main.ts',
+        './src/leaflet.ts',
+      ],
       output: {
         assetFileNames: '[name][extname]',
         entryFileNames: '[name].js',
@@ -44,8 +47,8 @@ export default defineConfig({
           src: 'node_modules/leaflet/dist/images/marker-icon-2x.png',
         },
         {
-          src: 'node_modules/leaflet/dist/images/marker-icon.png',
           dest: './',
+          src: 'node_modules/leaflet/dist/images/marker-icon.png',
         },
         {
           dest: './',
