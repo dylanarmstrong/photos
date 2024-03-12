@@ -35,11 +35,12 @@ docker-compose up --build
 
 ### Create Thumbnails
 
-Use `thumbs.sh`
+Use `packages/convert`
 
 ```sh
-cd /tmp/photos
-bash ~/scripts/thumbs.sh turkey-2020
+cd packages/convert
+pnpm run build
+node lib/index.js /path/to/photos/turkey-2020
 ```
 
 ### Exif Data
