@@ -106,7 +106,12 @@ router.get('/:albumName/details/:index', async (request, response) => {
 
 router.get('/:albumName', (request, response) => {
   const { albumName } = request.params;
-  response.redirect(`/${albumName}/1`);
+  response.redirect(`${baseUrl}/${albumName}/1`);
+});
+
+router.get('/:albumName/', (request, response) => {
+  const { albumName } = request.params;
+  response.redirect(`${baseUrl}/${albumName}/1`);
 });
 
 router.get('/', async (request, response, next) => {

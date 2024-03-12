@@ -9,12 +9,21 @@
 ```
 .
 ├── turkey-2020
-│   └── IMG_0001_512.jpeg
-│   └── IMG_0001_512.webp
-│   └── IMG_0001_1024.jpeg
-│   └── IMG_0001_1024.webp
-│   └── IMG_0001_2048.jpeg
-│   └── IMG_0001_2048.webp
+│   └── IMG_0001_w320.avif
+│   └── IMG_0001_w320.jpeg
+│   └── IMG_0001_w320.webp
+│   └── IMG_0001_w640.avif
+│   └── IMG_0001_w640.jpeg
+│   └── IMG_0001_w640.webp
+│   └── IMG_0001_w960.avif
+│   └── IMG_0001_w960.jpeg
+│   └── IMG_0001_w960.webp
+│   └── IMG_0001_w1280.avif
+│   └── IMG_0001_w1280.jpeg
+│   └── IMG_0001_w1280.webp
+│   └── IMG_0001_w2560.avif
+│   └── IMG_0001_w2560.jpeg
+│   └── IMG_0001_w2560.webp
 └── ...
 ```
 
@@ -65,6 +74,14 @@ Running [here](https://dylan.is/photos/).
 ### TODO
 
 - Update README with more DB information
+- Add GPT provided tags / description: Please write a pleasant description (approximately 5-7 lines) with a focus on both the location and the subject. Do not put the coordinates or the date in the description, but do include the city, country, or general region. Provide 5 tags for the photo provided. The tag format is`Tags: #Tag1, #Tag2, #Tag3, #Tag4, #Tag5`. This is the description that will appear in a photo album, it does not need to mention any reference to "this image". Instead of saying "this region", "this city", etc. specify the actual city or country where this photo was taken.
+  2018/11/15 @ 07:32
+  1˚39'28" S, 30˚6'42" E
+- Swiping on mobile (needs to be tested)
+- Admin mode for tagging, descriptions, etc.
+- Filtering ability for tags
+- PlantUmL diagram for db
+- Get all deleted photos and update db with flag for them
 
 ### Database
 

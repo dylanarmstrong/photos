@@ -1,0 +1,16 @@
+{
+  "name": "@dylanarmstrong/photos-convert",
+  "private": true,
+  "scripts": {
+    "build": "tsc"
+  },
+  "type": "module",
+  "version": "0.0.0",
+  "dependencies": {
+    "p-limit": "^5.0.0",
+    "sharp": "^0.33.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.25"
+  }
+}

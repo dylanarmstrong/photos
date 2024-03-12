@@ -25,13 +25,24 @@ const Photo = ({ albumName, country, index, page, photo }: Properties) => {
           href={`${baseUrl}/${albumName}/details/${(page - 1) * imagesPerPage + index}`}
         >
           <picture>
-            <source srcSet={images.sm.webp} type="image/webp" />
+            <source
+              sizes={photo.getSizes('album')}
+              srcSet={photo.getSrcSet('avif')}
+              type="image/avif"
+            />
+            <source
+              sizes={photo.getSizes('album')}
+              srcSet={photo.getSrcSet('webp')}
+              type="image/webp"
+            />
             <img
               alt={`${country} - ${photo.coord}`}
               className="relative max-h-[512px] w-full rounded-b-none rounded-t border border-black object-contain md:max-h-[362.25px] md:rounded-b"
-              height={images.sm.height}
-              src={images.sm.jpeg}
-              width={images.sm.width}
+              height={images['320'].height}
+              sizes={photo.getSizes('album')}
+              src={images['320'].jpeg}
+              srcSet={photo.getSrcSet('jpeg')}
+              width={images['320'].width}
             />
           </picture>
           <Data component="div" photo={photo} />

@@ -27,50 +27,47 @@ const Details = ({ photo, prevPage, nextPage, prevUrl }: Properties) => {
         <Link href={prevUrl} id="back">
           Go Back
         </Link>
-        {prevPage !== undefined && (
-          <Link href={prevPage} id="prev">
-            Previous
-          </Link>
-        )}
-        {nextPage !== undefined && (
-          <Link href={nextPage} id="next">
-            Next
-          </Link>
-        )}
-        <Link href={images.lg.jpeg} title="Download">
+        <Link href={prevPage} id="prev">
+          Previous
+        </Link>
+        <Link href={nextPage} id="next">
+          Next
+        </Link>
+        <Link href={images['2560'].jpeg} title="Download">
           Download
         </Link>
       </div>
       <div className="grid-rows-details md:grid-cols-details grid grid-flow-col md:h-[95%] md:grid-rows-none">
-        <div className="grid-cols-detailContainer grid bg-black">
-          {prevPage === undefined ? (
-            <span />
-          ) : (
-            <Chevron href={prevPage} title="Previous Image">
-              <ChevronLeftIcon className="h-6 w-6 text-white" />
-            </Chevron>
-          )}
+        <div className="grid-cols-photo grid min-h-[60vh] bg-white">
+          <Chevron href={prevPage} title="Previous Image">
+            <ChevronLeftIcon className="h-6 w-6 text-black" />
+          </Chevron>
 
-          <div className="mx-auto self-center p-5">
-            <picture>
-              <source srcSet={images.md.webp} type="image/webp" />
-              <img
-                alt={`Taken at ${photo.coord}`}
-                className="max-h-[83dvh] object-contain"
-                height={images.md.height}
-                src={images.md.jpeg}
-                width={images.md.width}
-              />
-            </picture>
-          </div>
+          <picture className="mx-auto self-center p-1 md:p-5">
+            <source
+              sizes={photo.getSizes('details')}
+              srcSet={photo.getSrcSet('avif')}
+              type="image/avif"
+            />
+            <source
+              sizes={photo.getSizes('details')}
+              srcSet={photo.getSrcSet('webp')}
+              type="image/webp"
+            />
+            <img
+              alt={`Taken at ${photo.coord}`}
+              className="max-h-[82dvh] object-contain"
+              height={images['1280'].height}
+              sizes={photo.getSizes('details')}
+              src={images['320'].jpeg}
+              srcSet={photo.getSrcSet('jpeg')}
+              width={images['1280'].width}
+            />
+          </picture>
 
-          {nextPage === undefined ? (
-            <span />
-          ) : (
-            <Chevron href={nextPage} title="Next Image">
-              <ChevronRightIcon className="h-6 w-6 text-white" />
-            </Chevron>
-          )}
+          <Chevron href={nextPage} title="Next Image">
+            <ChevronRightIcon className="h-6 w-6 text-black" />
+          </Chevron>
         </div>
         <Aside photo={photo} />
       </div>

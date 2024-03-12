@@ -10,7 +10,7 @@ export default defineConfig({
     rollupOptions: {
       input: [
         './src/main.ts',
-        './src/leaflet.ts',
+        './src/details.ts',
       ],
       output: {
         assetFileNames: '[name][extname]',

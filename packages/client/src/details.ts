@@ -1,3 +1,4 @@
+// This is JS specific to details page
 import 'leaflet/dist/leaflet.css';
 
 import L from 'leaflet';
@@ -15,7 +16,9 @@ const load = () => {
 
   const mapElement: HTMLDivElement | null = document.querySelector('#map');
   if (mapElement) {
-    const nLatitude = Number.parseFloat(mapElement.dataset['latitude'] || 'NaN');
+    const nLatitude = Number.parseFloat(
+      mapElement.dataset['latitude'] || 'NaN',
+    );
     const nLongitude = Number.parseFloat(
       mapElement.dataset['longitude'] || 'NaN',
     );

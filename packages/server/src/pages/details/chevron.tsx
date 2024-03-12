@@ -4,7 +4,7 @@ import { Link } from '../../components/link.js';
 
 type Properties = {
   readonly children: ReactNode;
-  readonly href: string;
+  readonly href: string | undefined;
   readonly title: string;
 };
 

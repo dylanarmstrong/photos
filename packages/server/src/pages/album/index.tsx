@@ -37,23 +37,19 @@ const Album = ({ album, nextPage, page, pages, prevPage }: Properties) => {
         <Link href={baseUrl} id="home">
           Home
         </Link>
-        {page > 1 && (
-          <Link href={prevPage} id="prev">
-            Previous
-          </Link>
-        )}
-        {page < pages && (
-          <Link href={nextPage} id="next">
-            Next
-          </Link>
-        )}
+        <Link href={page > 1 ? prevPage : undefined} id="prev">
+          Previous
+        </Link>
+        <Link href={page < pages ? nextPage : undefined} id="next">
+          Next
+        </Link>
       </div>
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-8">
         {photos}
       </div>
       <div className="mt-2.5">
-        {page > 1 && <Link href={prevPage}>Previous</Link>}
-        {page < pages && <Link href={nextPage}>Next</Link>}
+        <Link href={page > 1 ? prevPage : undefined}>Previous</Link>
+        <Link href={page < pages ? nextPage : undefined}>Next</Link>
       </div>
     </Layout>
   );

@@ -18,7 +18,7 @@ export default {
     extend: {
       gridTemplateColumns: {
         details: '1fr 400px',
-        detailContainer: '48px 1fr 48px',
+        photo: '24px 1fr 24px',
       },
       gridTemplateRows: {
         details: '1fr auto',

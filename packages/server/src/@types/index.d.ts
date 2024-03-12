@@ -1,4 +1,5 @@
 type Image = {
+  avif: string;
   height: number;
   jpeg: string;
   webp: string;
@@ -6,9 +7,11 @@ type Image = {
 };
 
 type Images = {
-  lg: Image;
-  md: Image;
-  sm: Image;
+  320: Image;
+  640: Image;
+  960: Image;
+  1280: Image;
+  2560: Image;
 };
 
 interface IPhoto {
@@ -19,6 +22,8 @@ interface IPhoto {
   fNumber: string;
   file: string;
   focalLength: string;
+  getSizes(page: 'album' | 'details'): string;
+  getSrcSet(format: 'avif' | 'jpeg' | 'webp'): string;
   gpsLatitude: string;
   gpsLatitudeRef: string;
   gpsLongitude: string;

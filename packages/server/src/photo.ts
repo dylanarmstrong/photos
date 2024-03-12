@@ -2,6 +2,8 @@ import { IMAGE_DOMAIN } from './constants.js';
 
 import type { IPhoto, SqlRowExif } from './@types/index.js';
 
+const sizes = Object.freeze([320, 640, 960, 1280, 2560]);
+
 const divide = (string_: string) => {
   const split = string_
     .split('/')
@@ -46,6 +48,36 @@ class Photo implements IPhoto {
     this.height = row.height;
     this.model = row.model;
     this.width = row.width;
+  }
+
+  getSizes(page: 'album' | 'details') {
+    if (page === 'album') {
+      return [
+        '(min-width: 1540px) calc(12.47vw - 12px)',
+        '(min-width: 1040px) calc(20vw - 15px)',
+        '(min-width: 780px) calc(33.33vw - 18px)',
+        '(min-width: 640px) calc(50vw - 22px)',
+        'calc(100vw - 34px)',
+      ].join(', ');
+    }
+
+    return [
+      '(min-width: 1920px) 1280px',
+      '(min-width: 780px) calc(95.36vw - 532px)',
+      'calc(100vw - 168px)',
+    ].join(',');
+  }
+
+  getSrcSet(format: 'avif' | 'jpeg' | 'webp') {
+    const { images, x } = this;
+    return sizes
+      .map(
+        (size) =>
+          `${images[size as keyof typeof images][format]} ${
+            x < size ? `${x}w` : `${size}w`
+          }`,
+      )
+      .join(', ');
   }
 
   get coord() {
@@ -156,37 +188,29 @@ class Photo implements IPhoto {
     const base = `${IMAGE_DOMAIN}/${this.album}`;
     const { x, y } = this;
 
-    const smHeightRatio = 512 / y;
-    const smWidth = Math.floor(x * smHeightRatio);
-    const smHeight = Math.floor(y * smHeightRatio);
-
-    const mdHeightRatio = 1024 / y;
-    const mdWidth = Math.floor(x * mdHeightRatio);
-    const mdHeight = Math.floor(y * mdHeightRatio);
-
-    const lgHeightRatio = 2048 / y;
-    const lgWidth = Math.floor(x * lgHeightRatio);
-    const lgHeight = Math.floor(y * lgHeightRatio);
+    const getSize = (size: number) => {
+      const widthRatio = size / x;
+      let height = y;
+      let width = x;
+      if (widthRatio < 1) {
+        height = Math.floor(y * widthRatio);
+        width = Math.floor(x * widthRatio);
+      }
+      return {
+        avif: `${base}/${baseFile}_w${size}.avif`,
+        height,
+        jpeg: `${base}/${baseFile}_w${size}.jpeg`,
+        webp: `${base}/${baseFile}_w${size}.webp`,
+        width,
+      };
+    };
 
     return {
-      lg: {
-        height: lgHeight,
-        jpeg: `${base}/${baseFile}_2048.jpeg`,
-        webp: `${base}/${baseFile}_2048.webp`,
-        width: lgWidth,
-      },
-      md: {
-        height: mdHeight,
-        jpeg: `${base}/${baseFile}_1024.jpeg`,
-        webp: `${base}/${baseFile}_1024.webp`,
-        width: mdWidth,
-      },
-      sm: {
-        height: smHeight,
-        jpeg: `${base}/${baseFile}_512.jpeg`,
-        webp: `${base}/${baseFile}_512.webp`,
-        width: smWidth,
-      },
+      1280: getSize(1280),
+      2560: getSize(2560),
+      320: getSize(320),
+      640: getSize(640),
+      960: getSize(960),
     };
   }
 

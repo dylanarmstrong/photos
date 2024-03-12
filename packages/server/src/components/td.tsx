@@ -13,7 +13,7 @@ const alignTopClassName = 'align-top';
 const borderClassName = 'border border-black';
 const className = 'p-1.5 text-left';
 const mobileClassName = 'table-cell';
-const nonMobileClassName = 'hidden md:table-cell';
+const nonMobileClassName = 'hidden sm:table-cell';
 
 const Td = ({ alignTop, border, children, mobile }: Properties) => (
   <td

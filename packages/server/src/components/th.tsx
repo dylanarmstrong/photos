@@ -15,7 +15,7 @@ const borderClassName =
   "border-x border-y-0 border-black before:absolute before:left-0 before:top-0 before:w-full before:border-t before:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:border-b after:content-['']";
 const className = 'bg-white p-1.5 text-left';
 const mobileClassName = 'table-cell';
-const nonMobileClassName = 'hidden md:table-cell';
+const nonMobileClassName = 'hidden sm:table-cell';
 const stickyClassName = 'sticky top-0';
 
 const Th = ({ big, border, children, mobile, sticky }: Properties) => (

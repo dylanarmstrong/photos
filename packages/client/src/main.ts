@@ -39,3 +39,38 @@ const move = ({ code }: KeyboardEvent) => {
 };
 
 document.addEventListener('keydown', move);
+
+const main: HTMLElement | null = document.querySelector('main');
+if (main) {
+  const minimumDeltaX = 20;
+  const maximumDeltaY = 15;
+  let initialScreenX = 0;
+  let initialScreenY = 0;
+
+  const touchstart = (event: TouchEvent) => {
+    [{ screenX: initialScreenX, screenY: initialScreenY }] =
+      event.changedTouches;
+  };
+
+  const touchend = (event: TouchEvent) => {
+    const [{ screenX, screenY }] = event.changedTouches;
+    const deltaX = screenX - initialScreenX;
+    const deltaY = screenY - initialScreenY;
+    if (
+      Math.abs(deltaX) > Math.abs(deltaY) &&
+      Math.abs(deltaX) > minimumDeltaX &&
+      Math.abs(deltaY) < maximumDeltaY
+    ) {
+      if (deltaX > 0) {
+        if (next) {
+          next.click();
+        }
+      } else if (previous) {
+        previous.click();
+      }
+    }
+  };
+
+  main.addEventListener('touchstart', touchstart);
+  main.addEventListener('touchend', touchend);
+}

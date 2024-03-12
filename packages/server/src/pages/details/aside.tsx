@@ -36,7 +36,7 @@ const Aside = ({ photo }: Properties) => {
             <Td mobile>
               {photo.file}
               <br />
-              <div className="grid grid-cols-4 gap-2 text-sm">
+              <div className="grid grid-cols-2 gap-2 text-sm">
                 <P>{photo.resolution}</P>
                 <P>{photo.megapixels}</P>
               </div>
