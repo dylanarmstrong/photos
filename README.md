@@ -79,6 +79,8 @@ Running [here](https://dylan.is/photos/).
   2018/11/15 @ 07:32
   1˚39'28" S, 30˚6'42" E
 - Swiping on mobile (needs to be tested)
+    - Reversed
+- Mobile has odd buttons for next / prev
 - Admin mode for tagging, descriptions, etc.
 - Filtering ability for tags
 - PlantUmL diagram for db
