@@ -24,8 +24,8 @@ const s3 = new S3Client({
 });
 
 const photoMap = ({ Key, Size }: _Object): string | undefined => {
-  // Gather all valid images by finding 512 sized thumbnails
-  if (Size && Size > 0 && Key && /^.*_512.jpeg$/.test(Key)) {
+  // Gather all valid images by finding 320 sized thumbnails
+  if (Size && Size > 0 && Key && Key.endsWith('_w320.avif')) {
     // Return without the thumbnail portion of the Key
     return Key.replace('_512.jpeg', '.jpeg');
   }
