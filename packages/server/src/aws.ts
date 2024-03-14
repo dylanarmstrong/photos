@@ -1,7 +1,7 @@
 import {
   ListObjectsV2Command,
-  S3Client,
   type ListObjectsV2CommandOutput,
+  S3Client,
   type _Object,
 } from '@aws-sdk/client-s3';
 import { fromCognitoIdentityPool } from '@aws-sdk/credential-providers';
@@ -13,7 +13,7 @@ import {
 } from './constants.js';
 import { filterUndefined } from './utils.js';
 
-import type { GetObjects } from './@types/index.js';
+import type { GetObjects } from './types.js';
 
 const s3 = new S3Client({
   credentials: fromCognitoIdentityPool({

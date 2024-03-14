@@ -1,3 +1,5 @@
+import { sizes } from './constants.js';
+
 type Image = {
   avif: string;
   height: number;
@@ -7,11 +9,7 @@ type Image = {
 };
 
 type Images = {
-  320: Image;
-  640: Image;
-  960: Image;
-  1280: Image;
-  2560: Image;
+  [key in (typeof sizes)[number]]: Image;
 };
 
 interface IPhoto {

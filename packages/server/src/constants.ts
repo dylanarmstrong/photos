@@ -11,6 +11,8 @@ const {
   IMAGE_DOMAIN = '',
 } = process.env;
 
+const sizes = Object.freeze([320, 640, 960, 1280, 2560] as const);
+
 const months = Object.freeze([
   'January',
   'February',
@@ -37,4 +39,5 @@ export {
   isDevelopment,
   months,
   port,
+  sizes,
 };

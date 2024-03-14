@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react';
-
 import { baseUrl, developmentPort, isDevelopment } from '../constants.js';
+
+import type { ReactNode } from 'react';
 
 type Properties = {
   readonly children?: ReactNode | undefined;

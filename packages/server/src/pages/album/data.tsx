@@ -1,6 +1,6 @@
 import { P } from '../../components/p.js';
 
-import type { IPhoto } from '../../@types/index.js';
+import type { IPhoto } from '../../types.js';
 
 type Properties = {
   readonly component: 'div' | 'figcaption';

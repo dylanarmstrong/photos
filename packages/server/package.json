@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.529.1",
-    "@aws-sdk/credential-providers": "^3.529.1",
+    "@aws-sdk/client-s3": "^3.533.0",
+    "@aws-sdk/credential-providers": "^3.533.0",
     "@heroicons/react": "^2.1.1",
     "better-sqlite3": "^9.4.3",
     "classnames": "^2.5.1",
@@ -15,12 +15,11 @@
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.9",
     "@types/compression": "^1.7.5",
-    "@types/etag": "^1.8.3",
     "@types/express": "^4.17.21",
     "@types/express-serve-static-core": "^4.17.43",
-    "@types/node": "^20.11.25",
-    "@types/react": "^18.2.64",
-    "@types/react-dom": "^18.2.21",
+    "@types/node": "^20.11.27",
+    "@types/react": "^18.2.65",
+    "@types/react-dom": "^18.2.22",
     "concurrently": "^8.2.2",
     "nodemon": "^3.1.0"
   },

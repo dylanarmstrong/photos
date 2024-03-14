@@ -2,8 +2,8 @@ import express from 'express';
 
 import { baseUrl, imagesPerPage } from './constants.js';
 import { getAlbums } from './database.js';
-import { log } from './utils.js';
 import { render, sendStatus } from './render.js';
+import { log } from './utils.js';
 
 const albums = getAlbums();
 

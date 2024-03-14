@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react';
-
 import { Link } from '../../components/link.js';
+
+import type { ReactNode } from 'react';
 
 type Properties = {
   readonly children: ReactNode;

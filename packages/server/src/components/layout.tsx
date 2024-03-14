@@ -1,8 +1,8 @@
-import type { FC, PropsWithChildren, ReactNode } from 'react';
-
 import { Footer } from './footer.js';
 import { Head } from './head.js';
 import { Header } from './header.js';
+
+import type { FC, PropsWithChildren, ReactNode } from 'react';
 
 type Properties = {
   readonly head?: ReactNode | undefined;

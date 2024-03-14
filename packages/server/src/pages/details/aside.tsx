@@ -9,7 +9,7 @@ import { P } from '../../components/p.js';
 import { Td } from '../../components/td.js';
 import { Th } from '../../components/th.js';
 
-import type { IPhoto } from '../../@types/index.js';
+import type { IPhoto } from '../../types.js';
 
 type Properties = {
   readonly photo: IPhoto;

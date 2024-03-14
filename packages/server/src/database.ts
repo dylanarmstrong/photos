@@ -3,7 +3,7 @@ import Database from 'better-sqlite3';
 import { Album } from './album.js';
 import { Photo } from './photo.js';
 
-import type { SqlRowAlbum, SqlRowExif } from './@types/index.js';
+import type { SqlRowAlbum, SqlRowExif } from './types.js';
 
 const exifFields = new Map<string, string>();
 exifFields.set('album', 'string');

@@ -1,13 +1,12 @@
 import { renderToString } from 'react-dom/server';
 
-import type { Response } from 'express';
-
 import { Album } from './pages/album/index.js';
 import { Details } from './pages/details/index.js';
 import { Home } from './pages/home/index.js';
 import { Status } from './pages/status.js';
 
-import type { RenderOptions } from './@types/index.js';
+import type { RenderOptions } from './types.js';
+import type { Response } from 'express';
 
 const sendStatus = (response: Response, status: number) => {
   const html = renderToString(<Status status={String(status)} />);

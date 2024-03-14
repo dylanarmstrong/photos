@@ -2,7 +2,7 @@ import { Link } from '../../components/link.js';
 import { Td } from '../../components/td.js';
 import { baseUrl } from '../../constants.js';
 
-import type { IAlbum } from '../../@types/index.js';
+import type { IAlbum } from '../../types.js';
 
 type Properties = {
   readonly album: IAlbum;

@@ -2,8 +2,8 @@ import compression from 'compression';
 import express from 'express';
 import helmet from 'helmet';
 
-import { router } from './router.js';
 import { baseUrl, developmentPort, isDevelopment, port } from './constants.js';
+import { router } from './router.js';
 
 const app = express();
 

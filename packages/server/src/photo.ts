@@ -1,8 +1,6 @@
-import { IMAGE_DOMAIN } from './constants.js';
+import { IMAGE_DOMAIN, sizes } from './constants.js';
 
-import type { IPhoto, SqlRowExif } from './@types/index.js';
-
-const sizes = Object.freeze([320, 640, 960, 1280, 2560]);
+import type { IPhoto, SqlRowExif } from './types.js';
 
 const divide = (string_: string) => {
   const split = string_

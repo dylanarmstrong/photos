@@ -1,7 +1,7 @@
-import { months } from './constants.js';
 import { viewAlbum } from './aws.js';
+import { months } from './constants.js';
 
-import type { IAlbum, IPhoto, SqlRowAlbum } from './@types/index.js';
+import type { IAlbum, IPhoto, SqlRowAlbum } from './types.js';
 
 const sortImages = (photoA: IPhoto, photoB: IPhoto) => {
   const dateA = new Date(photoA.datetime);

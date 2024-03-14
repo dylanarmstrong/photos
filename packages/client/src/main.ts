@@ -62,11 +62,11 @@ if (main) {
       Math.abs(deltaY) < maximumDeltaY
     ) {
       if (deltaX > 0) {
-        if (next) {
-          next.click();
+        if (previous) {
+          previous.click();
         }
-      } else if (previous) {
-        previous.click();
+      } else if (next) {
+        next.click();
       }
     }
   };

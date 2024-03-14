@@ -1,8 +1,8 @@
-import { Layout } from '../../components/layout.js';
 import { Row } from './row.js';
+import { Layout } from '../../components/layout.js';
 import { Th } from '../../components/th.js';
 
-import type { IAlbum } from '../../@types/index.js';
+import type { IAlbum } from '../../types.js';
 
 type Properties = {
   readonly albums: IAlbum[] | undefined;

@@ -1,9 +1,9 @@
+import { Photo } from './photo.js';
 import { Layout } from '../../components/layout.js';
 import { Link } from '../../components/link.js';
-import { Photo } from './photo.js';
 import { baseUrl, imagesPerPage } from '../../constants.js';
 
-import type { IAlbum } from '../../@types/index.js';
+import type { IAlbum } from '../../types.js';
 
 type Properties = {
   readonly album: IAlbum;
@@ -19,7 +19,6 @@ const Album = ({ album, nextPage, page, pages, prevPage }: Properties) => {
     .map((photo, index) => (
       <Photo
         albumName={album.name}
-        country={album.country}
         index={index}
         key={photo.file}
         page={page}

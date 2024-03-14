@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // Takes .44 per size on c6i-2xlarge
+import { readdir } from 'node:fs/promises';
+import { basename, dirname, join, sep } from 'node:path';
 import pLimit from 'p-limit';
 import sharp from 'sharp';
-import { basename, dirname, join, sep } from 'node:path';
-import { readdir } from 'node:fs/promises';
 
 const { argv } = process;
 if (argv.length < 3) {

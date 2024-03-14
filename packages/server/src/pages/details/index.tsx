@@ -5,9 +5,10 @@ import { Chevron } from './chevron.js';
 import { Head } from './head.js';
 import { Layout } from '../../components/layout.js';
 import { Link } from '../../components/link.js';
+import { Picture } from '../../components/picture.js';
 import { baseUrl } from '../../constants.js';
 
-import type { IPhoto } from '../../@types/index.js';
+import type { IPhoto } from '../../types.js';
 
 type Properties = {
   readonly photo: IPhoto;
@@ -43,27 +44,15 @@ const Details = ({ photo, prevPage, nextPage, prevUrl }: Properties) => {
             <ChevronLeftIcon className="h-6 w-6 text-black" />
           </Chevron>
 
-          <picture className="mx-auto self-center p-1 md:p-5">
-            <source
-              sizes={photo.getSizes('details')}
-              srcSet={photo.getSrcSet('avif')}
-              type="image/avif"
-            />
-            <source
-              sizes={photo.getSizes('details')}
-              srcSet={photo.getSrcSet('webp')}
-              type="image/webp"
-            />
-            <img
-              alt={`Taken at ${photo.coord}`}
-              className="max-h-[82dvh] object-contain"
-              height={images['1280'].height}
-              sizes={photo.getSizes('details')}
-              src={images['320'].jpeg}
-              srcSet={photo.getSrcSet('jpeg')}
-              width={images['1280'].width}
-            />
-          </picture>
+          <Picture
+            className={{
+              img: 'max-h-[82dvh] object-contain',
+              picture: 'mx-auto self-center p-1 md:p-5',
+            }}
+            pageName="details"
+            photo={photo}
+            size={1280}
+          />
 
           <Chevron href={nextPage} title="Next Image">
             <ChevronRightIcon className="h-6 w-6 text-black" />
