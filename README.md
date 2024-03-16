@@ -78,9 +78,6 @@ Running [here](https://dylan.is/photos/).
 - Add GPT provided tags / description: Please write a pleasant description (approximately 5-7 lines) with a focus on both the location and the subject. Do not put the coordinates or the date in the description, but do include the city, country, or general region. Provide 5 tags for the photo provided. The tag format is`Tags: #Tag1, #Tag2, #Tag3, #Tag4, #Tag5`. This is the description that will appear in a photo album, it does not need to mention any reference to "this image". Instead of saying "this region", "this city", etc. specify the actual city or country where this photo was taken.
   2018/11/15 @ 07:32
   1˚39'28" S, 30˚6'42" E
-- Swiping on mobile (needs to be tested)
-    - Reversed
-- Mobile has odd buttons for next / prev
 - Admin mode for tagging, descriptions, etc.
 - Filtering ability for tags
 - PlantUmL diagram for db
