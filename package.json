@@ -7,18 +7,18 @@
   "devDependencies": {
     "@dylanarmstrong/eslint-config": "^0.6.2",
     "@dylanarmstrong/tsconfig": "^0.0.2",
-    "@typescript-eslint/eslint-plugin": "^7.2.0",
-    "@typescript-eslint/parser": "^7.2.0",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsx-a11y": "^6.8.0",
-    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-unicorn": "^51.0.1",
     "prettier": "^3.2.5",
-    "prettier-plugin-tailwindcss": "^0.5.12",
-    "typescript": "^5.4.2"
+    "prettier-plugin-tailwindcss": "^0.5.13",
+    "typescript": "^5.4.3"
   },
   "eslintConfig": {
     "extends": "@dylanarmstrong",

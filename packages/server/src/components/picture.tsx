@@ -32,7 +32,7 @@ const Picture = ({ className, pageName, photo, size }: Properties) => {
         alt={`Taken at ${photo.coord} on ${photo.datetime}`}
         className={classNames(className?.img)}
         height={images[size].height}
-        sizes={photo.getSizes('details')}
+        sizes={photo.getSizes(pageName)}
         src={images['320'].jpeg}
         srcSet={photo.getSrcSet('jpeg')}
         width={images[size].width}
