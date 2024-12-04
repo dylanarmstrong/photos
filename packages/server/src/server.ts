@@ -25,7 +25,6 @@ app.use(
               "'self'",
               'data:',
               'photos.dylan.is',
-              'photos-dev.dylan.is',
               'a.basemaps.cartocdn.com',
               'b.basemaps.cartocdn.com',
               'c.basemaps.cartocdn.com',
