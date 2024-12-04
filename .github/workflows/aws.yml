@@ -43,8 +43,8 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
         R2_BUCKET: ${{ vars.R2_BUCKET }}
         R2_ENDPOINT: ${{ vars.R2_ENDPOINT }}
-        R2_SECRET: ${{ vars.R2_SECRET }}
-        R2_TOKEN: ${{ vars.R2_TOKEN }}
+        R2_SECRET: ${{ secrets.R2_SECRET }}
+        R2_TOKEN: ${{ secrets.R2_TOKEN }}
       run: |
         docker buildx build \
           --build-arg="IMAGE_DOMAIN=$IMAGE_DOMAIN" \
