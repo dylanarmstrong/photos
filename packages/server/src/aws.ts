@@ -4,23 +4,19 @@ import {
   S3Client,
   type _Object,
 } from '@aws-sdk/client-s3';
-import { fromCognitoIdentityPool } from '@aws-sdk/credential-providers';
 
-import {
-  AWS_IDENTITY_POOL_ID,
-  AWS_REGION,
-  AWS_S3_BUCKET,
-} from './constants.js';
+import { R2_BUCKET, R2_ENDPOINT, R2_SECRET, R2_TOKEN } from './constants.js';
 import { filterUndefined } from './utils.js';
 
 import type { GetObjects } from './types.js';
 
 const s3 = new S3Client({
-  credentials: fromCognitoIdentityPool({
-    clientConfig: { region: AWS_REGION },
-    identityPoolId: AWS_IDENTITY_POOL_ID,
-  }),
-  region: AWS_REGION,
+  credentials: {
+    accessKeyId: R2_TOKEN,
+    secretAccessKey: R2_SECRET,
+  },
+  endpoint: R2_ENDPOINT,
+  region: 'auto',
 });
 
 const photoMap = ({ Key, Size }: _Object): string | undefined => {
@@ -60,11 +56,12 @@ const viewAlbum = async (albumName: string) => {
       };
 
       const command = new ListObjectsV2Command({
-        Bucket: AWS_S3_BUCKET,
+        Bucket: R2_BUCKET,
         ContinuationToken,
         Delimiter: '/',
         Prefix: `${encodeURIComponent(albumName)}/`,
       });
+
       s3.send(command).then(listCallback);
     });
 

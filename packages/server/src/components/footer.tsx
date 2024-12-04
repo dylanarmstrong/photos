@@ -1,4 +1,4 @@
-// This server will maybe be updated once a year?
+// This server will maybe be rebooted once a year?
 const date = new Date().getFullYear();
 
 const Footer = () => (

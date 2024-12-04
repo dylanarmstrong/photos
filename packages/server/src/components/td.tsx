@@ -15,7 +15,12 @@ const className = 'p-1.5 text-left';
 const mobileClassName = 'table-cell';
 const nonMobileClassName = 'hidden sm:table-cell';
 
-const Td = ({ alignTop, border, children, mobile }: Properties) => (
+const Td = ({
+  alignTop = false,
+  border = false,
+  children,
+  mobile = false,
+}: Properties) => (
   <td
     className={classNames(className, {
       [alignTopClassName]: alignTop,
@@ -27,11 +32,5 @@ const Td = ({ alignTop, border, children, mobile }: Properties) => (
     {children}
   </td>
 );
-
-Td.defaultProps = {
-  alignTop: false,
-  border: false,
-  mobile: false,
-};
 
 export { Td };

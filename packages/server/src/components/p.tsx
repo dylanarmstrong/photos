@@ -12,7 +12,7 @@ const className = 'leading-4';
 const fullClassName = 'w-full';
 const smallClassName = 'text-sm';
 
-const P = ({ children, full, small }: Properties) => (
+const P = ({ children, full = false, small = false }: Properties) => (
   <p
     className={classNames(className, {
       [fullClassName]: full,
@@ -22,10 +22,5 @@ const P = ({ children, full, small }: Properties) => (
     {children}
   </p>
 );
-
-P.defaultProps = {
-  full: false,
-  small: false,
-};
 
 export { P };

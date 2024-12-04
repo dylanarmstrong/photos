@@ -14,7 +14,7 @@ const defaultClassName =
   'text-blue decoration-blue visited:text-purple visited:decoration-purple mr-3 underline decoration-2 underline-offset-1 md:mr-5';
 const hiddenClassName = 'opacity-0 pointer-events-none';
 
-const Link = ({ children, className, href, id, title }: Properties) => (
+const Link = ({ children, className = '', href, id, title }: Properties) => (
   <a
     className={classNames(defaultClassName, className, {
       [hiddenClassName]: href === undefined,
@@ -26,11 +26,5 @@ const Link = ({ children, className, href, id, title }: Properties) => (
     {children}
   </a>
 );
-
-Link.defaultProps = {
-  className: '',
-  id: undefined,
-  title: undefined,
-};
 
 export { Link };

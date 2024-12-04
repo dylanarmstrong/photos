@@ -18,7 +18,13 @@ const mobileClassName = 'table-cell';
 const nonMobileClassName = 'hidden sm:table-cell';
 const stickyClassName = 'sticky top-0';
 
-const Th = ({ big, border, children, mobile, sticky }: Properties) => (
+const Th = ({
+  big = false,
+  border = false,
+  children,
+  mobile = false,
+  sticky = false,
+}: Properties) => (
   <th
     className={classNames(className, {
       [bigClassName]: big,
@@ -31,13 +37,5 @@ const Th = ({ big, border, children, mobile, sticky }: Properties) => (
     {children}
   </th>
 );
-
-Th.defaultProps = {
-  big: false,
-  border: false,
-  children: '',
-  mobile: false,
-  sticky: false,
-};
 
 export { Th };

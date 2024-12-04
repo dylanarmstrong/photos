@@ -2,7 +2,6 @@ import tailwindcss from 'tailwindcss';
 import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
-// eslint-disable-next-line import/no-unused-modules
 export default defineConfig({
   build: {
     emptyOutDir: true,

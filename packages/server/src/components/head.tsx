@@ -3,11 +3,11 @@ import { baseUrl, developmentPort, isDevelopment } from '../constants.js';
 import type { ReactNode } from 'react';
 
 type Properties = {
-  readonly children?: ReactNode | undefined;
+  readonly children?: ReactNode;
   readonly title?: string;
 };
 
-const Head = ({ children, title }: Properties) => (
+const Head = ({ children, title = 'Photo Albums' }: Properties) => (
   <head>
     <title>{title}</title>
     <meta
@@ -69,10 +69,5 @@ const Head = ({ children, title }: Properties) => (
     {children}
   </head>
 );
-
-Head.defaultProps = {
-  children: undefined,
-  title: 'Photo Albums',
-};
 
 export { Head };

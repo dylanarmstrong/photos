@@ -41,11 +41,4 @@ const Picture = ({ className, pageName, photo, size }: Properties) => {
   );
 };
 
-Picture.defaultProps = {
-  className: {
-    img: '',
-    picture: '',
-  },
-};
-
 export { Picture };

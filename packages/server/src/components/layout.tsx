@@ -5,10 +5,10 @@ import { Header } from './header.js';
 import type { FC, PropsWithChildren, ReactNode } from 'react';
 
 type Properties = {
-  readonly head?: ReactNode | undefined;
-  readonly header?: string | undefined;
-  readonly subheader?: string | undefined;
-  readonly title?: string | undefined;
+  readonly head?: ReactNode;
+  readonly header?: string;
+  readonly subheader?: string;
+  readonly title?: string;
 };
 
 const Layout: FC<PropsWithChildren<Properties>> = ({
@@ -27,12 +27,5 @@ const Layout: FC<PropsWithChildren<Properties>> = ({
     </body>
   </html>
 );
-
-Layout.defaultProps = {
-  head: undefined,
-  header: undefined,
-  subheader: undefined,
-  title: undefined,
-};
 
 export { Layout };

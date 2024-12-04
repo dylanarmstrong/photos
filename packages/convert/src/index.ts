@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Takes .44 per size on c6i-2xlarge
 import { readdir } from 'node:fs/promises';
-import { basename, dirname, join, sep } from 'node:path';
+import path from 'node:path';
 import pLimit from 'p-limit';
 import sharp from 'sharp';
 
@@ -26,22 +26,23 @@ const requested = [320, 640, 960, 1280, 2560];
 const folder = argv[2];
 const files = await readdir(folder, { recursive: true });
 
-const getBase = (path: string): [string, string] => {
-  const baseFolder = dirname(path);
-  const baseFile = basename(path).replace(/\.[^./]+$/, '');
+const getBase = (pathName: string): [string, string] => {
+  const baseFolder = path.dirname(pathName);
+  const baseFile = path.basename(pathName).replace(/\.[^./]+$/, '');
   return [baseFolder, baseFile];
 };
 
 const hasFile = (baseFolder: string, outputFile: string) =>
-  files.includes(join(baseFolder.split(sep).at(-1) || `.${sep}`, outputFile)) ||
-  files.includes(outputFile);
+  files.includes(
+    path.join(baseFolder.split(path.sep).at(-1) || `.${path.sep}`, outputFile),
+  ) || files.includes(outputFile);
 
-const avif = async (path: string, width: number) => {
-  const [baseFolder, baseFile] = getBase(path);
+const avif = async (pathName: string, width: number) => {
+  const [baseFolder, baseFile] = getBase(pathName);
   try {
     const outputFile = `${baseFile}_w${width}.avif`;
     if (!hasFile(baseFolder, outputFile)) {
-      await sharp(path)
+      await sharp(pathName)
         .resize({
           fit: sharp.fit.inside,
           width,
@@ -51,7 +52,7 @@ const avif = async (path: string, width: number) => {
           effort: 4,
           quality: 50,
         })
-        .toFile(join(baseFolder, outputFile));
+        .toFile(path.join(baseFolder, outputFile));
     }
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -64,12 +65,12 @@ const avif = async (path: string, width: number) => {
   }
 };
 
-const webp = async (path: string, width: number) => {
-  const [baseFolder, baseFile] = getBase(path);
+const webp = async (pathName: string, width: number) => {
+  const [baseFolder, baseFile] = getBase(pathName);
   try {
     const outputFile = `${baseFile}_w${width}.webp`;
     if (!hasFile(baseFolder, outputFile)) {
-      await sharp(path)
+      await sharp(pathName)
         .resize({
           fit: sharp.fit.inside,
           width,
@@ -80,7 +81,7 @@ const webp = async (path: string, width: number) => {
           preset: 'photo',
           quality: 80,
         })
-        .toFile(join(baseFolder, outputFile));
+        .toFile(path.join(baseFolder, outputFile));
     }
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -93,19 +94,19 @@ const webp = async (path: string, width: number) => {
   }
 };
 
-const jpeg = async (path: string, width: number) => {
-  const [baseFolder, baseFile] = getBase(path);
+const jpeg = async (pathName: string, width: number) => {
+  const [baseFolder, baseFile] = getBase(pathName);
   try {
     const outputFile = `${baseFile}_w${width}.jpeg`;
     if (!hasFile(baseFolder, outputFile)) {
-      await sharp(path)
+      await sharp(pathName)
         .resize({
           fit: sharp.fit.inside,
           width,
           withoutEnlargement: true,
         })
         .jpeg({ mozjpeg: true, quality: 80 })
-        .toFile(join(baseFolder, outputFile));
+        .toFile(path.join(baseFolder, outputFile));
     }
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -118,12 +119,12 @@ const jpeg = async (path: string, width: number) => {
   }
 };
 
-const convertFile = async (path: string) => {
+const convertFile = async (pathName: string) => {
   for (let index = 0, { length } = requested; index < length; index += 1) {
     const width = requested[index];
-    limitAvif(() => avif(path, width));
-    limitJpeg(() => jpeg(path, width));
-    limitWebp(() => webp(path, width));
+    limitAvif(() => avif(pathName, width));
+    limitJpeg(() => jpeg(pathName, width));
+    limitWebp(() => webp(pathName, width));
   }
 };
 
@@ -131,7 +132,7 @@ for (const file of files) {
   if (/^(?!.*_w\d+.*$).*\.jpeg/.test(file)) {
     // eslint-disable-next-line no-console
     console.log('Convert', file);
-    const path = join(folder, file);
-    convertFile(path);
+    const pathName = path.join(folder, file);
+    convertFile(pathName);
   }
 }

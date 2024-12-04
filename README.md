@@ -1,10 +1,10 @@
-### Just a super, simple, spectacular S3 photo browser
+### Just a super, simple, spectacular R2 photo browser
 
 1. Copy `env.example` to `.env`, and update as needed.
 2. `pnpm install`
 3. `pnpm run -r build && pnpm run start`
 
-### S3 Folder Structure
+### R2 Folder Structure
 
 ```
 .

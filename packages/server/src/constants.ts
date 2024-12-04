@@ -5,10 +5,11 @@ const imagesPerPage = 20;
 const isDevelopment = process.env['NODE_ENV'] === 'development';
 const port = 80;
 const {
-  AWS_IDENTITY_POOL_ID = '',
-  AWS_REGION = '',
-  AWS_S3_BUCKET = '',
   IMAGE_DOMAIN = '',
+  R2_BUCKET = '',
+  R2_ENDPOINT = '',
+  R2_SECRET = '',
+  R2_TOKEN = '',
 } = process.env;
 
 const sizes = Object.freeze([320, 640, 960, 1280, 2560] as const);
@@ -29,10 +30,11 @@ const months = Object.freeze([
 ]);
 
 export {
-  AWS_IDENTITY_POOL_ID,
-  AWS_REGION,
-  AWS_S3_BUCKET,
   IMAGE_DOMAIN,
+  R2_BUCKET,
+  R2_ENDPOINT,
+  R2_SECRET,
+  R2_TOKEN,
   baseUrl,
   developmentPort,
   imagesPerPage,

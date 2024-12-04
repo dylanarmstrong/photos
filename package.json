@@ -5,34 +5,18 @@
   },
   "description": "Just a super, simple, spectacular S3 photo browser",
   "devDependencies": {
-    "@dylanarmstrong/eslint-config": "^0.6.2",
-    "@dylanarmstrong/tsconfig": "^0.0.2",
-    "@typescript-eslint/eslint-plugin": "^7.4.0",
-    "@typescript-eslint/parser": "^7.4.0",
-    "eslint": "^8.57.0",
+    "@dylanarmstrong/eslint-config": "^0.7.1",
+    "@dylanarmstrong/tsconfig": "^0.0.3",
+    "eslint": "^9.16.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-import-resolver-typescript": "^3.6.1",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-jsx-a11y": "^6.8.0",
-    "eslint-plugin-react": "^7.34.1",
-    "eslint-plugin-unicorn": "^51.0.1",
-    "prettier": "^3.2.5",
-    "prettier-plugin-tailwindcss": "^0.5.13",
-    "typescript": "^5.4.3"
-  },
-  "eslintConfig": {
-    "extends": "@dylanarmstrong",
-    "rules": {
-      "camelcase": "off",
-      "unicorn/prevent-abbreviations": [
-        "error",
-        {
-          "ignore": [
-            "vite-env\\.d$"
-          ]
-        }
-      ]
-    }
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-unicorn": "^56.0.1",
+    "prettier": "^3.4.1",
+    "prettier-plugin-tailwindcss": "^0.6.9",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.17.0"
   },
   "homepage": "https://github.com/dylanarmstrong/photos",
   "license": "ISC",
@@ -52,7 +36,7 @@
   },
   "scripts": {
     "build": "pnpm run -r build",
-    "dev": "pnpm run -r build && pnpm --stream=true run -r dev",
+    "dev": "pnpm run -r --filter='!./packages/convert' build && pnpm --stream=true run -r --filter='!./packages/convert' dev",
     "lint": "prettier --write --ignore-unknown ./packages/*/src/ && eslint --fix ./packages/*/src/",
     "start": "pnpm --filter './packages/server' run start"
   },
