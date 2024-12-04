@@ -3,6 +3,7 @@ services:
     build:
       args:
         build: true
+      image: photos
       target: stage1
     container_name: photos
     environment:
