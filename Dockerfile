@@ -1,4 +1,4 @@
-FROM node:22-alpine as stage0
+FROM node:22-alpine AS stage0
 
 LABEL maintainer="Dylan Armstrong <dylan@dylan.is>"
 
@@ -26,7 +26,7 @@ fi
 
 CMD [ "sh", "./scripts/docker-init.sh" ]
 
-FROM node:22-alpine as stage1
+FROM node:22-alpine AS stage1
 
 WORKDIR /app
 RUN npm i -g pnpm
