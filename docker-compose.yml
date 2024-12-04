@@ -3,7 +3,6 @@ services:
     build:
       args:
         build: true
-      image: photos
       target: stage1
     container_name: photos
     environment:
@@ -13,7 +12,7 @@ services:
       R2_ENDPOINT: $R2_ENDPOINT
       R2_SECRET: $R2_SECRET
       R2_TOKEN: $R2_TOKEN
-    image: dylanarms/photos
+    image: photos
     ports:
       - 80:80/tcp
     restart: unless-stopped
