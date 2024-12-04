@@ -30,7 +30,7 @@
 ### Running
 
 ```
-docker-compose up --build
+docker compose up --build
 ```
 
 ### Create Thumbnails
@@ -58,7 +58,7 @@ python3 scripts/insert-album.py /tmp/photos/turkey-2020
 #### Development (Docker)
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 ```
 
 #### Development (Non-Docker)

@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.703.0",
+    "@aws-sdk/client-s3": "^3.705.0",
     "@aws-sdk/credential-providers": "^3.699.0",
     "@heroicons/react": "^2.2.0",
     "better-sqlite3": "^11.6.0",
@@ -18,7 +18,7 @@
     "@types/express": "^5.0.0",
     "@types/express-serve-static-core": "^5.0.2",
     "@types/node": "^22.10.1",
-    "@types/react": "^18.3.12",
+    "@types/react": "^18.3.13",
     "@types/react-dom": "^18.3.1",
     "concurrently": "^9.1.0",
     "nodemon": "^3.1.7"
