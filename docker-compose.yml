@@ -12,7 +12,7 @@ services:
       R2_ENDPOINT: $R2_ENDPOINT
       R2_SECRET: $R2_SECRET
       R2_TOKEN: $R2_TOKEN
-    image: photos
+    image: dylanarms/photos
     ports:
       - 80:80/tcp
     restart: unless-stopped
