@@ -1,4 +1,5 @@
-import tailwindcss from 'tailwindcss';
+// @ts-expect-error vite isn't published quite correctly
+import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
@@ -17,12 +18,8 @@ export default defineConfig({
       },
     },
   },
-  css: {
-    postcss: {
-      plugins: [tailwindcss()],
-    },
-  },
   plugins: [
+    tailwindcss(),
     viteStaticCopy({
       targets: [
         {

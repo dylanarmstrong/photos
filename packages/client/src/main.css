@@ -1,6 +1,18 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@source '../../server/src/';
+@source './src/';
+
+@theme {
+  --color-black: #151515;
+  --color-blue: #133dc8;
+  --color-purple: #6034cc;
+  --color-red: #e21352;
+  --color-white: #fafafa;
+
+  --font-sans: 'Poppins', 'sans-serif';
+  --font-serif: 'serif';
+}
 
 @font-face {
   font-family: Poppins;

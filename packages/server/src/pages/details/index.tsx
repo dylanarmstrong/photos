@@ -38,8 +38,8 @@ const Details = ({ photo, prevPage, nextPage, prevUrl }: Properties) => {
           Download
         </Link>
       </div>
-      <div className="grid-rows-details md:grid-cols-details grid grid-flow-col md:h-[95%] md:grid-rows-none">
-        <div className="grid-cols-photo grid min-h-[60vh] bg-white">
+      <div className="grid grid-flow-col grid-rows-[1fr_auto] md:h-[95%] md:grid-cols-[1fr_400px] md:grid-rows-none">
+        <div className="grid min-h-[60vh] grid-cols-[24px_1fr_24px] bg-white">
           <Chevron href={prevPage} title="Previous Image">
             <ChevronLeftIcon className="h-6 w-6 text-black" />
           </Chevron>

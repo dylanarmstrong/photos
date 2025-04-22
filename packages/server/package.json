@@ -1,27 +1,27 @@
 {
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.705.0",
-    "@aws-sdk/credential-providers": "^3.699.0",
+    "@aws-sdk/client-s3": "^3.787.0",
+    "@aws-sdk/credential-providers": "^3.787.0",
     "@heroicons/react": "^2.2.0",
-    "better-sqlite3": "^11.7.0",
+    "better-sqlite3": "^11.9.1",
     "classnames": "^2.5.1",
-    "compression": "^1.7.5",
-    "express": "^4.21.2",
+    "compression": "^1.8.0",
+    "express": "^5.1.0",
     "express-serve-static-core": "^0.1.1",
-    "helmet": "^8.0.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "helmet": "^8.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.12",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/compression": "^1.7.5",
-    "@types/express": "^5.0.0",
-    "@types/express-serve-static-core": "^5.0.2",
-    "@types/node": "^22.10.1",
-    "@types/react": "^19.0.1",
-    "@types/react-dom": "^19.0.1",
-    "concurrently": "^9.1.0",
-    "nodemon": "^3.1.7"
+    "@types/express": "^5.0.1",
+    "@types/express-serve-static-core": "^5.0.6",
+    "@types/node": "^22.14.1",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.9"
   },
   "main": "./lib/server.js",
   "name": "@dylanarmstrong/photos-server",

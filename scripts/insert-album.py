@@ -1,19 +1,24 @@
 #!/usr/bin/env python3
 
-from datetime import datetime
+# /// script
+# requires-python = "==3.12"
+# ///
+
 import glob
 import os
-import pyexiv2
 import re
 import sqlite3
 import sys
+from datetime import datetime
+
+import pyexiv2
 from PIL import Image
 
 
-# Usage: python3 scripts/insert.py /path/to/album
+# Usage: uv run scripts/insert.py /path/to/album
 def main(argv):
     if len(argv) == 0:
-        print("Usage: python3 scripts/insert.py /path/to/album")
+        print("Usage: uv run scripts/insert.py /path/to/album")
         sys.exit(1)
 
     folder = argv[0]
@@ -54,7 +59,7 @@ def main(argv):
                         """,
                         [album],
                     )
-                except:
+                except Exception as _:
                     pass
 
                 cursor = cur.execute(
@@ -77,7 +82,7 @@ def main(argv):
                         if isinstance(date, tuple):
                             date = date[0]
                         date = datetime.strptime(str(date), "%Y:%m:%d %H:%M:%S")
-                    except:
+                    except Exception as _:
                         date = None
 
                 try:
@@ -194,7 +199,7 @@ def main(argv):
                         ],
                     )
                     count += 1
-                except:
+                except Exception as _:
                     pass
 
     con.commit()

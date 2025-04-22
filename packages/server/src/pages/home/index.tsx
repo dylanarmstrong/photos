@@ -35,7 +35,7 @@ const Home = ({ albums }: Properties) => {
             </Th>
           </tr>
         </thead>
-        <tbody className="[&_td]:first:[&>tr]:border-t-0">{albumRows}</tbody>
+        <tbody className="[&>tr]:first:[&_td]:border-t-0">{albumRows}</tbody>
       </table>
     </Layout>
   );

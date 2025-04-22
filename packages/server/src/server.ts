@@ -51,24 +51,19 @@ app.use(
   }),
 );
 
-if (baseUrl) {
-  app.use(`${baseUrl}/static`, express.static('static', { maxAge: '1y' }));
-  app.use(`${baseUrl}/`, router);
+app.use(`${baseUrl}/static`, express.static('static', { maxAge: '1y' }));
+app.use(`${baseUrl}/`, router);
 
-  // If vite resources try and load something, it may hit this (Leaflet)
-  // So redirect to appropiate place
-  if (isDevelopment) {
-    app.get('/@fs/*', (request, response) => {
-      const { path } = request;
-      response.redirect(`http://localhost:${developmentPort}${path}`);
-    });
-  }
-
-  app.listen(port, () => {
-    // eslint-disable-next-line no-console
-    console.log(`Listening at http://localhost:${port}${baseUrl}/`);
+// If vite resources try and load something, it may hit this (Leaflet)
+// So redirect to appropiate place
+if (isDevelopment) {
+  app.get('/@fs/*_', (request, response) => {
+    const { path } = request;
+    response.redirect(`http://localhost:${developmentPort}${path}`);
   });
-} else {
-  // eslint-disable-next-line no-console
-  console.error('Missing baseUrl in .env');
 }
+
+app.listen(port, () => {
+  // eslint-disable-next-line no-console
+  console.log(`Listening at http://localhost:${port}${baseUrl}/`);
+});

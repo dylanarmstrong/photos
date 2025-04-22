@@ -6,7 +6,7 @@ import {
 } from '@aws-sdk/client-s3';
 
 import { R2_BUCKET, R2_ENDPOINT, R2_SECRET, R2_TOKEN } from './constants.js';
-import { filterUndefined } from './utils.js';
+import { filterUndefined } from './utilities.js';
 
 import type { GetObjects } from './types.js';
 

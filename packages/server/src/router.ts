@@ -3,7 +3,7 @@ import express from 'express';
 import { baseUrl, imagesPerPage } from './constants.js';
 import { getAlbums } from './database.js';
 import { render, sendStatus } from './render.js';
-import { log } from './utils.js';
+import { log } from './utilities.js';
 
 const albums = getAlbums();
 
@@ -26,7 +26,7 @@ const getAlbumImages = async (albumName: string) => {
 const router = express.Router({ caseSensitive: true, strict: true });
 
 // Check that album exists
-router.get('/:albumName*', (request, response, next) => {
+router.get('/:albumName', (request, response, next) => {
   // Asterisk is not in the param name..
   const { albumName } = request.params as unknown as { albumName: string };
   if (!isValidAlbum(albumName)) {

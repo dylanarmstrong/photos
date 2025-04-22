@@ -1,2 +1,0 @@
-# vim:ft=requirements
-black==24.2.0
