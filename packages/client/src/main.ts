@@ -40,7 +40,7 @@ const move = ({ code }: KeyboardEvent) => {
 
 document.addEventListener('keydown', move);
 
-const main: HTMLElement | null = document.querySelector('main');
+const main = document.querySelector('main');
 if (main) {
   const minimumDeltaX = 20;
   const maximumDeltaY = 15;

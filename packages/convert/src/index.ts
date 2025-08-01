@@ -129,7 +129,7 @@ const convertFile = async (pathName: string) => {
 };
 
 for (const file of files) {
-  if (/^(?!.*_w\d+.*$).*\.jpeg/.test(file)) {
+  if (/^(?!.*_w\d+.*$).*\.(jpeg|png)/.test(file)) {
     // eslint-disable-next-line no-console
     console.log('Convert', file);
     const pathName = path.join(folder, file);

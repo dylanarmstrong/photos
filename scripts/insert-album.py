@@ -2,6 +2,10 @@
 
 # /// script
 # requires-python = "==3.12"
+# dependencies = [
+#     "pyexiv2",
+#     "pillow",
+# ]
 # ///
 
 import glob
@@ -41,7 +45,7 @@ def main(argv):
     count = 0
     # https://www.media.mit.edu/pia/Research/deepview/exif.html
     for file in glob.iglob(f"{folder}/*"):
-        if re.match(r"(?!.*_thumb.*)^.*?\.jpeg$", file, flags=re.IGNORECASE):
+        if re.match(r"(?!.*_w\d+.*)^.*?\.(jpeg|png)$", file, flags=re.IGNORECASE):
             with pyexiv2.Image(file) as img:
                 pil_image = Image.open(file)
 
@@ -59,8 +63,8 @@ def main(argv):
                         """,
                         [album],
                     )
-                except Exception as _:
-                    pass
+                except Exception as e:
+                    print(f"Error inserting album '{album}': {e}")
 
                 cursor = cur.execute(
                     """
@@ -82,7 +86,8 @@ def main(argv):
                         if isinstance(date, tuple):
                             date = date[0]
                         date = datetime.strptime(str(date), "%Y:%m:%d %H:%M:%S")
-                    except Exception as _:
+                    except Exception as e:
+                        print(f"Error parsing date for {file}: {e}")
                         date = None
 
                 try:
@@ -199,8 +204,8 @@ def main(argv):
                         ],
                     )
                     count += 1
-                except Exception as _:
-                    pass
+                except Exception as e:
+                    print(f"Error inserting image/exif data for {file}: {e}")
 
     con.commit()
     con.close()
