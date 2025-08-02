@@ -178,7 +178,7 @@ class Photo implements IPhoto {
     if (Number.isNaN(div)) {
       return ' ';
     }
-    return `${div}mm`;
+    return `${div.toFixed(2)}mm`;
   }
 
   get images() {

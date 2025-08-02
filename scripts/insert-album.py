@@ -19,6 +19,20 @@ import pyexiv2
 from PIL import Image
 
 
+def adapt_datetime_iso(val):
+    """Adapt datetime.datetime to timezone-naive ISO 8601 date."""
+    return val.isoformat()
+
+
+def convert_datetime(val):
+    """Convert ISO 8601 datetime to datetime.datetime object."""
+    return datetime.fromisoformat(val.decode())
+
+
+sqlite3.register_adapter(datetime, adapt_datetime_iso)
+sqlite3.register_converter("datetime", convert_datetime)
+
+
 # Usage: uv run scripts/insert.py /path/to/album
 def main(argv):
     if len(argv) == 0:
