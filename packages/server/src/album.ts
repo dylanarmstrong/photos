@@ -40,7 +40,10 @@ class Album implements IAlbum {
   }
 
   getPhoto(file: string) {
-    return this.photos.find((photo) => photo.file === file);
+    // This is the Key minus the _w320.jpeg at the end. Support finding jpeg | png.
+    return this.photos.find(
+      (photo) => photo.file === `${file}.jpeg` || photo.file === `${file}.png`,
+    );
   }
 
   async refreshExternalPhotos() {
