@@ -15,14 +15,14 @@ COPY packages/server/package.json ./packages/server/package.json
 RUN pnpm install --frozen-lockfile --prod=false
 
 COPY packages/client/src ./packages/client/src
-COPY packages/client/tailwind.config.ts packages/client/tsconfig.json packages/client/vite.config.ts ./packages/client/
+COPY packages/client/tsconfig.json packages/client/vite.config.ts ./packages/client/
 
 COPY packages/server/src ./packages/server/src
 COPY packages/server/tsconfig.json ./packages/server/
 
 RUN if [[ "$build" == "true" ]]; then \
   pnpm run -r build; \
-fi
+  fi
 
 CMD [ "sh", "./scripts/docker-init.sh" ]
 
