@@ -7,7 +7,7 @@ on:
 jobs:
   deploy:
     name: Deploy
-    runs-on: debian
+    runs-on: ubuntu
 
     steps:
       - name: Checkout
