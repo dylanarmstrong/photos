@@ -8,6 +8,8 @@ jobs:
   deploy:
     name: Deploy
     runs-on: docker
+    container:
+      image: ubuntu-22.04:docker://node:20-bullseye
 
     steps:
       - name: Checkout
