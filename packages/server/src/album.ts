@@ -1,5 +1,5 @@
-import { viewAlbum } from './aws.js';
 import { months } from './constants.js';
+import { sorted } from './files.js';
 
 import type { IAlbum, IPhoto, SqlRowAlbum } from './types.js';
 
@@ -46,9 +46,10 @@ class Album implements IAlbum {
     );
   }
 
-  async refreshExternalPhotos() {
+  refreshExternalPhotos() {
     if (!this.hasRefreshedPhotos) {
-      const externalPhotos = await viewAlbum(this.name);
+      const prefix = `${encodeURIComponent(this.name)}/`;
+      const externalPhotos = sorted.filter((entry) => entry.startsWith(prefix));
       const photos: IPhoto[] = [];
       for (
         let index = 0, { length } = externalPhotos;

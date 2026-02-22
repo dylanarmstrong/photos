@@ -2,7 +2,7 @@
 const date = new Date().getFullYear();
 
 const Footer = () => (
-  <footer className="ml-4 mt-2.5 pb-2.5">
+  <footer className="mt-2.5 ml-4 pb-2.5">
     © {date} Dylan Armstrong. All rights reserved.
   </footer>
 );

@@ -6,13 +6,8 @@ services:
       target: stage1
     container_name: photos
     environment:
-      IMAGE_DOMAIN: $IMAGE_DOMAIN
       NODE_ENV: production
-      R2_BUCKET: $R2_BUCKET
-      R2_ENDPOINT: $R2_ENDPOINT
-      R2_SECRET: $R2_SECRET
-      R2_TOKEN: $R2_TOKEN
-    image: dylanarms/photos
+    image: git.dylan.is/dylan/photos:latest
     ports:
       - 80:80/tcp
     restart: unless-stopped

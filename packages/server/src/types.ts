@@ -105,17 +105,4 @@ type SqlRowExif = {
   width: number;
 };
 
-type GetObjects = {
-  IsTruncated: boolean;
-  NextContinuationToken?: string;
-  photos: string[];
-};
-
-export type {
-  GetObjects,
-  IAlbum,
-  IPhoto,
-  RenderOptions,
-  SqlRowAlbum,
-  SqlRowExif,
-};
+export type { IAlbum, IPhoto, RenderOptions, SqlRowAlbum, SqlRowExif };

@@ -4,13 +4,7 @@ const developmentPort = 5173;
 const imagesPerPage = 20;
 const isDevelopment = process.env['NODE_ENV'] === 'development';
 const port = 80;
-const {
-  IMAGE_DOMAIN = '',
-  R2_BUCKET = '',
-  R2_ENDPOINT = '',
-  R2_SECRET = '',
-  R2_TOKEN = '',
-} = process.env;
+const IMAGE_DOMAIN = 'https://photos.dylan.is';
 
 const sizes = Object.freeze([320, 640, 960, 1280, 2560] as const);
 
@@ -31,10 +25,6 @@ const months = Object.freeze([
 
 export {
   IMAGE_DOMAIN,
-  R2_BUCKET,
-  R2_ENDPOINT,
-  R2_SECRET,
-  R2_TOKEN,
   baseUrl,
   developmentPort,
   imagesPerPage,

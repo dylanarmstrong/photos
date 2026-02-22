@@ -27,7 +27,7 @@ const Data = ({ component, photo }: Properties) => {
       {data}
     </div>
   ) : (
-    <figcaption className="block rounded-b border-b border-l border-r p-2 text-base leading-5 text-black md:hidden">
+    <figcaption className="block rounded-b border-r border-b border-l p-2 text-base leading-5 text-black md:hidden">
       {data}
     </figcaption>
   );

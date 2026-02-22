@@ -24,7 +24,7 @@ const Photo = ({ albumName, index, page, photo }: Properties) => (
       >
         <Picture
           className={{
-            img: 'relative max-h-full w-full rounded-b-none rounded-t border border-black md:rounded-b',
+            img: 'relative max-h-full w-full rounded-t rounded-b-none border border-black md:rounded-b',
           }}
           pageName="album"
           photo={photo}

@@ -4,6 +4,8 @@ backup/
 images.db
 images.db-*
 images.db.*
+sorted
+sorted.json
 lib/
 node_modules/
 scripts/map.py

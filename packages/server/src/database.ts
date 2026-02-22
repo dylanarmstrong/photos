@@ -5,22 +5,23 @@ import { Photo } from './photo.js';
 
 import type { SqlRowAlbum, SqlRowExif } from './types.js';
 
-const exifFields = new Map<string, string>();
-exifFields.set('album', 'string');
-exifFields.set('datetime', 'string');
-exifFields.set('f_number', 'string');
-exifFields.set('file', 'string');
-exifFields.set('focal_length', 'string');
-exifFields.set('gps_latitude', 'string');
-exifFields.set('gps_latitude_ref', 'string');
-exifFields.set('gps_longitude', 'string');
-exifFields.set('gps_longitude_ref', 'string');
-exifFields.set('height', 'number');
-exifFields.set('iso_speed_ratings', 'string');
-exifFields.set('make', 'string');
-exifFields.set('model', 'string');
-exifFields.set('shutter_speed_value', 'string');
-exifFields.set('width', 'number');
+const exifFields = new Map<string, string>([
+  ['album', 'string'],
+  ['datetime', 'string'],
+  ['f_number', 'string'],
+  ['file', 'string'],
+  ['focal_length', 'string'],
+  ['gps_latitude', 'string'],
+  ['gps_latitude_ref', 'string'],
+  ['gps_longitude', 'string'],
+  ['gps_longitude_ref', 'string'],
+  ['height', 'number'],
+  ['iso_speed_ratings', 'string'],
+  ['make', 'string'],
+  ['model', 'string'],
+  ['shutter_speed_value', 'string'],
+  ['width', 'number'],
+]);
 
 const isExifRow = (value: unknown): value is SqlRowExif => {
   let result = true;
