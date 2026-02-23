@@ -35,5 +35,5 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            git.dylan.is/dylan/photos:latest
-            git.dylan.is/dylan/photos:${{ github.sha }}
+            git.dylan.is/artifacts/photos:latest
+            git.dylan.is/artifacts/photos:${{ github.sha }}
