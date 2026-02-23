@@ -1,4 +1,4 @@
-### Just a super, simple, spectacular R2 photo browser
+### Just a super, simple, spectacular photo browser
 
 1. Copy `env.example` to `.env`, and update as needed.
 2. `pnpm install`
@@ -7,12 +7,11 @@
 ### Setup Sorted for Deleted
 
 ```bash
-fd -t f '\.(jpeg|avif|webp)$' > files
-cat files | sort -t'/' -k1,1 -k2V | ag '_w320\.jpeg$' | sed -e 's/_w320\.jpeg$//g' > sorted
+fd -t f '\.jpeg$' | sort -t'/' -k1,1 -k2V | ag '_w320\.jpeg$' | sed -e 's/_w320\.jpeg$//g' > sorted
 python3 -c "import json; print(json.dumps(open('sorted').read().splitlines(), indent=2))" > sorted.json
 ```
 
-### R2 Folder Structure
+### Folder Structure
 
 ```
 .
@@ -89,7 +88,6 @@ Running [here](https://dylan.is/photos/).
 - Admin mode for tagging, descriptions, etc.
 - Filtering ability for tags
 - PlantUmL diagram for db
-- Get all deleted photos and update db with flag for them
 
 ### Database
 

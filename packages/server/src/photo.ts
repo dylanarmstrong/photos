@@ -1,4 +1,5 @@
-import { IMAGE_DOMAIN, sizes } from './constants.js';
+import { imageDomain, sizes } from './constants.js';
+import { signUrl } from './utilities.js';
 
 import type { IPhoto, SqlRowExif } from './types.js';
 
@@ -183,7 +184,7 @@ class Photo implements IPhoto {
 
   get images() {
     const baseFile = encodeURIComponent(this.file.replace(/\.[^./]+$/, ''));
-    const base = `${IMAGE_DOMAIN}/${this.album}`;
+    const base = `${imageDomain}/${this.album}`;
     const { x, y } = this;
 
     const getSize = (size: number) => {
@@ -195,10 +196,10 @@ class Photo implements IPhoto {
         width = Math.floor(x * widthRatio);
       }
       return {
-        avif: `${base}/${baseFile}_w${size}.avif`,
+        avif: signUrl(`${base}/${baseFile}_w${size}.avif`),
         height,
-        jpeg: `${base}/${baseFile}_w${size}.jpeg`,
-        webp: `${base}/${baseFile}_w${size}.webp`,
+        jpeg: signUrl(`${base}/${baseFile}_w${size}.jpeg`),
+        webp: signUrl(`${base}/${baseFile}_w${size}.webp`),
         width,
       };
     };

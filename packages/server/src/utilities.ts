@@ -1,3 +1,7 @@
+import { createHash } from 'node:crypto';
+
+import { TOKEN_KEY, tokenExpiration } from './constants.js';
+
 import type { Request } from 'express';
 
 const getIp = (request: Request) => {
@@ -20,4 +24,25 @@ const log = (request: Request, message: string) => {
 const filterUndefined = <T>(object: T | undefined): object is T =>
   object !== undefined;
 
-export { filterUndefined, log };
+const signUrl = (url: string): string => {
+  if (!TOKEN_KEY) {
+    return url;
+  }
+
+  const parsed = new URL(url);
+  const expires = Math.floor(Date.now() / 1000) + tokenExpiration;
+  const hashableBase = `${TOKEN_KEY}${parsed.pathname}${expires}`;
+  const token = createHash('sha256')
+    .update(hashableBase)
+    .digest('base64')
+    .replaceAll('+', '-')
+    .replaceAll('/', '_')
+    .replaceAll('=', '');
+
+  parsed.searchParams.set('token', token);
+  parsed.searchParams.set('expires', String(expires));
+
+  return parsed.toString();
+};
+
+export { filterUndefined, log, signUrl };
