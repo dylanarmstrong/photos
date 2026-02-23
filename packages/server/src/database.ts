@@ -106,6 +106,7 @@ const stmtGetExif = database.prepare(`
     a.album = ? AND
     a.disabled = 0 AND
     i.deleted = 0
+  ORDER BY IFNULL(e.datetime, '1970-01-01 00:00:01') ASC
 `);
 
 const getAlbums = (): Album[] => {

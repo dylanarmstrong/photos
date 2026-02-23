@@ -4,6 +4,14 @@
 2. `pnpm install`
 3. `pnpm run -r build && pnpm run start`
 
+### Setup Sorted for Deleted
+
+```bash
+fd -t f '\.(jpeg|avif|webp)$' > files
+cat files | sort -t'/' -k1,1 -k2V | ag '_w320\.jpeg$' | sed -e 's/_w320\.jpeg$//g' > sorted
+python3 -c "import json; print(json.dumps(open('sorted').read().splitlines(), indent=2))" > sorted.json
+```
+
 ### R2 Folder Structure
 
 ```

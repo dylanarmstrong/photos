@@ -13,10 +13,9 @@ const isValidAlbum = (albumName: string) =>
 const getAlbum = (albumName: string) =>
   albums.find(({ name }) => name === albumName);
 
-const getAlbumImages = async (albumName: string) => {
+const getAlbumImages = (albumName: string) => {
   const selectedAlbum = getAlbum(albumName);
   if (selectedAlbum) {
-    await selectedAlbum.refreshExternalPhotos();
     return selectedAlbum.photos;
   }
   return [];
@@ -37,7 +36,7 @@ router.get('/:albumName', (request, response, next) => {
   next();
 });
 
-router.get('/:albumName/:page', async (request, response) => {
+router.get('/:albumName/:page', (request, response) => {
   const { albumName } = request.params;
   const page = Number.parseInt(request.params.page, 10);
   log(request, `${albumName}/${page}`);
@@ -47,7 +46,7 @@ router.get('/:albumName/:page', async (request, response) => {
     return;
   }
 
-  const photos = await getAlbumImages(albumName);
+  const photos = getAlbumImages(albumName);
   const pages = Math.ceil(photos.length / imagesPerPage);
 
   if (page > pages || page < 1) {
@@ -72,11 +71,11 @@ router.get('/:albumName/:page', async (request, response) => {
   }
 });
 
-router.get('/:albumName/details/:index', async (request, response) => {
+router.get('/:albumName/details/:index', (request, response) => {
   const { albumName, index } = request.params;
   log(request, `${albumName}/details/${index}`);
 
-  const photos = await getAlbumImages(albumName);
+  const photos = getAlbumImages(albumName);
   const imageIndex = Number.parseInt(index);
 
   if (
